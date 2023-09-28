@@ -30,12 +30,13 @@ The restricted access part of the application includes screens/pages for the fol
 To run this web application locally, follow these steps:
 
 1. Clone this repository to your local machine.
+
 git clone https://github.com/pedromelobitencourt/MedicalClinicWebApp.git
 
-3. Install the necessary dependencies. You can use your preferred programming language and frameworks.
+2. Install the necessary dependencies. You can use your preferred programming language and frameworks.
 
-4. Configure the database connection settings in the application to match your local environment.
+3. Configure the database connection settings in the application to match your local environment.
 
-5. Run the application server.
+4. Run the application server.
 
-6. Access the web application via your preferred web browser.
+5. Access the web application via your preferred web browser.
