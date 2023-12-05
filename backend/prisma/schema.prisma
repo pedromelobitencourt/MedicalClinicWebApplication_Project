@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BaseDeEnderecos {
+  id            Int      @id @default(autoincrement())
+  cep           String   @db.VarChar(8)
+  logradouro    String @db.VarChar(255)
+  bairro        String @db.VarChar(255)
+  cidade        String @db.VarChar(255)
+  estado        String @db.VarChar(255)
+  pessoa Pessoa[]
+}
+
+model Pessoa {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  email       String   @db.VarChar(255)
+  telefone    String   @db.VarChar(255)
+  endereco    BaseDeEnderecos @relation(fields: [enderecoId],  references: [id])
+  enderecoId  Int
+  funcionario Funcionario[]
+  paciente    Paciente[]
+}
+
+model Funcionario {
+  id            Int     @id @default(autoincrement())
+  dataContrato  DateTime
+  salario       Float 
+  pessoa        Pessoa @relation(fields: [pessoaId],  references: [id])
+  pessoaId      Int
+  medico        Medico[]
+}
+
+model Medico {
+  id                Int     @id @default(autoincrement())
+  crm               String   @db.VarChar(15)
+  especialidade     String  @db.VarChar(15)
+  funcionario       Funcionario @relation(fields: [funcionarioId],  references: [id])
+  funcionarioId     Int
+  agenda            Agenda[]
+}
+
+model Paciente {
+  id                Int     @id @default(autoincrement())
+  peso              Float
+  altura            Float
+  tipoSanguineo     String  @db.VarChar(3) 
+  pessoa            Pessoa @relation(fields: [pessoaId],  references: [id])
+  pessoaId          Int
+  prontuario       ProntuarioEletronico[]
+}
+
+model ProntuarioEletronico {
+  id              Int     @id @default(autoincrement())
+  anamnese        String   @db.VarChar(255)
+  medicamentos    String   @db.VarChar(255)
+  atestados       String   @db.VarChar(255)
+  paciente        Paciente @relation(fields: [pacienteId],  references: [id])
+  pacienteId      Int
+}
+
+model Agenda {
+  id          Int     @id @default(autoincrement())
+  data        DateTime
+  horario     String 
+  name        String   @db.VarChar(255)
+  email       String   @db.VarChar(255)
+  medico      Medico @relation(fields: [medicoId],  references: [id])
+  medicoId    Int
+
+  @@unique([medicoId,data,horario])
+}

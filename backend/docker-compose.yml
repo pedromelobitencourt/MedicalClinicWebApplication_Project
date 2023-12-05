@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  database:
+    image: mysql
+    container_name: banco_clinica
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: clinica
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+    volumes:
+      - ./banco:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: clinica_api
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/usr/app:z
+    links:
+      - database
+    depends_on:
+      - database
+
+volumes:
+  banco:
+    driver: local
