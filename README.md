@@ -39,4 +39,21 @@ git clone https://github.com/pedromelobitencourt/MedicalClinicWebApp.git
 
 4. Run the application server.
 
+### Frontend
+
+1. Go to "frontend" folder
+```
+cd frontend
+```
+
+2. Go to "medical_clinic" folder
+```
+cd medical_clinic
+```
+
+3. 
+```
+npm run serve
+```
+
 5. Access the web application via your preferred web browser.
