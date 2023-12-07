@@ -10,7 +10,6 @@ const db_user = env.DB_USER;
 const db_password = env.DB_PASSWORD;
 const db_host = env.DB_HOST;
 const db_database = env.DB_DATABASE;
-let id = 1;
 
 type Address = {
     cep: string,
@@ -48,8 +47,8 @@ async function connectToDB(): Promise<Connection> {
 }
 
 async function insertNewAddress(address: Address): Promise<void> {
-    const sql = 'INSERT INTO BaseDeEnderecos (id, cep, estado, cidade, bairro, logradouro) VALUES (?, ?, ?, ?, ?, ?)';
-    const values = [id++, address.cep, address.estado, address.cidade, address.bairro, address.logradouro]; // Replace with your actual column names
+    const sql = 'INSERT INTO BaseDeEnderecos (cep, estado, cidade, bairro, logradouro) VALUES (?, ?, ?, ?, ?)';
+    const values = [address.cep, address.estado, address.cidade, address.bairro, address.logradouro]; // Replace with your actual column names
 
     let connection;
 
@@ -59,12 +58,9 @@ async function insertNewAddress(address: Address): Promise<void> {
 
         await query({ sql, values });
         console.log("Endereço inserido com sucesso!");
-    } catch (error) {
-        console.error("Erro ao inserir endereço:", error);
-    } finally {
-        if (connection) {
-            connection.end();
-        }
+    } 
+    catch (error) {
+        throw error;
     }
 }
 

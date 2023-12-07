@@ -53,6 +53,7 @@
 
 <script>
     import axios from 'axios';
+    import router from '../router';
 
     export default {
         name: 'AddressRegistration',
@@ -81,19 +82,46 @@
         methods: {
             // Send to backend
             async handleSubmit() {                
-                const response = await axios.post('http://localhost:8000/addressRegistration', {
-                    cep: this.cep,
-                    estado: this.estado,
-                    cidade: this.cidade,
-                    bairro: this.bairro,
-                    logradouro: this.logradouro,
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+                try {
+                    const response = await axios.post('http://localhost:8000/addressRegistration', {
+                        cep: this.cep,
+                        estado: this.estado,
+                        cidade: this.cidade,
+                        bairro: this.bairro,
+                        logradouro: this.logradouro,
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
 
-                console.log("Response: ", response);
+                    // Verifique a resposta do servidor
+
+                    console.log(response);
+
+                    if (response.status === 201) {
+                        const msg = "Endereço cadastrado com sucesso";
+                        this.registerMessage(msg);
+                        
+                    } else {
+                        const msg = "Ocorreu um erro inesperado 1";
+                        this.registerMessage(msg);
+                    }
+                } 
+                catch (error) {
+                    const erro = error.response.data;
+                    console.log("ERRO", erro)
+
+                    if(erro && erro === "ER_DUP_ENTRY") {
+                        const msg = "CEP já cadastrado";
+                        this.registerMessage(msg);
+                    }
+                    else {
+                        const msg = "Ocorreu um erro inesperado 2";
+                        this.registerMessage(msg);
+                        console.error(error);
+                    }
+                }
             },
             handleKeyPress(e) {
                 const onlyNumbers = /[0-9]/;
@@ -174,6 +202,11 @@
                 this.cidade = '';
                 this.bairro = '';
                 this.estado = '';
+            },
+            registerMessage(msg) {
+                this.toggleMessage(msg);
+                this.disableAllReadOnly();
+                this.resetFormValues();
             }
         }
     }
