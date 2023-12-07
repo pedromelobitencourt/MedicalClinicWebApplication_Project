@@ -30,7 +30,7 @@ export default {
   }
 
   body {
-    background: #1dd2db;
+    background: #31AFB4;
     min-height: 100vh;
     display: flex;
     font-weight: 400;
@@ -103,7 +103,7 @@ export default {
   }
 
   .navbar-brand {
-    margin-right: 50em;
+    margin-right: 36em;
   }
 
   .navbar-nav .nav-item {
@@ -112,7 +112,7 @@ export default {
 
   @media (max-width: 1400px) {
     .navbar-brand {
-      margin-right: 40em;
+      margin-right: 25em;
     }
 
     .navbar-nav .nav-item {
@@ -122,7 +122,7 @@ export default {
 
   @media (max-width: 1200px) {
     .navbar-brand {
-      margin-right: 35em;
+      margin-right: 17em;
     }
 
     .navbar-nav .nav-item {
@@ -132,7 +132,7 @@ export default {
 
   @media (max-width: 1000px) {
     .navbar-brand {
-      margin-right: 23em;
+      margin-right: 4em;
     }
 
     .navbar-nav .nav-item {
@@ -142,7 +142,7 @@ export default {
 
   @media (max-width: 800px) {
     .navbar-brand {
-      margin-right: 15em;
+      margin-right: 1em;
     }
 
     .navbar-nav .nav-item {

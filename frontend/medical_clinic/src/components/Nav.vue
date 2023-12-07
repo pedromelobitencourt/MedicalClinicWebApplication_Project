@@ -9,8 +9,17 @@
             </li>
 
             <li class="nav-item">
-              <a href="#" class="nav-link">Sign Up</a>
+              <a href="#" class="nav-link">Agendamento de Consulta</a>
             </li>
+
+            <li class="nav-item">
+              <a href="#" class="nav-link">Cadastro de Endereço</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="#" class="nav-link">Fotos</a>
+            </li>
+
           </ul>
         </div>
       </div>
