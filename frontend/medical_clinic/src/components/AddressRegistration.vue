@@ -81,12 +81,16 @@
         methods: {
             // Send to backend
             async handleSubmit() {                
-                const response = await axios.post('address', {
+                const response = await axios.post('http://localhost:8000/addressRegistration', {
                     cep: this.cep,
                     estado: this.estado,
                     cidade: this.cidade,
                     bairro: this.bairro,
                     logradouro: this.logradouro,
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 });
 
                 console.log("Response: ", response);
