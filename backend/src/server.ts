@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { db } from './db';
+import { db, insertNewAddress } from './db';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -27,10 +27,16 @@ if(env.PORT !== undefined) {
     try {
       const { cep, estado, cidade, bairro, logradouro } = req.body; // Analisar o corpo da solicitação como JSON
 
-      console.log(cep, estado, cidade, bairro, logradouro);
+      const address = { cep, estado, cidade, bairro, logradouro };
+
+      insertNewAddress(address);
     }
     catch(error) {
       console.log(error);
     }
-  })
+  });
+
+  async function getMySqlConnection() {
+  
+  }
 }

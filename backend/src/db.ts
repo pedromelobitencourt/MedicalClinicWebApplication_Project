@@ -1,4 +1,6 @@
-import mysql from 'mysql';
+import * as mysql from 'mysql';
+import { Connection } from 'mysql'
+import { promisify } from 'util';
 const path = require('path');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -8,23 +10,71 @@ const db_user = env.DB_USER;
 const db_password = env.DB_PASSWORD;
 const db_host = env.DB_HOST;
 const db_database = env.DB_DATABASE;
+let id = 1;
 
-let db;
+type Address = {
+    cep: string,
+    estado: string,
+    cidade: string,
+    bairro: string,
+    logradouro: string
+};
 
-if(db_user && db_password && db_host && db_database) {
-    const db = mysql.createConnection({
-        host: db_host,
-        user: db_user,
-        password: db_password,
-        database: db_database
-    });
+let db: Connection | undefined;
 
-    db.connect((err) => {
-        if(err)
-            console.error("Erro de conexão ao MySQL:", err);
-        else
-            console.log("Conectado ao MySQL");
+async function connectToDB(): Promise<Connection> {
+    return new Promise<Connection>((resolve, reject) => {
+        if (db_user && db_password && db_host && db_database) {
+            const connection = mysql.createConnection({
+                host: db_host,
+                user: db_user,
+                password: db_password,
+                database: db_database
+            });
+
+            connection.connect((err) => {
+                if (err) {
+                    console.error("Erro de conexão ao MySQL:", err);
+                    reject(err);
+                } else {
+                    console.log("Conectado ao MySQL");
+                    resolve(connection);
+                }
+            });
+        } else {
+            reject(new Error("Credenciais de banco de dados não fornecidas."));
+        }
     });
 }
 
-export { db };
+async function insertNewAddress(address: Address): Promise<void> {
+    const sql = 'INSERT INTO BaseDeEnderecos (id, cep, estado, cidade, bairro, logradouro) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [id++, address.cep, address.estado, address.cidade, address.bairro, address.logradouro]; // Replace with your actual column names
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+        console.log("Endereço inserido com sucesso!");
+    } catch (error) {
+        console.error("Erro ao inserir endereço:", error);
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+}
+
+
+async function getDB(): Promise<Connection> {
+    if (!db) {
+        db = await connectToDB();
+    }
+
+    return db;
+}
+
+export { db, insertNewAddress };
