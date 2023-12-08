@@ -73,4 +73,4 @@ async function getDB(): Promise<Connection> {
     return db;
 }
 
-export { db, insertNewAddress };
+export { getDB, insertNewAddress };
