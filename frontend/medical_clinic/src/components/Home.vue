@@ -53,22 +53,15 @@ background: linear-gradient(180deg, #31AFB4 0%, rgba(49, 175, 180, 0.86) 18.75%,
         font-family: 'Euclid Circular B', Arial, Helvetica, sans-serif;">Sobre nós</h3>
         <p style="text-align: center;">Texto explicando sobre nossos valores e princípios xxxxxxxxxxxxxxxxxxxxxx </p>
     <div class="ListCard-Principios">
-        <div class="Card-Principios">
-                <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 60px;text-align: center;">
-                <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
-            </svg>
-        <h3 style="margin-top: 10px;">Princípio/valor1</h3>
-        <p style="margin-top: 10px;">textinho explicando o principio/valor xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
-        </div>
-
+        
         <div class="Card-Principios">
             
                 <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 60px;display: inline-block;">
                 <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
             </svg>
         
-        <h3 style="margin-top: 10px;">Princípio/valor1</h3>
-        <p style="margin-top: 10px;word-wrap: break-word;">textinho explicando o principio/valor xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+        <h3 class="TextoPrincipio2">PRINCÍPIO/VALOR1</h3>
+        <p class="TextoPrincipio1">textinho explicando o principio/valor xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
         </div>
 
         <div class="Card-Principios">
@@ -133,16 +126,24 @@ height: 1px;background: #000;">
 </svg>
 </div>
 
+<div class="Especialidades">
+    <svg xmlns="http://www.w3.org/2000/svg" width="223" height="220" viewBox="0 0 223 220" fill="none">
+  <ellipse cx="111.5" cy="110" rx="111.5" ry="110" fill="url(#paint0_radial_22_32)"/>
+  <defs>
+    <radialGradient id="paint0_radial_22_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(111.5 110) rotate(90) scale(110 111.5)">
+      <stop stop-color="#FFFCFC"/>
+      <stop offset="1" stop-color="#FFFCFC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+</div>
+
 
 </div>
 
 </div>
 
-<footer>
-<div class="footer-container">
 
-</div>
-</footer>
 
 </div>
 </template>
@@ -159,27 +160,27 @@ height: 1px;background: #000;">
 <style scoped>
  @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
 
-.Especialidades{
+
+.Conteudo-Especialidades{
+    margin-bottom: 40px;
+}
+
+ .Especialidades{
     width: 200px;
 height: 250px;
 flex-shrink: 0;
 border-radius: 10px;
 border: 0.5px solid #000;
-
+margin: 20px;
 background: #A2EEF1;
 }
 
-.footer-container{
-    width: 100%;
-height: 150px;
-flex-shrink: 0;
-background: #31AFB4;
-}
 .Lista-Especiadades{
     display: flex;
 }
 .ListCard-Principios{
-    margin-left: 40px;
+    justify-content: space-between;
+    margin-left: 60px;
     margin-top: 60px;
     display: flex;
 }
@@ -215,7 +216,7 @@ background-position: center center;
 }
 .TextoBranco{
     color: #FFF;
-
+    
 font-family: Inter;
 font-size: 30px;
 font-style: bold;
@@ -254,6 +255,24 @@ line-height: normal;
 letter-spacing: 3.24px;
 mix-blend-mode: overlay;
 }
-
+.TextoPrincipio1{
+        margin-top: 10px;
+        word-wrap: break-word;
+        font-size: 18px;
+        line-height: 28px;
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+        border: 0px none rgb(59, 76, 102);
+        vertical-align: baseline;
+}
+.TextoPrincipio2{
+        margin-top: 10px;
+        font-size: 20px;
+        line-height: 28px;
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+        border: 0px none rgb(59, 76, 102);
+        vertical-align: baseline;
+}
 
 </style>
