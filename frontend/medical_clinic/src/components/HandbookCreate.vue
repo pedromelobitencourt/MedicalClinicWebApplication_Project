@@ -7,6 +7,15 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
+                    <label for="">Paciente</label>
+                    <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                        <option value="" selected>-- Escolha uma opção --</option>
+                        <option v-for="pacient in options" :key="pacient.id" :value="pacient.id">
+                            {{ pacient.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label for="">Anamnese</label>
                     <input type="text" v-model="model.handbook.anamnese" id="" class="form-control">
                 </div>
@@ -29,6 +38,7 @@
 
 <script>
 import axios from 'axios';
+import Select2 from 'vue3-select2-component'
 
 export default {
     name: 'HandbookCreate',
@@ -38,19 +48,38 @@ export default {
                 handbook: {
                     anamnese: '',
                     medicamentos: '',
-                    atestados: ''
-                }
-            }
+                    atestados: '',
+                    name: null
+                },
+            },
+            selectedOption: null,
+            options: [],
         }
+    },
+    mounted() {
+        this.fetchOptions();
     },
     methods: {
         saveHandbook() {
+            const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
+            console.log("O nome", name)
+            this.model.handbook.name = name;
+
             axios.post('http://localhost:8000/handbook', this.model.handbook)
                 .then(res => {
                     console.log(res.data);
                 })
                 .catch(console.log)
-        }
+        },
+        async fetchOptions() {
+            try {
+                const response = await axios.get('http://localhost:8000/pacients/name');
+                this.options = response.data.response;
+            }
+            catch (error) {
+                console.error("Handbook creation: ", error);
+            }
+        },
     }
 }
 </script>

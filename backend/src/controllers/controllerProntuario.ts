@@ -5,6 +5,7 @@ import { Connection } from 'mysql'
 import { promisify } from 'util';
 
 type Prontuario = {
+    id: number,
     anamnese: string,
     medicamentos: string,
     atestados: string
@@ -28,8 +29,8 @@ export async function getAllProntuarioRecords() {
 }
 
 export async function insertNewProtuarioRecord(prontuario: Prontuario) {
-    const sql = `INSERT INTO ProntuarioEletronico (id, anamnese, medicamentos, atestados) VALUES
-    (?, ?, ?, ?)`;
+    const sql = `INSERT INTO ProntuarioEletronico (id, anamnese, medicamentos, atestados, pacienteId) VALUES
+    (?, ?, ?, ?, ?)`;
     let connection;
 
     try {
@@ -40,13 +41,15 @@ export async function insertNewProtuarioRecord(prontuario: Prontuario) {
 
         if(typeof(greatestId) === `number`) {
             const id = greatestId + 1;
-            const values = [ id, prontuario.anamnese, prontuario.medicamentos, prontuario.atestados ];
+            const values = [ id, prontuario.anamnese, prontuario.medicamentos, prontuario.atestados, prontuario.id ];
 
-            const response = await query({ sql });
-            console.log("Registros listados com sucesso!");
+            const response = await query({ sql, values });
+            console.log("Registro inserido com sucesso!");
             return response;
         }
-        else throw new Error(`O ID não é um número`)
+        else {
+            throw new Error(`O ID não é um número`)
+        }
     } 
     catch (error) {
         throw error;

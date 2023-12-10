@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { getDB, insertNewAddress } from './db';
 import { getAllProntuarioRecords, insertNewProtuarioRecord } from './controllers/controllerProntuario';
+import { getAllPacientNames, getIdFromName } from './controllers/controllerPaciente';
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -63,10 +64,35 @@ if(env.PORT !== undefined) {
 
   app.post('/handbook', async (req: Request, res: Response) => {
     try {
-      console.log(req.body);
+      const { anamnese, medicamentos, atestados, name } = req.body;
+
+      const idResponse = await getIdFromName(name);
+      
+      if(idResponse) {
+        const id = idResponse.id;
+        const handbook = { id, anamnese, medicamentos, atestados };
+
+        await insertNewProtuarioRecord(handbook);
+
+        res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+        res.send();
+      }
+      else throw new Error("ID é undefined")
     }
     catch (error) {
-      res.status(500).json({ error: 'Erro desconhecido' });
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get('/pacients/name', async (req: Request, res: Response) =>{
+    try {
+      const response = await getAllPacientNames();
+
+      res.status(201).json({ message: 'Nomes listados com sucesso', response });
+      res.send();
+    }
+    catch (error) {
+      res.status(500).json({ error });
     }
   })
 }
