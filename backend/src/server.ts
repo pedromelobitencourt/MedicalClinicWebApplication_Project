@@ -74,6 +74,21 @@ if(env.PORT !== undefined) {
     }
   });
 
+  app.get('/pessoa', async (req: Request, res: Response) => {
+    try {
+      const pessoas = await getAllPessoas();
+      res.status(200).send(pessoas);
+    } catch (error) {
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
   app.post('/addressRegistration', async (req: Request, res: Response) => {
     try {
       const { cep, estado, cidade, bairro, logradouro } = req.body;
