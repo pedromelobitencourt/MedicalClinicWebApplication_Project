@@ -3,7 +3,7 @@
     <Nav />
 
     <div class="auth-wrapper">
-      <div class="auth-inner">
+      <div :class="{ 'auth-inner': !isHandbook, 'auth-inner-handbook': isHandbook }">
         <router-view />
       </div>
     </div>
@@ -15,9 +15,17 @@
   import Nav from './components/Nav.vue';
   export default {
     name: 'app',
-      components: {
-        Nav,
+    data() {
+      return {
+        isHandbook: false,
       }
+    },
+    components: {
+      Nav,
+    },
+    mounted() {
+      this.isHandbook = this.$route.name === 'handbook' || this.$route.name === 'handbook/create';
+    }
   
 }
 </script>
@@ -64,13 +72,23 @@
   }
 
   .auth-inner {
-    width: 450px;
     margin: auto;
+    width: 450px;
     background: #ffffff;
     box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
     padding: 40px 55px 45px 55px;
     border-radius: 15px;
     transition: all .3s;
+  }
+
+  .auth-inner-handbook {
+      margin: auto;
+      width: 1000px;
+      background: #ffffff;
+      box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+      padding: 40px 55px 45px 55px;
+      border-radius: 15px;
+      transition: all .3s;
   }
 
   .auth-wrapper .form-control:focus {

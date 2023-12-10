@@ -1,7 +1,9 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { db, insertNewAddress } from './db';
+import { getDB, insertNewAddress } from './db';
+import { getAllProntuarioRecords, insertNewProtuarioRecord } from './controllers/controllerProntuario';
+
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -47,4 +49,24 @@ if(env.PORT !== undefined) {
       }
     }
   });
+
+  app.get('/handbook', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllProntuarioRecords();
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+  app.post('/handbook', async (req: Request, res: Response) => {
+    try {
+      console.log(req.body);
+    }
+    catch (error) {
+      res.status(500).json({ error: 'Erro desconhecido' });
+    }
+  })
 }
