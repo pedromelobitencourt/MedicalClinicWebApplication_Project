@@ -40,6 +40,7 @@ async function insertNewMedico(medico: Medico): Promise<void> {
     catch (error) {
         throw error;
     }
+}
 
 async function getMedicoById(id: number): Promise<Medico> {
     const sql = 'SELECT * FROM Medico WHERE id = ?';
@@ -61,6 +62,7 @@ async function getMedicoById(id: number): Promise<Medico> {
     } catch (error) {
         throw error;
     }
+}
 
 async function getAllMedicos(): Promise<Medico[]> {
     const sql = 'SELECT * FROM Medico';
@@ -77,6 +79,7 @@ async function getAllMedicos(): Promise<Medico[]> {
     } catch (error) {
         throw error;
     }
+}
 
 async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[]> {
     const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
@@ -94,6 +97,7 @@ async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[
     } catch (error) {
         throw error;
     }
+}
 
 async function deleteMedico(id: number): Promise<void> {
     const sql = 'DELETE FROM Medico WHERE id = ?';
@@ -109,6 +113,6 @@ async function deleteMedico(id: number): Promise<void> {
     } catch (error) {
         throw error;
     }
+}
 
 export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico }
-}
