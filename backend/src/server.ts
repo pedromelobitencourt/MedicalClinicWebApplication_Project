@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { getDB, insertNewAddress } from './db';
+import { getDB } from './db';
+import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName } from './controllers/controllerPaciente';

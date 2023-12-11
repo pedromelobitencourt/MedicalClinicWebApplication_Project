@@ -1,4 +1,4 @@
-import { getDB, insertNewAddress } from '../db';
+import { getDB } from '../db';
 import * as mysql from 'mysql';
 import { Connection } from 'mysql'
 import { promisify } from 'util';
