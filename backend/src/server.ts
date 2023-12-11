@@ -1,7 +1,12 @@
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { db, insertNewAddress } from './db';
+import { getDB } from './db';
+import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
+import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
+import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
+import { getAllPacientNames, getIdFromName } from './controllers/controllerPaciente';
+
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
 import { getAllPacientes, insertNewPaciente, deletePaciente } from './controllers/controllerPaciente';
@@ -280,4 +285,110 @@ if(env.PORT !== undefined) {
     }
   });
 
+
+  app.get('/handbook', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllProntuarioRecords();
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+  app.post('/handbook', async (req: Request, res: Response) => {
+    try {
+      const { anamnese, medicamentos, atestados, name } = req.body;
+
+      const idResponse = await getIdFromName(name);
+      
+      if(idResponse) {
+        const id = idResponse.id;
+        const handbook = { id, anamnese, medicamentos, atestados };
+
+        await insertNewProtuarioRecord(handbook);
+
+        res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+        res.send();
+      }
+      else throw new Error("ID é undefined")
+    }
+    catch (error) {
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get('/pacients/name', async (req: Request, res: Response) =>{
+    try {
+      const response = await getAllPacientNames();
+
+      res.status(201).json({ message: 'Nomes listados com sucesso', response });
+      res.send();
+    }
+    catch (error) {
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get('/handbook/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      const dataResponse = await getDataFromId(numberId);
+      const name = await getPacientNameFromId(numberId);
+
+      console.log(name, numberId);
+
+      if(name !== undefined && dataResponse) {
+        const response = { ...dataResponse[0], ...name }
+
+        console.log("handbook response", response)
+
+        res.status(201).json({ message: 'Prontuário com id específico obtido com sucesso', response });
+      }
+      else throw new Error('name é undefined ou não tem a propriedade name')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.put('/handbook/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { anamnese, medicamentos, atestados, name, id } = req.body;
+      const pacientId = await getIdFromName(name);
+      if(pacientId !== undefined){
+        const [ updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse ] = 
+        await Promise.all
+        ([updateIdPaciente(id, pacientId.id), updateAnamnese(id, anamnese), updateMedicamentos(id, medicamentos),
+          updateAtestados(id, atestados)]);
+        
+        return { updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse }
+      }
+      else throw new Error("update handbook error")
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.delete('/handbook/:id/delete', async (req: Request, res: Response) => {
+    try {
+      const handbookId = req.params.id;
+      const handbookNumberId = parseInt(handbookId);
+      
+      await deleteProntuario(handbookNumberId);
+
+      res.status(201).json({ message: `Prontuário com o id ${handbookId} deletado com sucesso` });
+      res.send();
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }
