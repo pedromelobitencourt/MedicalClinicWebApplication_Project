@@ -80,6 +80,42 @@ export async function getIdFromName(name: string): Promise<PacienteIdResult | un
     return undefined;
 }
 
+export async function insertNewPaciente(paciente: Paciente): Promise<void> {
+    const sql = 'INSERT INTO Paciente (peso, altura, tipoSanguineo, pessoaId) VALUES (?, ?, ?, ?)';
+    const values = [paciente.peso, paciente.altura, paciente.tipoSanguineo, paciente.pessoaId]; // Replace with your actual column names
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+        console.log("Paciente inserido com sucesso!");
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function getAllPacientes(): Promise<Paciente[]> {
+    const sql = 'SELECT * FROM Paciente';
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const pacientes = await query({ sql });
+
+        return pacientes;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
 // export async function getNameFromId(id: number): Promise<PacienteNameResult | undefined> {
 //     const sql = 'SELECT Pessoa.name FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id) WHERE Paciente.id = ?';
 //     let connection;
