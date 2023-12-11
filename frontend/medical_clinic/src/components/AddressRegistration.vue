@@ -100,7 +100,6 @@
 
                     // Verifique a resposta do servidor
 
-                    console.log(response);
 
                     if (response.status === 201) {
                         const msg = "Endereço cadastrado com sucesso";
@@ -113,7 +112,6 @@
                 } 
                 catch (error) {
                     const erro = error.response.data;
-                    console.log("ERRO", erro)
 
                     if(erro && erro === "ER_DUP_ENTRY") {
                         const msg = "CEP já cadastrado";
@@ -122,7 +120,6 @@
                     else {
                         const msg = "Ocorreu um erro inesperado 2";
                         this.registerMessage(msg);
-                        console.error(error);
                     }
                 }
             },

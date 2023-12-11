@@ -156,7 +156,6 @@ height: 1px;background: #000;">
 
 </script>
 
-
 <style scoped>
  @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
 

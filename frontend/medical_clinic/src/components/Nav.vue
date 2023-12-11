@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar-light navbar navbar-expand fixed-top bg-light" style="position: relative;">
-    <img class = "logo" src="../assets/Logo2.png" alt="">
+    <img class = "logo" src="../assets/Logo2.png" alt=" mb-20">
     <div class="container">
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
