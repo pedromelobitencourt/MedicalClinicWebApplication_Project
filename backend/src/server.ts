@@ -2,10 +2,10 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { db, insertNewAddress } from './db';
-import { getAllMedicos, insertNewMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario } from './controllers/controllerFuncionario';
-import { getAllPacientes, insertNewPaciente } from './controllers/controllerPaciente';
-import { getAllPessoas, insertNewPessoa } from './controllers/controllerPessoa';
+import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
+import { getAllPacientes, insertNewPaciente, deletePaciente } from './controllers/controllerPaciente';
+import { getAllPessoas, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -28,6 +28,28 @@ if(env.PORT !== undefined) {
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
+  });
+
+  app.post('/addressRegistration', async (req: Request, res: Response) => {
+    try {
+      const { cep, estado, cidade, bairro, logradouro } = req.body;
+  
+      const address = { cep, estado, cidade, bairro, logradouro };
+  
+      await insertNewAddress(address);
+  
+      res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
   });
 
   app.get('/medicos', async (req: Request, res: Response) => {
@@ -178,15 +200,13 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.post('/addressRegistration', async (req: Request, res: Response) => {
+  app.delete('/medicos/:id', async (req: Request, res: Response) => {
     try {
-      const { cep, estado, cidade, bairro, logradouro } = req.body;
+      const id = parseInt(req.params.id);
   
-      const address = { cep, estado, cidade, bairro, logradouro };
+      await deleteMedico(id);
   
-      await insertNewAddress(address);
-  
-      res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+      res.status(200).json({ message: 'Médico deletado com sucesso' });
       res.send();
     } 
     catch (error) {  
@@ -199,4 +219,65 @@ if(env.PORT !== undefined) {
       }
     }
   });
+
+  app.delete('/funcionarios/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+  
+      await deleteFuncionario(id);
+  
+      res.status(200).json({ message: 'Funcionário deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
+
+  app.delete('/pacientes/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+  
+      await deletePaciente(id);
+  
+      res.status(200).json({ message: 'Paciente deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
+  
+  app.delete('/pessoa/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+  
+      await deletePessoa(id);
+  
+      res.status(200).json({ message: 'Pessoa deletada com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
+
 }

@@ -70,8 +70,26 @@ async function getAllPacientes(): Promise<Paciente[]> {
     }
 }
 
+async function deletePaciente (id: number): Promise<void> {
+    const sql = 'DELETE FROM Paciente WHERE id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
 export {
     insertNewPaciente,
     getPacienteById,
-    getAllPacientes
+    getAllPacientes,
+    deletePaciente
 };

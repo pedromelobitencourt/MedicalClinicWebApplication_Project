@@ -68,4 +68,21 @@ async function getAllFuncionarios(): Promise<Funcionario[]> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios };
+async function deleteFuncionario(id: number): Promise<void> {
+    const sql = 'DELETE FROM Funcionario WHERE id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, deleteFuncionario };
