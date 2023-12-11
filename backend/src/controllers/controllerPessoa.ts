@@ -3,19 +3,19 @@ import { promisify } from 'util';
 
 
 type Pessoa = {
-    id: number,
+    id?: number,
     nome: string,
     telefone: string,
     email: string,
-    enderecoCep: number
+    enderecoCep: string
 };
 
 async function insertNewPessoa(pessoa: Pessoa): Promise<void> {
-    const sql = 'INSERT INTO Pessoa (nome, telefone, email, enderecoCep) VALUES (?, ?, ?, ?)';
+    const sql = 'INSERT INTO Pessoa (name, email, telefone, enderecoCep) VALUES ( ?, ?, ?, ?)';
     const values = [pessoa.nome, pessoa.telefone, pessoa.email, pessoa.enderecoCep]; // Replace with your actual column names
 
     let connection;
-
+//
     try {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
@@ -68,3 +68,5 @@ async function getAllPessoas(): Promise<Pessoa[]> {
         throw error;
     }
 }
+
+export { insertNewPessoa, getPessoaById, getAllPessoas };

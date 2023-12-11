@@ -2,23 +2,23 @@ import { getDB } from '../db';
 import { promisify } from 'util';
 
 
-type Pessoa = {
-    id: number,
-    nome: string,
-    telefone: string,
-    email: string,
-    enderecoCep: number
-};
+// type Pessoa = {
+//     id: number,
+//     nome: string,
+//     telefone: string,
+//     email: string,
+//     enderecoCep: number
+// };
 
-type Funcionario = {
-    id: number,
-    dataContrato: Date,
-    salario: number,
-    pessoaId: number
-};
+// type Funcionario = {
+//     id: number,
+//     dataContrato: Date,
+//     salario: number,
+//     pessoaId: number
+// };
 
 type Medico = {
-    id: number,
+    id?: number,
     crm: string,
     especialidade: string,
     funcionarioId: number
@@ -40,7 +40,7 @@ async function insertNewMedico(medico: Medico): Promise<void> {
     catch (error) {
         throw error;
     }
-}
+};
 
 async function getMedicoById(id: number): Promise<Medico> {
     const sql = 'SELECT * FROM Medico WHERE id = ?';
@@ -79,7 +79,7 @@ async function getAllMedicos(): Promise<Medico[]> {
     } catch (error) {
         throw error;
     }
-}
+};
 
 async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[]> {
     const sql = 'SELECT * FROM Medico WHERE especialidade = ?';

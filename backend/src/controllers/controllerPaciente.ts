@@ -2,16 +2,8 @@ import { getDB } from '../db';
 import { promisify } from 'util';
 
 
-type Pessoa = {
-    id: number,
-    nome: string,
-    telefone: string,
-    email: string,
-    enderecoCep: number
-};
-
 type Paciente = {
-    id: number,
+    id?: number,
     peso: number,
     altura: number,
     tipoSanguineo: string,
