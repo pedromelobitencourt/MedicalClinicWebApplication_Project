@@ -8,7 +8,8 @@ type Prontuario = {
     id: number,
     anamnese: string,
     medicamentos: string,
-    atestados: string
+    atestados: string,
+    nome?: string
 }
 
 export async function getAllProntuarioRecords() {
@@ -89,4 +90,32 @@ async function getGreatestId(): Promise<number | undefined> {
     catch (error) {
         throw error;
     }
+}
+
+export async function getDataFromId(id: number) {
+    const sql = 'SELECT * FROM ProntuarioEletronico WHERE id = ?;';
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [id];
+
+        // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values }) as Prontuario[];
+        
+        
+        // Se houver pelo menos um resultado
+        if (response.length > 0) {
+            return response;
+        } else {
+            console.error("Nenhum resultado encontrado.");
+            return undefined;
+        }
+    } catch (error) {
+        throw error;
+    }
+
+    // Adicione uma declaração de retorno ao final da função
+    return undefined;
 }

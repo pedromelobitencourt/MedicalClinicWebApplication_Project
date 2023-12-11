@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form  @submit.prevent="saveHandbook" class="container">
+        <form  @submit.prevent="editHandbook" class="container">
             <div class="card">
                 <div class="card-header">
                     <h4>Editar Prontuário</h4>
@@ -41,7 +41,7 @@
 import axios from 'axios';
 
 export default {
-    name: 'HandbookCreate',
+    name: 'HandbookEdit',
     data() {
         return {
             errorList: null,
@@ -58,17 +58,43 @@ export default {
         }
     },
     mounted() {
-        this.fetchOptions();
+        this.fetchOptions(this.$route.params.id);
+
+        this.getHandbookData(this.$route.params.id)
     },
     methods: {
-        saveHandbook() {
+        getHandbookData(id) {
+            axios.get(`http://localhost:8000/handbook/${id}/edit`)
+                .then(res => {
+                    const data = res.data.response;
+                    console.log(data);
+                    this.model.handbook.anamnese = data.anamnese;
+                    this.model.handbook.medicamentos = data.medicamentos;
+                    this.model.handbook.atestados = data.atestados;
+                    const index = this.options.findIndex(option => option.name === data.nome);
+
+                    console.log("AQUI", this.$refs.selectedOption.value)
+
+                    if (index !== -1) {
+                        // Definir selectedOption com base no índice encontrado
+                        this.selectedOption = this.options[index].id;
+                    } else {
+                        // Lidar com o caso em que a opção não foi encontrada
+                        console.error('Opção não encontrada:', data.nome);
+                    }
+
+                    console.log(this.options, data.nome, index)
+                })
+        },
+
+        editHandbook() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
-            console.log("O nome", name)
             this.model.handbook.name = name;
+            this.model.handbook.id = this.$route.params.id;
 
-            axios.post('http://localhost:8000/handbook', this.model.handbook)
+            axios.put(`http://localhost:8000/handbook/${this.model.handbook.id}/edit`, this.model.handbook)
                 .then(res => {
                     console.log(res.data);
 
@@ -76,7 +102,8 @@ export default {
                         anamnese: '',
                         medicamentos: '',
                         atestados: '',
-                        name: null
+                        name: null,
+                        id
                     }
                 })
                 .catch(function (error) {
@@ -96,6 +123,7 @@ export default {
         async fetchOptions() {
             try {
                 const response = await axios.get('http://localhost:8000/pacients/name');
+                console.log("AHHAH", response)
                 this.options = response.data.response;
             }
             catch (error) {

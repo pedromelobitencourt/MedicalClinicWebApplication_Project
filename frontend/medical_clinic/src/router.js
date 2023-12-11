@@ -5,6 +5,7 @@ import Login from './components/Login.vue';
 import AddressRegistration from './components/AddressRegistration.vue';
 import Handbook from './components/Handbook.vue';
 import HandbookCreate from './components/HandbookCreate.vue';
+import HandbookEdit from './components/HandbookEdit.vue';
 
 Vue.use(Router);
 
@@ -15,6 +16,7 @@ export default new Router({
         { path: '/login', component: Login },
         { path: '/address', component: AddressRegistration },
         { path: '/handbook', name: 'handbook' , component: Handbook },
-        { path: '/handbook/create', component: HandbookCreate }
+        { path: '/handbook/create', component: HandbookCreate },
+        { path: '/handbook/:id/edit', component: HandbookEdit }
     ]
 })

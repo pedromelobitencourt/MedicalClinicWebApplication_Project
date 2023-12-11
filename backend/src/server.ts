@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { getDB, insertNewAddress } from './db';
-import { getAllProntuarioRecords, insertNewProtuarioRecord } from './controllers/controllerProntuario';
-import { getAllPacientNames, getIdFromName } from './controllers/controllerPaciente';
+import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId } from './controllers/controllerProntuario';
+import { getAllPacientNames, getIdFromName, getNameFromId } from './controllers/controllerPaciente';
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -94,5 +94,40 @@ if(env.PORT !== undefined) {
     catch (error) {
       res.status(500).json({ error });
     }
-  })
+  });
+
+  app.get('/handbook/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      const dataResponse = await getDataFromId(numberId);
+      const name = await getNameFromId(numberId);
+
+      if(name !== undefined && dataResponse) {
+        const response = { ...dataResponse[0], ...name }
+
+        console.log("handbook response", response)
+
+        res.status(201).json({ message: 'Prontuário com id específico obtido com sucesso', response });
+      }
+      else throw new Error('name é undefined ou não tem a propriedade name')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.put('/handbook/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { anamnese, medicamentos, atestados, name, id } = req.body;
+      
+      console.log(id)
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
 }

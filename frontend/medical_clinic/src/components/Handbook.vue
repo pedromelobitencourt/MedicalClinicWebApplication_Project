@@ -14,23 +14,23 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nome</th>
-                            <th>Anamnese</th>
-                            <th>Medicamentos</th>
-                            <th>Atestados</th>
-                            <th>Ação</th>
+                            <th class="max-width">Nome</th>
+                            <th class="max-width">Anamnese</th>
+                            <th class="max-width">Medicamentos</th>
+                            <th class="max-width">Atestados</th>
+                            <th class="min-width">Ação</th>
                         </tr>
                     </thead>
 
                     <tbody v-if="handbooks.length > 0">
                         <tr v-for="(handbook, index) in handbooks" :key="index">
                             <td> {{handbook.id}} </td>
-                            <td> {{handbook.name}} </td>
-                            <td> {{handbook.anamnese}} </td>
-                            <td> {{handbook.medicamentos}} </td>
-                            <td> {{handbook.atestados}} </td>
-                            <td>
-                                <router-link to="/" class="btn btn-success float-end">
+                            <td class="max-width"> {{handbook.name}} </td>
+                            <td class="max-width2"> {{handbook.anamnese}} </td>
+                            <td class="max-width2"> {{handbook.medicamentos}} </td>
+                            <td class="max-width2"> {{handbook.atestados}} </td>
+                            <td class="min-width">
+                                <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
                                 <button type="button" class="btn btn-danger float-end">Deletar</button>
@@ -98,15 +98,27 @@ export default {
     align-items: stretch;
 }
     .handbook-wrapper {
-        margin-top: 20px;
+        margin: 20px 150px 0px 150px;
         width: 100%;
         flex: 1;
         height: 100%;
+        padding: 0;
     }
 
     .table-container {
         overflow-y: hidden; /* Adicione uma barra de rolagem vertical quando necessário */
         max-height: calc(100vh - 100px);
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .max-width {
+        max-width: 100px;
+    }
+    .max-width2 {
+        max-width: 200px;
     }
 
     .pagination-container {
@@ -119,6 +131,13 @@ export default {
     #pagSpan {
         margin-right: 15px;
         margin-left: 15px;
+    }
+    .min-width {
+        min-width: 150px;
+    }
+
+    th {
+        text-align: center;
     }
 
 </style>

@@ -95,7 +95,7 @@
       width: 1500px;
       background: #ffffff;
       box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-      padding: 40px 55px 45px 55px;
+      padding: 20px 5px 25px 15px;
       border-radius: 15px;
       transition: all .3s;
       align-content: center;
