@@ -2,6 +2,9 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { db, insertNewAddress } from './db';
+import { insertNewMedico, getAllMedicos, getMedicosByEspecialidade, deleteMedico} from './controllers/controllerMedico';
+
+
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -45,6 +48,17 @@ if(env.PORT !== undefined) {
         // Se 'code' não estiver presente, trate de outra forma
         res.status(500).json({ error: 'Erro desconhecido' });
       }
+    }
+  });
+  app.get('/medico', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllMedicos();
+      res.status(200).json({ response });
+      
+      
+    }
+    catch (error) {
+      console.error(error);
     }
   });
 }
