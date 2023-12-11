@@ -2,7 +2,7 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { getDB } from './db';
-import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
+import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
@@ -52,6 +52,41 @@ if(env.PORT !== undefined) {
       } else {
         // Se 'code' não estiver presente, trate de outra forma
         res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
+  app.get('/address', async (req: Request, res: Response) => {
+    try {
+      const enderecos = await getAllEnderecos();
+      res.status(200).send(enderecos);
+    } catch (error) {
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
+  app.delete('/address/:cep', async (req: Request, res: Response) => {
+    try {
+      const cep = req.params.cep;
+  
+      await deleteEnderecoByCep(cep);
+  
+      res.status(200).json({ message: 'Endereço deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
       }
     }
   });
