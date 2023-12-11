@@ -1,4 +1,6 @@
 <template>
+    <div class="auth-wrapper">
+      <div class="auth-inner">
     <div>
         <div id="fade" class="hide" ref="fade">
             <div id="loader" class="spinner-border text-info hide" role="status" ref="loader">
@@ -48,7 +50,8 @@
             <button class="btn btn-primary btn-block w-100">Cadastrar</button>
         </form>
     </div>
-
+    </div>
+    </div>
 </template>
 
 <script>
@@ -353,6 +356,22 @@
         width: 8em;
         border-radius: 1.5em;
     }
+    .auth-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+}
+
+.auth-inner {
+  width: 450px;
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
+}
 
     /* Responsive */
     @media (min-width: 500px) {
