@@ -12,7 +12,18 @@ type Prontuario = {
 }
 
 export async function getAllProntuarioRecords() {
-    const sql = 'SELECT * FROM ProntuarioEletronico';
+    const sql = `
+    SELECT ProntuarioEletronico.id, 
+           ProntuarioEletronico.anamnese, 
+           ProntuarioEletronico.medicamentos, 
+           ProntuarioEletronico.atestados, 
+           Pessoa.name
+    FROM ProntuarioEletronico
+    JOIN Paciente ON ProntuarioEletronico.pacienteId = Paciente.id
+    JOIN Pessoa ON Pessoa.id = Paciente.pessoaId
+    ORDER BY ProntuarioEletronico.id;
+`;
+
     let connection;
 
     try {

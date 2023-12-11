@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar-light navbar navbar-expand fixed-top bg-light">
+    <nav class="navbar-light navbar navbar-expand fixed-top bg-light mb-20">
       <div class="container">
         <a href="#" class="navbar-brand">Home</a>
         <div class="collapse navbar-collapse">

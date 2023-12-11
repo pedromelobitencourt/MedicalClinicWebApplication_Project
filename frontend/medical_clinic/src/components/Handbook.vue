@@ -9,11 +9,12 @@
                     </router-link>
                 </h4>
             </div>
-            <div class="card-body">
+            <div class="card-body table-container">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Nome</th>
                             <th>Anamnese</th>
                             <th>Medicamentos</th>
                             <th>Atestados</th>
@@ -24,6 +25,7 @@
                     <tbody v-if="handbooks.length > 0">
                         <tr v-for="(handbook, index) in handbooks" :key="index">
                             <td> {{handbook.id}} </td>
+                            <td> {{handbook.name}} </td>
                             <td> {{handbook.anamnese}} </td>
                             <td> {{handbook.medicamentos}} </td>
                             <td> {{handbook.atestados}} </td>
@@ -44,6 +46,13 @@
                 </table>
             </div>
         </div>
+
+        <div class="pagination-container d-flex justify-content-center">
+            <button @click="changePage(-1)" :disabled="currentPage === 1" class="btn btn-secondary">Anterior</button>
+            <span id="pagSpan" class="my-auto">Página {{ currentPage }}</span>
+            <button @click="changePage(1)" :disabled="currentPage * itemsPerPage >= totalItems" class="btn btn-secondary">Próxima</button>
+        </div>
+
     </div>
 </template>
 
@@ -54,7 +63,10 @@ export default {
     name: 'handbook',
     data() {
         return {
-            handbooks: []
+            handbooks: [],
+            currentPage: 1,
+            itemsPerPage: 10,
+            totalItems: 0,
         }
     },
     mounted() {
@@ -63,10 +75,18 @@ export default {
     },
     methods: {
         getHandbooks() {
+            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+            const endIndex = startIndex + this.itemsPerPage;
+
             axios.get('http://localhost:8000/handbook')
                 .then(res => {
-                    this.handbooks = res.data.response;
+                    this.totalItems = res.data.response.length;
+                    this.handbooks = res.data.response.slice(startIndex, endIndex);
                 })
+        },
+        changePage(offset) {
+            this.currentPage += offset;
+            this.getHandbooks();
         }
     }
 }
@@ -74,7 +94,31 @@ export default {
 
 
 <style>
+.container {
+    align-items: stretch;
+}
     .handbook-wrapper {
-        width: 100%
+        margin-top: 20px;
+        width: 100%;
+        flex: 1;
+        height: 100%;
     }
+
+    .table-container {
+        overflow-y: hidden; /* Adicione uma barra de rolagem vertical quando necessário */
+        max-height: calc(100vh - 100px);
+    }
+
+    .pagination-container {
+        margin-top: 10px; /* Adicione espaçamento acima dos botões */
+    }
+
+    .btn-next {
+        margin-left: 10px; /* Adicione espaçamento entre os botões */
+    }
+    #pagSpan {
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
 </style>
