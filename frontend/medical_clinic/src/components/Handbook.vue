@@ -33,7 +33,9 @@
                                 <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" class="btn btn-danger float-end">Deletar</button>
+                                <button type="button" @click="deleteHandbook(handbook.id)" class="btn btn-danger float-end">
+                                    Deletar
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -87,6 +89,20 @@ export default {
         changePage(offset) {
             this.currentPage += offset;
             this.getHandbooks();
+        },
+        deleteHandbook(id) {
+
+            if(confirm('Você tem certeza que quer deletar tal registro?')){
+                axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                    .then(res => {
+                        const message = res.data.message;
+                        alert(message);
+                        this.$router.go();
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            }
         }
     }
 }

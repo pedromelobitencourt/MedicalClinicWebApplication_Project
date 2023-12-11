@@ -12,7 +12,6 @@ type Paciente = {
 }
 
 type PacienteIdResult = { id: number };
-type PacienteNameResult = { nome: string };
 
 async function getAllPacienteRecords() {
     const sql = 'SELECT * FROM Paciente';
@@ -81,34 +80,34 @@ export async function getIdFromName(name: string): Promise<PacienteIdResult | un
     return undefined;
 }
 
-export async function getNameFromId(id: number): Promise<PacienteNameResult | undefined> {
-    const sql = 'SELECT Pessoa.name FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id) WHERE Paciente.id = ?';
-    let connection;
+// export async function getNameFromId(id: number): Promise<PacienteNameResult | undefined> {
+//     const sql = 'SELECT Pessoa.name FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id) WHERE Paciente.id = ?';
+//     let connection;
 
-    try {
-        connection = await getDB();
-        const query = promisify(connection.query).bind(connection);
-        const values = [id];
+//     try {
+//         connection = await getDB();
+//         const query = promisify(connection.query).bind(connection);
+//         const values = [id];
 
-        // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
-        const response = await query({ sql, values }) as PacienteNameResult[];
+//         // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+//         const response = await query({ sql, values }) as PacienteNameResult[];
         
-        // Se houver pelo menos um resultado
-        if (response.length > 0) {
-            if ('name' in response[0]) {
-                const nome = response[0].name as string;
-                return { nome }; // Retorna um objeto com a propriedade 'id'
-            } else {
-                console.error("Propriedade 'name' não encontrada no objeto de resposta.");
-            }
-        } else {
-            console.error("Nenhum resultado encontrado.");
-            return undefined;
-        }
-    } catch (error) {
-        throw error;
-    }
+//         // Se houver pelo menos um resultado
+//         if (response.length > 0) {
+//             if ('name' in response[0]) {
+//                 const nome = response[0].name as string;
+//                 return { nome }; // Retorna um objeto com a propriedade 'id'
+//             } else {
+//                 console.error("Propriedade 'name' não encontrada no objeto de resposta.");
+//             }
+//         } else {
+//             console.error("Nenhum resultado encontrado.");
+//             return undefined;
+//         }
+//     } catch (error) {
+//         throw error;
+//     }
 
-    // Adicione uma declaração de retorno ao final da função
-    return undefined;
-}
+//     // Adicione uma declaração de retorno ao final da função
+//     return undefined;
+// }

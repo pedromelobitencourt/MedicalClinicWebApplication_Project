@@ -67,13 +67,10 @@ export default {
             axios.get(`http://localhost:8000/handbook/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
-                    console.log(data);
                     this.model.handbook.anamnese = data.anamnese;
                     this.model.handbook.medicamentos = data.medicamentos;
                     this.model.handbook.atestados = data.atestados;
                     const index = this.options.findIndex(option => option.name === data.nome);
-
-                    console.log("AQUI", this.$refs.selectedOption.value)
 
                     if (index !== -1) {
                         // Definir selectedOption com base no índice encontrado
@@ -83,7 +80,6 @@ export default {
                         console.error('Opção não encontrada:', data.nome);
                     }
 
-                    console.log(this.options, data.nome, index)
                 })
         },
 
@@ -103,8 +99,9 @@ export default {
                         medicamentos: '',
                         atestados: '',
                         name: null,
-                        id
                     }
+
+                    this.$router.go();
                 })
                 .catch(function (error) {
                     if(error.response) {

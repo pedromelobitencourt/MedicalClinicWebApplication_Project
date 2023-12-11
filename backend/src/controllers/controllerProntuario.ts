@@ -12,6 +12,8 @@ type Prontuario = {
     nome?: string
 }
 
+type PacienteNameResult = { nome: string };
+
 export async function getAllProntuarioRecords() {
     const sql = `
     SELECT ProntuarioEletronico.id, 
@@ -118,4 +120,128 @@ export async function getDataFromId(id: number) {
 
     // Adicione uma declaração de retorno ao final da função
     return undefined;
+}
+
+export async function getPacientNameFromId(id: number) {
+    const sql = 'SELECT Pessoa.name FROM (ProntuarioEletronico JOIN Paciente ON ProntuarioEletronico.pacienteId = Paciente.id JOIN Pessoa ON Paciente.pessoaId = Pessoa.id) WHERE ProntuarioEletronico.id = ?';
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [id];
+
+        // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values }) as PacienteNameResult[];
+        
+        // Se houver pelo menos um resultado
+        if (response.length > 0) {
+            if ('name' in response[0]) {
+                const nome = response[0].name as string;
+                return { nome }; // Retorna um objeto com a propriedade 'id'
+            } else {
+                console.error("Propriedade 'name' não encontrada no objeto de resposta.");
+            }
+        } else {
+            console.error("Nenhum resultado encontrado.");
+            return undefined;
+        }
+    } catch (error) {
+        throw error;
+    }
+
+    // Adicione uma declaração de retorno ao final da função
+    return undefined;
+}
+
+export async function updateIdPaciente(prontuarioId: number, pacienteId: number) {
+    const sql = `UPDATE ProntuarioEletronico
+                    SET pacienteId = ?
+                    WHERE id = ?;`;
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ pacienteId, prontuarioId ];
+
+        // Use a dica d tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateAnamnese(prontuarioId: number, anamnese: string) {
+    const sql = `UPDATE ProntuarioEletronico
+                    SET anamnese = ?
+                    WHERE id = ?;`;
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ anamnese, prontuarioId ];
+
+        // Use a dica d tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateMedicamentos(prontuarioId: number, medicamentos: string) {
+    const sql = `UPDATE ProntuarioEletronico
+                    SET medicamentos = ?
+                    WHERE id = ?;`;
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ medicamentos, prontuarioId ];
+
+        // Use a dica d tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateAtestados(prontuarioId: number, atestados: string) {
+    const sql = `UPDATE ProntuarioEletronico
+                    SET atestados = ?
+                    WHERE id = ?;`;
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ atestados, prontuarioId ];
+
+        // Use a dica d tipo com 'as' para informar ao TypeScript sobre o tipo esperado
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function deleteProntuario(id: number) {
+    const sql = `DELETE FROM ProntuarioEletronico WHERE ProntuarioEletronico.id = ?;`;
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ id ];
+
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
 }

@@ -2,8 +2,9 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { getDB, insertNewAddress } from './db';
-import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId } from './controllers/controllerProntuario';
-import { getAllPacientNames, getIdFromName, getNameFromId } from './controllers/controllerPaciente';
+import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
+import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
+import { getAllPacientNames, getIdFromName } from './controllers/controllerPaciente';
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -102,7 +103,9 @@ if(env.PORT !== undefined) {
 
       const numberId = parseInt(id);
       const dataResponse = await getDataFromId(numberId);
-      const name = await getNameFromId(numberId);
+      const name = await getPacientNameFromId(numberId);
+
+      console.log(name, numberId);
 
       if(name !== undefined && dataResponse) {
         const response = { ...dataResponse[0], ...name }
@@ -122,12 +125,36 @@ if(env.PORT !== undefined) {
   app.put('/handbook/:id/edit', async (req: Request, res: Response) => {
     try {
       const { anamnese, medicamentos, atestados, name, id } = req.body;
-      
-      console.log(id)
+      const pacientId = await getIdFromName(name);
+      if(pacientId !== undefined){
+        const [ updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse ] = 
+        await Promise.all
+        ([updateIdPaciente(id, pacientId.id), updateAnamnese(id, anamnese), updateMedicamentos(id, medicamentos),
+          updateAtestados(id, atestados)]);
+        
+        return { updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse }
+      }
+      else throw new Error("update handbook error")
     }
     catch (error) {
       console.log(error);
       res.status(500).json({ error });
     }
   });
+
+  app.delete('/handbook/:id/delete', async (req: Request, res: Response) => {
+    try {
+      const handbookId = req.params.id;
+      const handbookNumberId = parseInt(handbookId);
+      
+      await deleteProntuario(handbookNumberId);
+
+      res.status(201).json({ message: `Prontuário com o id ${handbookId} deletado com sucesso` });
+      res.send();
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }
