@@ -4,7 +4,7 @@ import { Connection } from 'mysql'
 import { promisify } from 'util';
 
 type Paciente = {
-    id: number,
+    id?: number,
     peso: number,
     altura: number
     tipoSanguineo: string
@@ -98,7 +98,7 @@ export async function insertNewPaciente(paciente: Paciente): Promise<void> {
     }
 }
 
-export async function getAllPacientes(): Promise<Paciente[]> {
+export async function getAllPacientes(): Promise<Paciente[] | undefined> {
     const sql = 'SELECT * FROM Paciente';
 
     let connection;
@@ -107,9 +107,14 @@ export async function getAllPacientes(): Promise<Paciente[]> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const pacientes = await query({ sql });
+        const pacientes = await query({ sql }) as Paciente[];
 
-        return pacientes;
+        if(pacientes) {
+            if(pacientes.length > 0) {
+                return pacientes;
+            } 
+            return undefined;
+        }
     } 
     catch (error) {
         throw error;

@@ -52,7 +52,7 @@ async function getMedicoById(id: number): Promise<Medico> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const medico = await query({ sql, values });
+        const medico = await query({ sql, values }) as Medico[];
 
         if (medico.length > 0) {
             return medico[0];
@@ -73,7 +73,7 @@ async function getAllMedicos(): Promise<Medico[]> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const medicos = await query(sql);
+        const medicos = await query(sql) as Medico[];
 
         return medicos;
     } catch (error) {
@@ -81,7 +81,7 @@ async function getAllMedicos(): Promise<Medico[]> {
     }
 };
 
-async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[]> {
+async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[] | undefined> {
     const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
     const values = [especialidade];
 
@@ -91,7 +91,7 @@ async function getMedicosByEspecialidade(especialidade: string): Promise<Medico[
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const medicos = await query({ sql, values });
+        const medicos = await query({ sql, values }) as Medico[];
 
         return medicos;
     } catch (error) {

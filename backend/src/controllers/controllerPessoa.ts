@@ -38,7 +38,7 @@ async function getPessoaById(id: number): Promise<Pessoa> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const pessoa = await query({ sql, values });
+        const pessoa = await query({ sql, values }) as Pessoa[];
 
         if (pessoa.length > 0) {
             return pessoa[0];
@@ -60,7 +60,7 @@ async function getAllPessoas(): Promise<Pessoa[]> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const pessoas = await query(sql);
+        const pessoas = await query(sql) as Pessoa[];
 
         return pessoas;
     } 

@@ -37,7 +37,7 @@ async function getFuncionarioById(id: number): Promise<Funcionario> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const funcionario = await query({ sql, values });
+        const funcionario = await query({ sql, values }) as Funcionario[];
 
         if (funcionario.length > 0) {
             return funcionario[0];
@@ -59,7 +59,7 @@ async function getAllFuncionarios(): Promise<Funcionario[]> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const funcionarios = await query(sql);
+        const funcionarios = await query(sql) as Funcionario[];
 
         return funcionarios;
     }
