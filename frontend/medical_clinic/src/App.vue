@@ -5,12 +5,15 @@
     <div class="container-fluid scroll" :class="{ 'auth-wrapper': !isHandbook, 'auth-wrapper-handbook': isHandbook }">
       <div :class="{ 'auth-inner': !isHandbook, 'auth-inner-handbook': isHandbook }">
         <router-view />
-    <Footer />
-  </div>
+      </div>
+    </div>
+      <Footer />
+</div>
 </template>
 
 <script>
   import Nav from './components/Nav.vue';
+  import Footer from './components/Footer.vue';
   export default {
     name: 'app',
     data() {
@@ -19,19 +22,12 @@
       }
     },
     components: {
-      Nav,
+      Nav, Footer
     },
     mounted() {
       this.isHandbook = this.$route.name === 'handbook' || this.$route.name === 'handbook/create';
-    }
-  import Footer from './components/Footer.vue';
-export default {
-  name: 'app',
-    components: {
-      Nav, Footer
-    }
-  
-}
+    }}
+    
 </script>
 
 <style>

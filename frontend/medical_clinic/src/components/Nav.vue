@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar-light navbar navbar-expand fixed-top bg-light" style="position: relative;">
+  <nav class="navbar-light navbar navbar-expand fixed-top bg-light mb-20" style="position: relative;">
     <img class = "logo" src="../assets/Logo2.png" alt=" mb-20">
     <div class="container">
       <div class="collapse navbar-collapse">

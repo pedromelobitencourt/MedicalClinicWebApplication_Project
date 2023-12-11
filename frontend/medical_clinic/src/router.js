@@ -18,7 +18,7 @@ export default new Router({
         { path: '/address', component: AddressRegistration },
         { path: '/handbook', name: 'handbook' , component: Handbook },
         { path: '/handbook/create', component: HandbookCreate },
-        { path: '/handbook/:id/edit', component: HandbookEdit }
+        { path: '/handbook/:id/edit', component: HandbookEdit },
         {path: '/scheduling', component: AppointmentScheduling}
     ] 
 })
