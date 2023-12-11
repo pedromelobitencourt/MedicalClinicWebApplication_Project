@@ -45,13 +45,13 @@ height: 150px;
 flex-shrink: 0;
 background: #31AFB4;
 position: relative;
-
+}
 .Diretrizes{
     text-decoration: underline;
     color: white;
 }
 
-}
+
 .Texto-Diretrizes{
     position: absolute;
     bottom: 0;

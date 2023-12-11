@@ -191,6 +191,7 @@ background: #A2EEF1;
  .root{
     display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
  .conteudo-ImagemPrincipal{
 width: 100%;
