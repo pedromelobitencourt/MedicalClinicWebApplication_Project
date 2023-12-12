@@ -103,7 +103,7 @@ export default {
     },
     async fetchOptions() {
       try {
-        const response = await axios.get('http://localhost:8000/employees');
+        const response = await axios.get('http://localhost:8000/employees/create');
         this.options = response.data.response;
         console.log("selectMenu", this.$refs.selectMenu);
         console.log("ResponseData", response.data.response)

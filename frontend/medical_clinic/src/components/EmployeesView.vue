@@ -28,7 +28,7 @@
                             <td class="max-width"> {{employee.salario}} </td>
                             <td class="max-width"> {{employee.dataContrato}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/handbook/'+employee.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/employees/'+employee.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
                                 <button type="button" @click="deleteHandbook(employee.id)" class="btn btn-danger float-end">

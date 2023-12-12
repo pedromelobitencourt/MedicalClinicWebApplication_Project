@@ -8,7 +8,7 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioIdByName } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, getFuncionarioIdByName } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -393,6 +393,18 @@ if(env.PORT !== undefined) {
 
   app.get('/employees', async (req: Request, res: Response) => {
     try {
+      const response = await getAllFuncionariosWithName();
+
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+  app.get('/employees/create', async (req: Request, res: Response) => {
+    try {
       const response = await getAllPessoasNotFuncionario();
 
       res.status(201).json({ response });
@@ -448,4 +460,49 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
+
+  app.get('/employees/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      const dataResponse = await getFuncionarioById(numberId);
+      const name = await getFuncionarioNameFromId(numberId);
+
+      console.log(name, numberId);
+
+      if(name !== undefined && dataResponse && name.name) {
+        const response = { ...dataResponse, ...name };
+
+        console.log("funcionario response", response)
+
+        res.status(201).json({ message: 'Funcionario com id específico obtido com sucesso', response });
+      }
+      else throw new Error('name é undefined ou não tem a propriedade name')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  // app.put('/employees/:id/edit', async (req: Request, res: Response) => {
+  //   try {
+  //     const { anamnese, medicamentos, atestados, name, id } = req.body;
+  //     const pacientId = await getIdFromName(name);
+  //     if(pacientId !== undefined){
+  //       const [ updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse ] = 
+  //       await Promise.all
+  //       ([updateIdPaciente(id, pacientId.id), updateAnamnese(id, anamnese), updateMedicamentos(id, medicamentos),
+  //         updateAtestados(id, atestados)]);
+        
+  //       return { updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse }
+  //     }
+  //     else throw new Error("update handbook error")
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({ error });
+  //   }
+  // });
 }

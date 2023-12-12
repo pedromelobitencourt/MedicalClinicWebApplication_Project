@@ -10,6 +10,7 @@ import AppointmentScheduling from './components/AppointmentScheduling.vue';
 import PhotoPage from './components/PhotoPage.vue';
 import EmployeesView from './components/EmployeesView.vue';
 import EmployeesCreate from './components/EmployeesCreate.vue';
+import EmployeesEdit from './components/EmployeesEdit.vue';
 
 Vue.use(Router);
 
@@ -25,6 +26,7 @@ export default new Router({
         { path: '/scheduling', component: AppointmentScheduling },
         { path: '/photo', component: PhotoPage },
         { path: '/employees', component: EmployeesView },
-        { path: '/employees/create', component: EmployeesCreate }
+        { path: '/employees/create', component: EmployeesCreate },
+        { path: '/employees/:id/edit', component: EmployeesEdit }
     ] 
 })

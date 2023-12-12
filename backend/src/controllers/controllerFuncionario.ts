@@ -10,7 +10,10 @@ type Funcionario = {
 };
 
 type FuncionarioId = {
-    id?: number
+    id: number
+}
+type FuncionarioName = {
+    name: string
 }
 
 async function insertNewFuncionario(funcionario: Funcionario): Promise<void> {
@@ -119,6 +122,36 @@ async function getFuncionarioIdByName(name: string): Promise<FuncionarioId | und
     }
 }
 
+async function getFuncionarioNameFromId(id: number): Promise<FuncionarioName | undefined> {
+    const sql = "SELECT Pessoa.name FROM Funcionario JOIN Pessoa ON Funcionario.pessoaId=Pessoa.id WHERE Funcionario.id = ?;";
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ id ];
+
+        const response = await query({ sql, values }) as FuncionarioName[];
+
+        if (response.length > 0) {
+            if ('name' in response[0]) {
+                const name = response[0].name;
+                return { name }; // Retorna um objeto com a propriedade 'id'
+            } else {
+                console.error("Propriedade 'id' não encontrada no objeto de resposta.");
+            }
+        } else {
+            console.error("Nenhum resultado encontrado.");
+            return undefined;
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+
 async function deleteFuncionario(id: number): Promise<void> {
     const sql = 'DELETE FROM Funcionario WHERE id = ?';
     const values = [id];
@@ -136,4 +169,4 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, deleteFuncionario };
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, deleteFuncionario };
