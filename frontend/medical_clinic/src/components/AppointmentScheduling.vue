@@ -71,6 +71,13 @@
             <button type="submit" class="btn btn-primary w-100" >Agendar consulta</button>
         </form>
 
+        <b-modal v-model="showSuccessPopup" title="Sucesso" @hide="resetScreen">
+        <p>Agendamento realizado com sucesso!</p>
+        <template #modal-footer="{ ok }">
+          <b-button @click="ok">Ok</b-button>
+        </template>
+      </b-modal>
+
       </div>
     </div>
 
@@ -98,7 +105,8 @@ export default {
         ListaPadrao:["8","9","10","11","12","13","14","15","16","17"],
         TelefoneP:'',
         NomeP:'',
-        EmailP:''
+        EmailP:'',
+        showSuccessPopup: false,
       }
     },
     mounted() {
@@ -270,45 +278,61 @@ export default {
 
          
           }},
-           efetuarAgendamento(){
-            // try {
+           async efetuarAgendamento(){
+            try {
               const dataCompletaString = this.dataC + " " + this.HorarioSelecionado + ":00:00";
               const dataCompleta = new Date(dataCompletaString);
               const dataFormatada = dataCompleta.toISOString();
+              const novaData =  new Date(dataFormatada);
 
-              console.log(dataFormatada,this.NomeP,this.EmailP,this.TelefoneP,parseInt(this.MedicoSelecionado))
-                //     const response = await axios.post('http://localhost:8000/agenda', {
+              console.log(novaData,this.NomeP,this.EmailP,this.TelefoneP,parseInt(this.MedicoSelecionado))
+                    const response = await axios.post('http://localhost:8000/agenda', {
                       
-                //       date: dataFormatada,
-                //       horario: "tarde",
-                //       name:this.NomeP ,
-                //       email:this.EmailP,
-                //       telefone:this.TelefoneP,
-                //       medicoID:parseInt(this.MedicoSelecionado)
-                //     }, {
-                //         headers: {
-                //             'Content-Type': 'application/json',
-                //         }
-                //     });
+                      data: novaData,
+                      horario: "tarde",
+                      name:this.NomeP ,
+                      email:this.EmailP,
+                      medicoID:parseInt(this.MedicoSelecionado),
+                      telefone:this.TelefoneP
+                      
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
 
               
 
 
-                //     if (response.status === 201) {
-                //         const msg = "Agendamento realizado com sucesso";
-                //         this.registerMessage(msg);
+                    if (response.status === 201) {
+                        //const msg = "Agendamento realizado com sucesso";
+                        this.showSuccessPopup = true;
                         
-                //     } else {
-                //         const msg = "Ocorreu um erro inesperado 1";
-                //         this.registerMessage(msg);
-                //     }
-                // } 
-                // catch (error) {
-                //     const erro = error.response.data;
+                    } else {
+                        //const msg = "Ocorreu um erro inesperado 1";
+                        
+                    }
+                } 
+                catch (error) {
+                  console.error("Erro ao agendar consulta:", error);
+
+              if (error.response) {
+                  console.error("Status da resposta:", error.response.status);
+                  console.error("Dados da resposta:", error.response.data);
+                  console.error("Cabeçalhos da resposta:", error.response.headers);
+              } else if (error.request) {
+                  console.error("Erro na solicitação:", error.request);
+              } else {
+                  console.error("Erro durante a configuração da solicitação:", error.message);
+              }
 
                     
-                // }
-          }
+                }
+          },
+          resetScreen() {
+      this.showSuccessPopup = false;
+      location.reload();
+    },
 
       }
 
