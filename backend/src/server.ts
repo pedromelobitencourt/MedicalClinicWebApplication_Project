@@ -58,15 +58,23 @@ if(env.PORT !== undefined) {
 
   app.get('/address', async (req: Request, res: Response) => {
     try {
-      const enderecos = await getAllEnderecos();
-      res.status(200).send(enderecos);
+      const response = await getAllEnderecos();
+
+      res.status(201).send({ response });
+      //console.log(res.getHeaders());
+      console.log("Registros listados com sucesso!");
     } catch (error) {
-      // Verifique se 'error' é do tipo CustomError
+      console.log("Pegou erro no getAllEnderecos");
+      //Verifique se 'error' é do tipo CustomError
       if ((error as CustomError).code) {
-        res.status(500).send((error as CustomError).code);
+        console.log(res.getHeaders());
+        console.log((error as CustomError).code)
+        console.log("2 repostas ");
+        //res.status(500).send((error as CustomError).code);
       } else {
+        console.log("3 repostas ");
         // Se 'code' não estiver presente, trate de outra forma
-        res.status(500).json({ error: 'Erro desconhecido' });
+       // res.status(500).json({ error: 'Erro desconhecido' });
       }
     }
   });
@@ -74,8 +82,9 @@ if(env.PORT !== undefined) {
   app.delete('/address/:cep', async (req: Request, res: Response) => {
     try {
       const cep = req.params.cep;
+      const cepString = cep.toString();
   
-      await deleteEnderecoByCep(cep);
+      await deleteEnderecoByCep(cepString);
   
       res.status(200).json({ message: 'Endereço deletado com sucesso' });
       res.send();
@@ -83,8 +92,10 @@ if(env.PORT !== undefined) {
     catch (error) {  
       // Verifique se 'error' é do tipo CustomError
       if ((error as CustomError).code) { 
+        console.log((error as CustomError).code);
         res.status(500).send((error as CustomError).code);
       } else { 
+        console.log(error);
         // Se 'code' não estiver presente, trate de outra forma
         res.status(500).json({ error: 'Erro desconhecido' }); 
       }

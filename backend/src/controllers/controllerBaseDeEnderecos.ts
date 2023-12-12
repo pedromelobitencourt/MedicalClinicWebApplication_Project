@@ -27,19 +27,23 @@ export async function insertNewAddress(address: Address): Promise<void> {
     }
 }
 
-export async function getAllEnderecos(): Promise<Address[]> {
-    const sql = 'SELECT * FROM BaseDeEnderecos';
+export async function getAllEnderecos()  {
+    const sql = `SELECT * FROM BaseDeEnderecos;`;
     let connection;
 
     try {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const enderecos = await query({ sql } ) as Address[];
 
+        const enderecos = await query({ sql });
+        console.log("Registros listados com sucesso!");
+        console.log(enderecos);
         return enderecos;
     } 
     catch (error) {
+        console.log("Pegou erro no getAllEnderecos");
+        console.log(error);
         throw error;
     }
 }
@@ -66,8 +70,9 @@ export async function getEnderecoByCep(cep: string): Promise<Address> {
     }
 }
 
-export async function deleteEnderecoByCep(cep: string): Promise<void> {
-    const sql = 'DELETE FROM BaseDeEnderecos WHERE cep = ?';
+export async function deleteEnderecoByCep(cep: string) {
+    const sql = `DELETE FROM BaseDeEnderecos WHERE cep LIKE ?`; 
+    console.log(cep);
     const values = [cep];
 
     let connection;
@@ -76,7 +81,7 @@ export async function deleteEnderecoByCep(cep: string): Promise<void> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        await query({ sql, values });
+        const response = await query({ sql, values });
         console.log("Endereço deletado com sucesso!");
     } catch (error) {
         throw error;

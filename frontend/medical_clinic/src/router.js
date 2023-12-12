@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './components/Home.vue';
 import Login from './components/Login.vue';
 import AddressRegistration from './components/AddressRegistration.vue';
+import AddressList from './components/AddressList.vue';
 import Handbook from './components/Handbook.vue';
 import HandbookCreate from './components/HandbookCreate.vue';
 import HandbookEdit from './components/HandbookEdit.vue';
@@ -15,7 +16,8 @@ export default new Router({
     routes: [
         { path: '/', component: Home },
         { path: '/login', component: Login },
-        { path: '/address', component: AddressRegistration },
+        { path: '/address', name: 'address' , component: AddressList },
+        { path: '/address/create', component: AddressRegistration },
         { path: '/handbook', name: 'handbook' , component: Handbook },
         { path: '/handbook/create', component: HandbookCreate },
         { path: '/handbook/:id/edit', component: HandbookEdit },
