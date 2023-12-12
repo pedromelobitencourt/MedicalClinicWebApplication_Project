@@ -12,6 +12,7 @@ import EmployeesView from './components/EmployeesView.vue';
 import EmployeesCreate from './components/EmployeesCreate.vue';
 import EmployeesEdit from './components/EmployeesEdit.vue';
 import PersonCreate from './components/PersonCreate.vue';
+import PersonView from './components/PersonView.vue';
 
 Vue.use(Router);
 
@@ -30,5 +31,6 @@ export default new Router({
         { path: '/employees/create', component: EmployeesCreate },
         { path: '/employees/:id/edit', component: EmployeesEdit },
         { path: '/persons/create', component: PersonCreate },
+        { path: '/people', component: PersonView }
     ] 
 })

@@ -520,6 +520,19 @@ if(env.PORT !== undefined) {
     }
   });
 
+  app.get('/people', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllPessoas();
+      console.log("people", response)
+
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
   app.post('/person', async (req: Request, res: Response) => {
     try {
       const { nome, email, telefone, enderecoCep } = req.body;
