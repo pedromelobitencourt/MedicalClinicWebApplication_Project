@@ -68,6 +68,24 @@ async function getAllFuncionarios(): Promise<Funcionario[]> {
     }
 }
 
+async function getAllFuncionariosWithName(): Promise<Funcionario[]> {
+    const sql = "SELECT Funcionario.id, Funcionario.dataContrato, Funcionario.salario, Pessoa.name, Pessoa.id as 'pessoaId' FROM Funcionario JOIN Pessoa ON Funcionario.pessoaId=Pessoa.id;";
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const funcionarios = await query(sql) as Funcionario[];
+
+        return funcionarios;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 async function deleteFuncionario(id: number): Promise<void> {
     const sql = 'DELETE FROM Funcionario WHERE id = ?';
     const values = [id];
@@ -85,4 +103,4 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, deleteFuncionario };
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, deleteFuncionario, getAllFuncionariosWithName };

@@ -8,7 +8,7 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName } from './controllers/controllerFuncionario';
 import { getAllPessoas, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -389,5 +389,39 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+
+  app.get('/employees', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllFuncionariosWithName();
+
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
+  app.post('/employees/name', async (req: Request, res: Response) => {
+    try {
+      const { anamnese, medicamentos, atestados, name } = req.body;
+
+      const idResponse = await getIdFromName(name);
+      
+      if(idResponse) {
+        const id = idResponse.id;
+        const handbook = { id, anamnese, medicamentos, atestados };
+
+        await insertNewProtuarioRecord(handbook);
+
+        res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+        res.send();
+      }
+      else throw new Error("ID é undefined")
+    }
+    catch (error) {
+      res.status(500).json({ error });
+    }
+  });
 }
