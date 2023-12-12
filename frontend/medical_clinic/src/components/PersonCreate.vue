@@ -81,7 +81,7 @@ export default {
       try {
         var myThis = this;
 
-        const cep = this.options[this.$refs.selectedOption.selectedIndex - 1].cep;
+        const cep = this.options[this.$refs.selectedOption.selectedIndex - 2].cep;
         this.model.person.enderecoCep = cep;
         console.log('Person saved:', this.model.person);
 

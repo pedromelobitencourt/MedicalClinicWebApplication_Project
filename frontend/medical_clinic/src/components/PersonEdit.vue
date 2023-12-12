@@ -23,10 +23,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="">CEP</label>
-                        <input type="tel"
-                        v-model="model.person.enderecoCep"
-                        pattern="[0-9]{8}"
-                        class="form-control">
+                        <select required v-model="selectedOption" id="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                            <option value="" selected>-- Escolha uma opção --</option>
+                            <option value="" selected>-- Se não houver opção, não há ceps cadastrados --</option>
+                            <option v-for="cep in options" :key="cep.cep" :value="cep.cep">
+                            {{ cep.cep }}
+                            </option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -61,6 +64,7 @@ export default {
     },
     mounted() {
         this.getPersonData(this.$route.params.id)
+        this.fetchOptions();
     },
     methods: {
         getPersonData(id) {
@@ -78,7 +82,11 @@ export default {
 
         editPerson() {
             var myThis = this;
-            console.log("person", this.model.person)
+            console.log("person", this.model.person);
+
+            const cep = this.options[this.$refs.selectedOption.selectedIndex - 2].cep;
+            this.model.person.enderecoCep = cep;
+            console.log('Person saved:', this.model.person);
 
             axios.put(`http://localhost:8000/person/${this.model.person.id}/edit`, this.model.person)
                 .then(res => {
@@ -106,7 +114,17 @@ export default {
                     else {
                         console.log("Error:", error.message);
                     }
-                })
+                });
+        },
+
+        async fetchOptions() {
+            try {
+                const response = await axios.get('http://localhost:8000/ceps');
+                this.options = response.data.response;
+                console.log("options", this.options);
+            } catch (error) {
+                console.error('cep creation: ', error);
+            }
         },
     }
 }
