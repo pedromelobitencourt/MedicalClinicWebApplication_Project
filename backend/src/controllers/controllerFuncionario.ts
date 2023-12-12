@@ -169,4 +169,44 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, deleteFuncionario };
+async function updateSalarioFuncionario(id: number, salario: number) {
+    const sql = `UPDATE Funcionario
+                    SET salario = ?
+                    WHERE id = ?;
+                `;
+    const values = [ salario, id ];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function updateDataContratoFuncionario(id: number, dataContrato: string) {
+    const sql = `UPDATE Funcionario
+                    SET dataContrato = ?
+                    WHERE id = ?;
+                `;
+    const values = [ dataContrato, id ];
+    
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, deleteFuncionario };

@@ -8,7 +8,7 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, getFuncionarioIdByName } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -486,23 +486,37 @@ if(env.PORT !== undefined) {
     }
   });
 
-  // app.put('/employees/:id/edit', async (req: Request, res: Response) => {
-  //   try {
-  //     const { anamnese, medicamentos, atestados, name, id } = req.body;
-  //     const pacientId = await getIdFromName(name);
-  //     if(pacientId !== undefined){
-  //       const [ updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse ] = 
-  //       await Promise.all
-  //       ([updateIdPaciente(id, pacientId.id), updateAnamnese(id, anamnese), updateMedicamentos(id, medicamentos),
-  //         updateAtestados(id, atestados)]);
-        
-  //       return { updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse }
-  //     }
-  //     else throw new Error("update handbook error")
-  //   }
-  //   catch (error) {
-  //     console.log(error);
-  //     res.status(500).json({ error });
-  //   }
-  // });
+  app.put('/employees/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id, pessoaId, name, salario, dataContrato } = req.body;
+      console.log(id, pessoaId, name, salario, typeof(dataContrato))
+      const [ updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse ] = 
+      await Promise.all
+      ( [updateSalarioFuncionario(id, salario), updateDataContratoFuncionario(id, dataContrato) ]);
+      
+      return { updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse }
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.delete('/employees/:id/delete', async (req: Request, res: Response) => {
+    try {
+      const employeeId = req.params.id;
+      const employeeNumberId = parseInt(employeeId);
+
+      console.log('o id eh', employeeNumberId)
+      
+      await deleteFuncionario(employeeNumberId);
+
+      res.status(201).json({ message: `Funcionário com o id ${employeeNumberId} deletado com sucesso` });
+      res.send();
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }

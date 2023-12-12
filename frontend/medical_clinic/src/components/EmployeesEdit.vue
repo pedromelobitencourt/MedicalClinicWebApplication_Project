@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form  @submit.prevent="editHandbook" class="container">
+        <form  @submit.prevent="editEmployee" class="container">
             <div class="card">
                 <div class="card-header">
                     <h4>Editar Funcionário</h4>
@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="">Funcionário</label>
-                        <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                        <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100" disabled>
                             <option value="" selected>-- Escolha uma opção --</option>
                             <option v-for="employee in options" :key="employee.id" :value="employee.id">
                                 {{ employee.name }}
@@ -16,16 +16,18 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="">Nome</label>
-                        <input type="text" v-model="model.employee.name" id="" class="form-control">
-                    </div>
-                    <div class="mb-3">
                         <label for="">Salario</label>
                         <input type="text" v-model="model.employee.salario" name="" id="" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="">Atestados</label>
-                        <input type="text" v-model="model.handbook.dataContrato" name="" id="" class="form-control">
+                        <label for="">Data de Contrato</label>
+                        <v-date-picker 
+                            v-model="model.employee.dataContrato"
+                            dark
+                            full-width
+                            :value="model.employee.dataContrato"
+                            class="custom-date-picker">
+                        </v-date-picker>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -68,56 +70,59 @@ export default {
             axios.get(`http://localhost:8000/employees/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
-                    console.log(data);
-                    // this.model.handbook.anamnese = data.anamnese;
-                    // this.model.handbook.medicamentos = data.medicamentos;
-                    // this.model.handbook.atestados = data.atestados;
-                    // const index = this.options.findIndex(option => option.name === data.nome);
 
-                    // if (index !== -1) {
-                    //     // Definir selectedOption com base no índice encontrado
-                    //     this.selectedOption = this.options[index].id;
-                    // } else {
-                    //     // Lidar com o caso em que a opção não foi encontrada
-                    //     console.error('Opção não encontrada:', data.nome);
-                    // }
+                    this.model.employee.id = data.id;
+                    this.model.employee.dataContrato = data.dataContrato.substr(0, 10);
+                    this.model.employee.pessoaId = data.pessoaId;
+                    this.model.employee.name = data.name;
+                    this.model.employee.salario = data.salario.toFixed(2);
+
+                    const index = this.options.findIndex(option => option.name === data.name);
+                    if (index !== -1) {
+                        // Definir selectedOption com base no índice encontrado
+                        this.selectedOption = this.options[index].id;
+                    } else {
+                        // Lidar com o caso em que a opção não foi encontrada
+                        console.error('Opção não encontrada:', data.nome);
+                    }
 
                 })
         },
 
-        editHandbook() {
-            // var myThis = this;
+        editEmployee() {
+            var myThis = this;
 
-            // const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
-            // this.model.handbook.name = name;
-            // this.model.handbook.id = this.$route.params.id;
+            const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
+            this.model.employee.name = name;
+            this.model.employee.id = this.$route.params.id;
 
-            // axios.put(`http://localhost:8000/handbook/${this.model.handbook.id}/edit`, this.model.handbook)
-            //     .then(res => {
-            //         console.log(res.data);
+            axios.put(`http://localhost:8000/employees/${this.model.employee.id}/edit`, this.model.employee)
+                .then(res => {
+                    console.log(res.data);
 
-            //         this.model.handbook = {
-            //             anamnese: '',
-            //             medicamentos: '',
-            //             atestados: '',
-            //             name: null,
-            //         }
+                    this.model.employee = {
+                        id: '',
+                        pessoaId: '',
+                        name: '',
+                        salario: '',
+                        dataContrato: null,
+                    }
 
-            //         this.$router.go();
-            //     })
-            //     .catch(function (error) {
-            //         if(error.response) {
-            //             if(error.response.status === 422) {
-            //                 myThis.errorList = error.response.data.errors;
-            //             }
-            //         }
-            //         else if (error.request) {
-            //             console.log(error.request);
-            //         }
-            //         else {
-            //             console.log("Error:", error.message);
-            //         }
-            //     })
+                    this.$router.go();
+                })
+                .catch(function (error) {
+                    if(error.response) {
+                        if(error.response.status === 422) {
+                            myThis.errorList = error.response.data.errors;
+                        }
+                    }
+                    else if (error.request) {
+                        console.log(error.request);
+                    }
+                    else {
+                        console.log("Error:", error.message);
+                    }
+                })
         },
         async fetchOptions() {
             try {

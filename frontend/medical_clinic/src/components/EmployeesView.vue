@@ -31,7 +31,7 @@
                                 <router-link :to="{ path: '/employees/'+employee.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" @click="deleteHandbook(employee.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deleteEmployee(employee.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -117,10 +117,10 @@ export default {
             this.currentPage += offset;
             this.getEmployees();
         },
-        deleteHandbook(id) {
-
+        deleteEmployee(id) {
+            console.log("O ID", id)
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                axios.delete(`http://localhost:8000/employees/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
