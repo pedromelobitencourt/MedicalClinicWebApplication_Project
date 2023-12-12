@@ -60,14 +60,14 @@ export default {
         this.fetchOptions();
     },
     methods: {
-        saveHandbook() {
+        async saveHandbook() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
             console.log("O nome", name)
             this.model.handbook.name = name;
 
-            axios.post('http://localhost:8000/handbook', this.model.handbook)
+            await axios.post('http://localhost:8000/handbook', this.model.handbook)
                 .then(res => {
                     console.log(res.data);
 

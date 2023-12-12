@@ -65,9 +65,9 @@ export default {
         this.getFuncionarioData(this.$route.params.id)
     },
     methods: {
-        getFuncionarioData(id) {
+        async getFuncionarioData(id) {
             console.log(id);
-            axios.get(`http://localhost:8000/employees/${id}/edit`)
+            await axios.get(`http://localhost:8000/employees/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
 
@@ -89,14 +89,14 @@ export default {
                 })
         },
 
-        editEmployee() {
+        async editEmployee() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
             this.model.employee.name = name;
             this.model.employee.id = this.$route.params.id;
 
-            axios.put(`http://localhost:8000/employees/${this.model.employee.id}/edit`, this.model.employee)
+            await axios.put(`http://localhost:8000/employees/${this.model.employee.id}/edit`, this.model.employee)
                 .then(res => {
                     console.log(res.data);
 

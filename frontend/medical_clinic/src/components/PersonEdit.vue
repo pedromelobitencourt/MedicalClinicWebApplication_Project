@@ -67,9 +67,9 @@ export default {
         this.fetchOptions();
     },
     methods: {
-        getPersonData(id) {
+        async getPersonData(id) {
             console.log(id);
-            axios.get(`http://localhost:8000/person/${id}/edit`)
+            await axios.get(`http://localhost:8000/person/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
                     this.model.person.id = data.id;
@@ -80,7 +80,7 @@ export default {
                 });
         },
 
-        editPerson() {
+        async editPerson() {
             var myThis = this;
             console.log("person", this.model.person);
 
@@ -88,7 +88,7 @@ export default {
             this.model.person.enderecoCep = cep;
             console.log('Person saved:', this.model.person);
 
-            axios.put(`http://localhost:8000/person/${this.model.person.id}/edit`, this.model.person)
+            await axios.put(`http://localhost:8000/person/${this.model.person.id}/edit`, this.model.person)
                 .then(res => {
                     console.log(res.data);
 

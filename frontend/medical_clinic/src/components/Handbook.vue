@@ -76,11 +76,11 @@ export default {
         this.getHandbooks();
     },
     methods: {
-        getHandbooks() {
+        async getHandbooks() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:8000/handbook')
+            await axios.get('http://localhost:8000/handbook')
                 .then(res => {
                     this.totalItems = res.data.response.length;
                     this.handbooks = res.data.response.slice(startIndex, endIndex);
@@ -90,10 +90,9 @@ export default {
             this.currentPage += offset;
             this.getHandbooks();
         },
-        deleteHandbook(id) {
-
+        async deleteHandbook(id) {
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                await axios.delete(`http://localhost:8000/handbook/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);

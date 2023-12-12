@@ -63,8 +63,8 @@ export default {
         this.getHandbookData(this.$route.params.id)
     },
     methods: {
-        getHandbookData(id) {
-            axios.get(`http://localhost:8000/handbook/${id}/edit`)
+        async getHandbookData(id) {
+            await axios.get(`http://localhost:8000/handbook/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
                     this.model.handbook.anamnese = data.anamnese;
@@ -83,14 +83,14 @@ export default {
                 })
         },
 
-        editHandbook() {
+        async editHandbook() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
             this.model.handbook.name = name;
             this.model.handbook.id = this.$route.params.id;
 
-            axios.put(`http://localhost:8000/handbook/${this.model.handbook.id}/edit`, this.model.handbook)
+            await axios.put(`http://localhost:8000/handbook/${this.model.handbook.id}/edit`, this.model.handbook)
                 .then(res => {
                     console.log(res.data);
 

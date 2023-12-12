@@ -74,11 +74,11 @@ export default {
         this.getEmployees();
     },
     methods: {
-        getEmployees() {
+        async getEmployees() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:8000/employees')
+            await axios.get('http://localhost:8000/employees')
                 .then(res => {
                     const formattedData = res.data.response.map(employee => {
                     const formattedDate = new Date(employee.dataContrato).toLocaleDateString('pt-BR', {
@@ -117,10 +117,10 @@ export default {
             this.currentPage += offset;
             this.getEmployees();
         },
-        deleteEmployee(id) {
+        async deleteEmployee(id) {
             console.log("O ID", id)
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:8000/employees/${id}/delete`)
+                await axios.delete(`http://localhost:8000/employees/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);

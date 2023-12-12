@@ -76,11 +76,11 @@ export default {
         this.getPeople();
     },
     methods: {
-        getPeople() {
+        async getPeople() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:8000/people')
+            await axios.get('http://localhost:8000/people')
                 .then(res => {
                     this.people = res.data.response
                     this.totalItems = this.people.length;
@@ -97,10 +97,10 @@ export default {
             this.currentPage += offset;
             this.getPeople();
         },
-        deletePerson(id) {
+        async deletePerson(id) {
             console.log("O ID", id)
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:8000/person/${id}/delete`)
+                await axios.delete(`http://localhost:8000/person/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);

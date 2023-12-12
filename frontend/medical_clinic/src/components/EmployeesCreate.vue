@@ -71,7 +71,7 @@ export default {
         this.model.employee.name = name;
         console.log('Employee saved:', this.model.employee);
 
-        axios.post('http://localhost:8000/employees', this.model.employee)
+        await axios.post('http://localhost:8000/employees', this.model.employee)
                 .then(res => {
                     console.log(res.data);
 

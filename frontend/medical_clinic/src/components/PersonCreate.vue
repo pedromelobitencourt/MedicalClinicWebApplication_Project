@@ -85,7 +85,7 @@ export default {
         this.model.person.enderecoCep = cep;
         console.log('Person saved:', this.model.person);
 
-        axios.post('http://localhost:8000/person', this.model.person)
+        await axios.post('http://localhost:8000/person', this.model.person)
                 .then(res => {
                     console.log(res.data);
 
