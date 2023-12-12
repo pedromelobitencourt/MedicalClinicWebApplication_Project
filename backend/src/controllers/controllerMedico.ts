@@ -75,7 +75,6 @@ async function getAllMedicos() {
         
         const response = await query(sql);
 
-        console.log("Registro de medicos listados com sucesso!");
         
         return response;
     } catch (error) {
@@ -94,6 +93,28 @@ async function getMedicosByEspecialidade(especialidade: string) {
         const query = promisify(connection.query).bind(connection);
 
         const response = await query({ sql, values });
+
+
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+async function getMedicosNamesByEspecialidade(especialidade: string) {
+    //const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
+    const sql = 'select medico.id,medico.crm,medico.especialidade,medico.funcionarioID, pessoa.name from medico inner join funcionario on medico.funcionarioId = funcionario.id inner join pessoa on funcionario.pessoaID = pessoa.id WHERE especialidade = ?';
+    const values = [especialidade];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+
+        console.log("Lista retornada com sucesso");
+        console.log(response);
 
         return response;
     } catch (error) {
@@ -117,4 +138,4 @@ async function deleteMedico(id: number): Promise<void> {
     }
 }
 
-export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico }
+export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico,getMedicosNamesByEspecialidade }

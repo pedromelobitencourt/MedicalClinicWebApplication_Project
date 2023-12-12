@@ -10,6 +10,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false
+Vue.config.silent = true;
 
 new Vue({
   router,

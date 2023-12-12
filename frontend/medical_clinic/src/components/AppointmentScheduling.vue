@@ -2,13 +2,13 @@
  <div class="auth-wrapper">
       <div class="auth-inner">
         <h3>Agendamento de consulta</h3>
-        <form >
+        <form @submit.prevent="efetuarAgendamento" >
           <div class="form-especialidade">
             <select class="form-select" aria-label=""  v-model="EspecialidadeSelecionada"
             @change="selecionarMedicos($event)">
                   <option selected value="" >Selecione a especialidade Desejada</option>
-                  <option v-for="medico in medicos"   :key="medico.id" :value="medico.especialidade">
-                    {{ medico.especialidade }}</option>
+                  <option v-for="espec in especialidades"   :key="espec" :value="espec">
+                    {{ espec}}</option>
                 
           </select>
 
@@ -16,11 +16,11 @@
 
           <div class="form-nomeMedico">
 
-            <select class="form-select" aria-label="">
-                  <option selected>Selecione o nome do medico/a</option>
-                  <option value="1"></option>
-                  <option value="2"></option>
-                  <option value="3"></option>
+            <select class="form-select" aria-label="" v-model="MedicoSelecionado"
+            @change="selecionarDataEHorario($event)">
+                  <option selected  value="">Selecione o nome do medico/a</option>
+                  <option v-for="medico in medicos"   :key="medico.id" :value="medico.id">{{ medico.name }}</option>
+                  
           </select>
 
           </div>
@@ -29,7 +29,7 @@
 
             <label for="dataConsulta">Data da consulta:</label>
             
-            <b-form-datepicker v-model="dataC" :date-disabled-fn="dateDisabled" locale="pt-br" name="dataConsulta" id="dataConsulta" :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }" date-format="d/m/Y"
+            <b-form-datepicker v-model="dataC" :date-disabled-fn="dateDisabled" locale="pt-br" name="dataConsulta" id="dataConsulta" :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }" date-format="d/m/Y" @input="atualizarHorariosDisponiveis"
             >
             
             </b-form-datepicker>
@@ -40,7 +40,11 @@
           <div class="form-horarioEscolhido">
 
             <label for="horaConsulta">Data da consulta:</label>
-            <b-form-timepicker name="horaConsulta" id="horaConsulta" v-model="horaC" locale="en" ></b-form-timepicker>
+            <select class="form-select" v-model="HorarioSelecionado">
+              <option selected value="" >Selecione o horario desejado</option>
+              <option v-for="hora in ListaPadrao"   :key="hora" :value="hora">
+                    {{ hora}}hrs</option>
+            </select>
 
           </div>
           
@@ -53,7 +57,7 @@
 
             <div class="form-group my-3">
               <label class="mb-1">Email</label>
-              <input type="email" class="form-control mb-1" placeholder="Email">
+              <input type="email" class="form-control mb-1" placeholder="Email" v-model="EmailP">
           
             </div>
 
@@ -64,7 +68,7 @@
 
 
 
-
+            <button type="submit" class="btn btn-primary w-100" >Agendar consulta</button>
         </form>
 
       </div>
@@ -81,10 +85,20 @@ export default {
     data() {
       return {
         medicos: [], 
-         especialidades: [], 
+        especialidades: [], 
+        Datas:[],
+        DatasEHorariosOcupados:{},
         value: '',
         EspecialidadeSelecionada:'',
-        MedicoSelecionado:''
+        MedicoSelecionado:'',
+        DataSelecionada:'',
+        HorarioSelecionado:'',
+        dataC:'',
+        HorariosDisponiveis:[],
+        ListaPadrao:["8","9","10","11","12","13","14","15","16","17"],
+        TelefoneP:'',
+        NomeP:'',
+        EmailP:''
       }
     },
     mounted() {
@@ -93,26 +107,60 @@ export default {
     this.carregarMedicos();
   },
     methods: {
-      dateDisabled(ymd, date) {
+      dateDisabled(ymd) {
+
+
         
-        const weekday = date.getDay()
-        const day = date.getDate()
+        // console.log("datepicker",this.DatasEHorariosOcupados);
+        
+        
+        for (const chave in this.DatasEHorariosOcupados) {
+          const lista = this.DatasEHorariosOcupados[chave];
+
+          // console.log(`Chave: ${chave}`);
+          
+          for (const valor of lista) {
+            let tamanhoMax = 0;
+            // console.log(`  Valor: ${valor}`);
+            tamanhoMax =+ tamanhoMax+1;
+            // console.log("tamnhoMax",tamanhoMax)
+            
+            if(tamanhoMax>=10){
+            //   const [ano, mes, dia] = chave.split('-').map(Number);
+
+
+            // const dataObj = new Date(ano, mes - 1, dia);
+            
+            return chave===ymd;
+
+            }
+          }}
+          
+          
+          
+
+        
+
+        
+        // const weekday = date.getDay()
+        // const day = date.getDate()
       
-        return weekday === 0 || weekday === 6 || day === 13
+        
       },
 
       carregarMedicos(){
-        axios.get('http://localhost:8000/medico').then(res =>{
+        axios.get('http://localhost:8000/medicos').then(res =>{
 
-          console.log(res.data);
-          this.medicos = res.data.response;
+       
+          
+          const especialidadesSet = new Set(res.data.map(med => med.especialidade));
+      
+        this.especialidades = Array.from(especialidadesSet);
+
+         
 
 
-          console.log("Objeto Medicos:");
-          console.log(this.medicos);
 
-          console.log("Especialidade do primeiro meido:");
-          console.log(this.medicos[0].especialidade);
 
         }).catch(error => {
       console.error('Erro na requisição:', error);
@@ -120,14 +168,152 @@ export default {
 
       },
       selecionarMedicos(event){
-        this.MedicoSelecionado= event.target.value;
-        //console.log(this.MedicoSelecionado);
+         this.EspecialidadeSelecionada = event.target.value;
+
+
+        
+         
+         if(this.EspecialidadeSelecionada !=='' &&this.EspecialidadeSelecionada !==null){
+
+          
+
+          
+          
+        
+
+        axios.get(`http://localhost:8000/medicos/name/${this.EspecialidadeSelecionada}`)
+        .then((response) => {
+          
+          this.medicos = response.data;
+        })
+        .catch((error) => {
+          console.error('Erro na requisição ao backend (controllerMedicos):', error);
+        });
+
+    
+
+      }
+      },
+      selecionarDataEHorario(event){
+        this.MedicoSelecionado = event.target.value;
+        console.log("Id do medico selecionado:",this.MedicoSelecionado);
+
+
+        
+
+
+        
+         
+         if(this.MedicoSelecionado !=='' &&this.MedicoSelecionado !==null){
+
+          
+
+          
+          
+        
+
+        axios.get(`http://localhost:8000/agenda/${this.MedicoSelecionado}`)
+        .then((response) => {
+          
+          this.Datas = response.data;
+          console.log("Datas da agenda:",this.Datas);
+       
+          this.DatasEHorariosOcupados = {};
+        
+          for (const obj of this.Datas) {
+          const chave =  obj.data.split("T")[0].slice(0,10);
+          console.log("Chave selecionada:",chave);
+
+          this.DatasEHorariosOcupados[chave] = [];
+
+          for (const obj2 of this.Datas) {
+
+          
+
+            if(chave===obj2.data.split("T")[0].slice(0,10)){
+              console.log("Hora Selecionada:",obj2.data.split("T")[1]
+              .slice(0,2));
+
+              this.DatasEHorariosOcupados[chave].push(obj2.data.split("T")[1]
+              .slice(0,2));
+
+            }
+            
+          }
+        }
+        })
+        .catch((error) => {
+          console.error('Erro na requisição ao backend (controllerAgenda):', error);
+        });
+
+        
+        
+      }
 
       },
-      
+      atualizarHorariosDisponiveis(){
+        console.log("Data escolhida:", this.dataC);
+        for (const chave in this.DatasEHorariosOcupados) {
+          const lista = this.DatasEHorariosOcupados[chave];
+          // console.log(`Chave: ${chave}`);
+
+          if(chave === this.dataC){
+            for (const valor of lista) {
+
+              console.log(this.ListaPadrao, lista);
+
+              this.ListaPadrao = this.ListaPadrao.filter(itemB => !lista.includes(itemB));
+            
+              console.log("Horarios disponiveis:", this.HorariosDisponiveis);
+          }
+          }
+
+         
+          }},
+           efetuarAgendamento(){
+            // try {
+              const dataCompletaString = this.dataC + " " + this.HorarioSelecionado + ":00:00";
+              const dataCompleta = new Date(dataCompletaString);
+              const dataFormatada = dataCompleta.toISOString();
+
+              console.log(dataFormatada,this.NomeP,this.EmailP,this.TelefoneP,parseInt(this.MedicoSelecionado))
+                //     const response = await axios.post('http://localhost:8000/agenda', {
+                      
+                //       date: dataFormatada,
+                //       horario: "tarde",
+                //       name:this.NomeP ,
+                //       email:this.EmailP,
+                //       telefone:this.TelefoneP,
+                //       medicoID:parseInt(this.MedicoSelecionado)
+                //     }, {
+                //         headers: {
+                //             'Content-Type': 'application/json',
+                //         }
+                //     });
+
+              
+
+
+                //     if (response.status === 201) {
+                //         const msg = "Agendamento realizado com sucesso";
+                //         this.registerMessage(msg);
+                        
+                //     } else {
+                //         const msg = "Ocorreu um erro inesperado 1";
+                //         this.registerMessage(msg);
+                //     }
+                // } 
+                // catch (error) {
+                //     const erro = error.response.data;
+
+                    
+                // }
+          }
+
+      }
 
     }
-  }
+  
 
 </script>
 

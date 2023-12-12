@@ -6,8 +6,9 @@ import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
+import {getAllAgenda,getAgendaByMedicoId} from './controllers/controllerAgenda';
 
-import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
+import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
@@ -46,6 +47,68 @@ if(env.PORT !== undefined) {
       res.send();
     } 
     catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+  app.get('/medicos/name/:especialidade', async (req: Request, res: Response) => {
+    try {
+      const especialidade = req.params.especialidade;
+
+      console.log('Valor da especialidade que chegou no server.ts:',  req.params.especialidade);
+  
+      const listaMedicos = await getMedicosNamesByEspecialidade(especialidade);
+  
+      
+
+      res.status(200).send(listaMedicos);
+
+    } 
+    catch (error) { 
+
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
+  app.get('/agenda/:medicoid', async (req: Request, res: Response) => {
+    try {
+      const medicoid = parseInt(req.params.medicoid);
+
+      console.log('valor do medicoId',  req.params.medicoid);
+  
+      const listaAgenda = await getAgendaByMedicoId(medicoid);
+  
+      console.log('ListaAgenda',  listaAgenda);
+
+      res.status(200).send(listaAgenda);
+
+    } 
+    catch (error) { 
+
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
+  app.get('/agenda', async (req: Request, res: Response) => {
+    try {
+      const agenda = await getAllAgenda();
+      res.status(200).send(agenda);
+    } catch (error) {
       // Verifique se 'error' é do tipo CustomError
       if ((error as CustomError).code) {
         res.status(500).send((error as CustomError).code);
