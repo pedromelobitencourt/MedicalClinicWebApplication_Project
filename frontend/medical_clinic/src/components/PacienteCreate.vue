@@ -52,6 +52,7 @@
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
     name: 'PacienteCreate',
@@ -121,6 +122,7 @@ export default {
             },
         closeMessage() {
                 this.toggleMessage();
+                router.push('/paciente');
             },
         registerMessage(msg) {
                 this.toggleMessage(msg);

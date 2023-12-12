@@ -99,7 +99,7 @@ export async function insertNewPaciente(paciente: Paciente): Promise<void> {
 }
 
 export async function getAllPacientes(): Promise<Paciente[] | undefined> {
-    const sql = 'SELECT * FROM Paciente';
+    const sql = 'SELECT name, Paciente.id, Paciente.peso, Paciente.altura, Paciente.tipoSanguineo FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id)';
 
     let connection;
 
@@ -115,6 +115,23 @@ export async function getAllPacientes(): Promise<Paciente[] | undefined> {
             } 
             return undefined;
         }
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function deletePaciente (id: number): Promise<void> {
+    const sql = 'DELETE FROM Paciente WHERE id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
     } 
     catch (error) {
         throw error;
