@@ -189,8 +189,9 @@ background: #A2EEF1;
 }
 
  .root{
-    display: flex;
-  flex-direction: column;
+overflow: hidden;    
+display: flex;
+flex-direction: column;
 }
  .conteudo-ImagemPrincipal{
 width: 100%;
