@@ -15,7 +15,7 @@ type PessoaId = {
 }
 
 async function insertNewPessoa(pessoa: Pessoa): Promise<void> {
-    const sql = 'INSERT INTO Pessoa (name, email, telefone, enderecoCep) VALUES ( ?, ?, ?, ?)';
+    const sql = 'INSERT INTO Pessoa (name, email, telefone, enderecoCep) VALUES (?, ?, ?, ?)';
     const values = [pessoa.nome, pessoa.telefone, pessoa.email, pessoa.enderecoCep]; // Replace with your actual column names
 
     let connection;
@@ -28,6 +28,7 @@ async function insertNewPessoa(pessoa: Pessoa): Promise<void> {
         console.log("Pessoa inserida com sucesso!");
     } 
     catch (error) {
+        console.log(error);
         throw error;
     }
 }

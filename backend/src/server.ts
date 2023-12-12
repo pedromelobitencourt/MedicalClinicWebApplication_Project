@@ -518,5 +518,22 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+
+  app.post('/person', async (req: Request, res: Response) => {
+    try {
+      const { nome, email, telefone, enderecoCep } = req.body;
+      console.log(nome, email, telefone, enderecoCep);
+
+      const person = { nome, email, telefone, enderecoCep }
+      
+      await insertNewPessoa(person);
+
+      res.status(201).json({ message: 'Pessoa cadastrada com sucesso' });
+      res.send();
+    }
+    catch (error) {
+      res.status(500).json({ error });
+    }
+  });
 }
