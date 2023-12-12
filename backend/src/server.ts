@@ -9,7 +9,7 @@ import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes }
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario } from './controllers/controllerFuncionario';
-import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone } from './controllers/controllerPessoa';
+import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -579,21 +579,11 @@ if(env.PORT !== undefined) {
       const { id, nome, email, telefone, enderecoCep } = req.body;
       console.log(id, nome, email, telefone, enderecoCep)
 
-      const [ updatePessoaNomeResponse, updatePessoaEmailResponse, updatePessoaTelefoneResponse ] = await
-          Promise.all([updatePessoaNome(id, nome), updatePessoaEmail(id, email), updatePessoaTelefone(id, telefone)])
+      const [ updatePessoaNomeResponse, updatePessoaEmailResponse, updatePessoaTelefoneResponse, updatePessoaCepResponse ] = await
+          Promise.all([updatePessoaNome(id, nome), updatePessoaEmail(id, email), updatePessoaTelefone(id, telefone), updatePessoaCep(id, enderecoCep)])
 
-      return { updatePessoaNomeResponse, updatePessoaEmailResponse }
-
-      // console.log(dataResponse);
-
-      // if(dataResponse) {
-      //   const response = { ...dataResponse};
-
-      //   console.log("pessoa response", response)
-
-      //   res.status(201).json({ message: 'Pessoa com id específico obtida com sucesso', response });
-      // }
-      // else throw new Error('dataResponse no person é undefined ou não tem a propriedade name')
+      const response =  { updatePessoaNomeResponse, updatePessoaEmailResponse, updatePessoaTelefoneResponse, updatePessoaCepResponse }
+      res.status(201).json({ message: 'Pessoa com id específico modificada com sucesso', response });
     }
     catch (error) {
       console.log(error);

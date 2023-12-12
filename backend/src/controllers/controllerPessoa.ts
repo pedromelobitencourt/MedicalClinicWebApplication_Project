@@ -118,10 +118,31 @@ async function updatePessoaEmail(id: number, email: string) {
 
 async function updatePessoaTelefone(id: number, telefone: string) {
     const sql = `UPDATE Pessoa
-                    SET telefone = 'novo_numero_telefone'
-                    WHERE id = 1;    
+                    SET telefone = ?
+                    WHERE id = ?;    
                 `;
     const values = [ telefone, id ];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const pessoas = await query({ sql, values });
+        return pessoas;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+async function updatePessoaCep(id: number, cep: string) {
+    const sql = `UPDATE Pessoa
+                    SET enderecoCep = ?
+                    WHERE id = ?;    
+                `;
+    const values = [ cep, id ];
 
     let connection;
 
@@ -198,4 +219,4 @@ async function getPessoaIdByName(name: string): Promise<PessoaId> {
     }
 }
 
-export { insertNewPessoa, getPessoaById, getPessoaIdByName, getAllPessoas, getAllPessoasNotFuncionario, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, deletePessoa };
+export { insertNewPessoa, getPessoaById, getPessoaIdByName, getAllPessoas, getAllPessoasNotFuncionario, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep, deletePessoa };
