@@ -9,6 +9,10 @@ type Funcionario = {
     pessoaId: number
 };
 
+type FuncionarioId = {
+    id?: number
+}
+
 async function insertNewFuncionario(funcionario: Funcionario): Promise<void> {
     const sql = 'INSERT INTO Funcionario (dataContrato, salario, pessoaId) VALUES (?, ?, ?)';
     const values = [funcionario.dataContrato, funcionario.salario, funcionario.pessoaId]; // Replace with your actual column names
@@ -86,6 +90,35 @@ async function getAllFuncionariosWithName(): Promise<Funcionario[]> {
     }
 }
 
+async function getFuncionarioIdByName(name: string): Promise<FuncionarioId | undefined> {
+    const sql = "SELECT Funcionario.id FROM Funcionario JOIN Pessoa ON Funcionario.pessoaId=Pessoa.id WHERE Pessoa.name = ?;";
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        const values = [ name ];
+
+        const response = await query({ sql, values }) as FuncionarioId[];
+
+        if (response.length > 0) {
+            if ('id' in response[0]) {
+                const id = response[0].id;
+                return { id }; // Retorna um objeto com a propriedade 'id'
+            } else {
+                console.error("Propriedade 'id' não encontrada no objeto de resposta.");
+            }
+        } else {
+            console.error("Nenhum resultado encontrado.");
+            return undefined;
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 async function deleteFuncionario(id: number): Promise<void> {
     const sql = 'DELETE FROM Funcionario WHERE id = ?';
     const values = [id];
@@ -103,4 +136,4 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, deleteFuncionario, getAllFuncionariosWithName };
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, deleteFuncionario };

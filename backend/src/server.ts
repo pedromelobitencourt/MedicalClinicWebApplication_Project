@@ -8,8 +8,8 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName } from './controllers/controllerFuncionario';
-import { getAllPessoas, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioIdByName } from './controllers/controllerFuncionario';
+import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -393,7 +393,7 @@ if(env.PORT !== undefined) {
 
   app.get('/employees', async (req: Request, res: Response) => {
     try {
-      const response = await getAllFuncionariosWithName();
+      const response = await getAllPessoasNotFuncionario();
 
       res.status(201).json({ response });
       res.send();
@@ -416,6 +416,30 @@ if(env.PORT !== undefined) {
         await insertNewProtuarioRecord(handbook);
 
         res.status(201).json({ message: 'Endereço cadastrado com sucesso' });
+        res.send();
+      }
+      else throw new Error("ID é undefined")
+    }
+    catch (error) {
+      res.status(500).json({ error });
+    }
+  });
+
+  app.post('/employees', async (req: Request, res: Response) => {
+    try {
+      const { dataContrato, salario, name } = req.body;
+      
+      const idResponse = await getPessoaIdByName(name);
+
+      const [year, month, day] = dataContrato.split("-");
+      const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      const numberSalario = parseInt(salario);
+      
+      if(idResponse !== undefined && idResponse.id) {
+        const id = idResponse.id;
+        await insertNewFuncionario({ dataContrato: dateObject, salario: numberSalario, pessoaId: id })
+
+        res.status(201).json({ message: 'Funcionário cadastrado com sucesso' });
         res.send();
       }
       else throw new Error("ID é undefined")
