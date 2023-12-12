@@ -33,7 +33,7 @@
                                 <router-link :to="{ path: '/person/'+person.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" @click="deleteEmployee(person.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deletePerson(person.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -97,20 +97,20 @@ export default {
             this.currentPage += offset;
             this.getPeople();
         },
-        // deletePeople(id) {
-        //     console.log("O ID", id)
-        //     if(confirm('Você tem certeza que quer deletar tal registro?')){
-        //         axios.delete(`http://localhost:8000/employees/${id}/delete`)
-        //             .then(res => {
-        //                 const message = res.data.message;
-        //                 alert(message);
-        //                 this.$router.go();
-        //             })
-        //             .catch(error => {
-        //                 alert(error.message);
-        //             });
-        //     }
-        // }
+        deletePerson(id) {
+            console.log("O ID", id)
+            if(confirm('Você tem certeza que quer deletar tal registro?')){
+                axios.delete(`http://localhost:8000/person/${id}/delete`)
+                    .then(res => {
+                        const message = res.data.message;
+                        alert(message);
+                        this.$router.go();
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            }
+        }
     }
 }
 </script>

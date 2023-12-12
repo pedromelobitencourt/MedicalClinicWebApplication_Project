@@ -600,5 +600,23 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+
+  app.delete('/person/:id/delete', async (req: Request, res: Response) => {
+    try {
+      const personId = req.params.id;
+      const personNumberId = parseInt(personId);
+
+      console.log('o id de person eh', personNumberId)
+      
+      await deletePessoa(personNumberId);
+
+      res.status(201).json({ message: `Pessoa com o id ${personNumberId} deletado com sucesso` });
+      res.send();
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
 }
