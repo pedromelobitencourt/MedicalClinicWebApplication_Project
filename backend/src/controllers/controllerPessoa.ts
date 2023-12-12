@@ -51,7 +51,7 @@ async function getPessoaById(id: number): Promise<Pessoa> {
     }
 }
 
-async function getAllPessoas(): Promise<Pessoa[]> {
+async function getAllPessoas() {
     const sql = 'SELECT * FROM Pessoa';
 
     let connection;

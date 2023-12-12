@@ -149,8 +149,10 @@ if(env.PORT !== undefined) {
 
   app.get('/pessoa', async (req: Request, res: Response) => {
     try {
-      const pessoas = await getAllPessoas();
-      res.status(200).send(pessoas);
+      const response = await getAllPessoas();
+      console.log(response);
+      res.status(201).json(response);
+      console.log("back ok");
     } catch (error) {
       // Verifique se 'error' é do tipo CustomError
       if ((error as CustomError).code) {
