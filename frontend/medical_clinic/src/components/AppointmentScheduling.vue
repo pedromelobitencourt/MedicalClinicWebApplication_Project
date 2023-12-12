@@ -4,6 +4,7 @@
         <h3>Agendamento de consulta</h3>
         <form @submit.prevent="efetuarAgendamento" >
           <div class="form-especialidade">
+            <label for="MedicoSelecionado">Selecione a especialidade:</label>
             <select class="form-select" aria-label=""  v-model="EspecialidadeSelecionada"
             @change="selecionarMedicos($event)">
                   <option selected value="" >Selecione a especialidade Desejada</option>
@@ -16,6 +17,7 @@
 
           <div class="form-nomeMedico">
 
+            <label for="MedicoSelecionado">Selecione o médico/a:</label>
             <select class="form-select" aria-label="" v-model="MedicoSelecionado"
             @change="selecionarDataEHorario($event)">
                   <option selected  value="">Selecione o nome do medico/a</option>
@@ -25,7 +27,7 @@
 
           </div>
 
-          <div class="form-dataConsulta">
+          <div class="form-dataConsulta" style="margin-top: 20px;">
 
             <label for="dataConsulta">Data da consulta:</label>
             
@@ -37,9 +39,9 @@
             
           </div>
 
-          <div class="form-horarioEscolhido">
+          <div class="form-horarioEscolhido"  style="margin-top: 20px;">
 
-            <label for="horaConsulta">Data da consulta:</label>
+            <label for="horaConsulta">Horario da consulta:</label>
             <select class="form-select" v-model="HorarioSelecionado">
               <option selected value="" >Selecione o horario desejado</option>
               <option v-for="hora in ListaPadrao"   :key="hora" :value="hora">
@@ -48,7 +50,7 @@
 
           </div>
           
-          <h4>Dados pessoais</h4>
+          <h4 style="margin-top: 20px;">Dados pessoais</h4>
 
           <div class="form-group my-3">
                 <label class="mb-1">Nome</label>
@@ -118,7 +120,12 @@ export default {
       dateDisabled(ymd) {
 
 
-        
+      // const hoje = new Date();
+      // const [ano, mes, dia] = ymd.split('-').map(Number);
+      // const dataSelecionada = new Date(ano, mes - 1, dia);
+
+      // // Desabilita datas anteriores à data atual
+      // return dataSelecionada < hoje;
         // console.log("datepicker",this.DatasEHorariosOcupados);
         
         
@@ -348,6 +355,8 @@ export default {
   justify-content: center;
   flex-direction: column;
   text-align: left;
+ margin-bottom: 100px;
+ margin-top: 100px;
 }
 
 .auth-inner {
