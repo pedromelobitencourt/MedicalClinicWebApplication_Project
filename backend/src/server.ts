@@ -2,14 +2,14 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { getDB } from './db';
-import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
+import { insertNewAddress, getAllCeps } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario } from './controllers/controllerFuncionario';
-import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa } from './controllers/controllerPessoa';
+import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -549,4 +549,66 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
+
+  app.get('/person/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      const dataResponse = await getPessoaById(numberId);
+
+      console.log(dataResponse);
+
+      if(dataResponse) {
+        const response = { ...dataResponse};
+
+        console.log("pessoa response", response)
+
+        res.status(201).json({ message: 'Pessoa com id específico obtida com sucesso', response });
+      }
+      else throw new Error('dataResponse no person é undefined ou não tem a propriedade name')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.put('/person/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id, nome, email, telefone, enderecoCep } = req.body;
+      console.log(id, nome, email, telefone, enderecoCep)
+
+      const [ updatePessoaNomeResponse, updatePessoaEmailResponse, updatePessoaTelefoneResponse ] = await
+          Promise.all([updatePessoaNome(id, nome), updatePessoaEmail(id, email), updatePessoaTelefone(id, telefone)])
+
+      return { updatePessoaNomeResponse, updatePessoaEmailResponse }
+
+      // console.log(dataResponse);
+
+      // if(dataResponse) {
+      //   const response = { ...dataResponse};
+
+      //   console.log("pessoa response", response)
+
+      //   res.status(201).json({ message: 'Pessoa com id específico obtida com sucesso', response });
+      // }
+      // else throw new Error('dataResponse no person é undefined ou não tem a propriedade name')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get('/ceps', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllCeps();
+      res.status(201).json({ message: 'Ceps obtidos com sucesso', response });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }

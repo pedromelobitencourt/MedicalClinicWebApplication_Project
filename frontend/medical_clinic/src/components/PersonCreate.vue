@@ -35,13 +35,13 @@
         </div>
         <div class="mb-3">
           <label for="cep">CEP</label>
-          <input
-            type="text"
-            v-model="model.person.enderecoCep"
-            class="form-control"
-            placeholder="XXXXXXXX"
-            pattern="[0-9]{8}"
-            required>
+          <select required v-model="selectedOption" id="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+            <option value="" selected>-- Escolha uma opção --</option>
+            <option value="" selected>-- Se não houver opção, não há ceps cadastrados --</option>
+            <option v-for="cep in options" :key="cep.cep" :value="cep.cep">
+              {{ cep.cep }}
+            </option>
+          </select>
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -73,11 +73,16 @@ export default {
       locale: 'pt-BR',
     };
   },
+  mounted() {
+    this.fetchOptions();
+  },
   methods: {
     async savePerson() {
       try {
         var myThis = this;
 
+        const cep = this.options[this.$refs.selectedOption.selectedIndex - 1].cep;
+        this.model.person.enderecoCep = cep;
         console.log('Person saved:', this.model.person);
 
         axios.post('http://localhost:8000/person', this.model.person)
@@ -93,16 +98,13 @@ export default {
                     }
                 })
                 .catch(function (error) {
-                    console.log("erroooooo", error)
                     if(error.response) {
                         if(error.response.status === 422) {
                             myThis.errorList = error.response.data.errors;
                         }
                         else if (error.response.data.error.code === 'ER_NO_REFERENCED_ROW_2') {
-                            console.log("cep error")
                             myThis.errorList = error.response.data.errors;
                         }
-                        console.log("erro 1")
                     }
                     else if (error.request) {
                         console.log(error.request);
@@ -117,6 +119,15 @@ export default {
         console.error('Error saving employee:', error);
       }
     },
+    async fetchOptions() {
+      try {
+        const response = await axios.get('http://localhost:8000/ceps');
+        this.options = response.data.response;
+        console.log(this.options);
+      } catch (error) {
+        console.error('cep creation: ', error);
+      }
+    },
   },
 };
 </script>
@@ -125,4 +136,10 @@ export default {
 .container {
     width: 650px
 }
+
+select {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
 </style>

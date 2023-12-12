@@ -74,6 +74,69 @@ async function getAllPessoas(): Promise<Pessoa[]> {
     }
 }
 
+async function updatePessoaNome(id: number, name: string) {
+    const sql = `UPDATE Pessoa
+                    SET name = ?
+                    WHERE id = ?;
+                `;
+    const values = [ name, id ];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const pessoas = await query({ sql, values });
+        return pessoas;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+async function updatePessoaEmail(id: number, email: string) {
+    const sql = `UPDATE Pessoa
+                    SET email = ?
+                    WHERE id = ?;    
+                `;
+    const values = [ email, id ];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const pessoas = await query({ sql, values });
+        return pessoas;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+async function updatePessoaTelefone(id: number, telefone: string) {
+    const sql = `UPDATE Pessoa
+                    SET telefone = 'novo_numero_telefone'
+                    WHERE id = 1;    
+                `;
+    const values = [ telefone, id ];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const pessoas = await query({ sql, values });
+        return pessoas;
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
 async function deletePessoa(id: number): Promise<void> {
     const sql = 'DELETE FROM Pessoa WHERE id = ?';
     const values = [id];
@@ -135,4 +198,4 @@ async function getPessoaIdByName(name: string): Promise<PessoaId> {
     }
 }
 
-export { insertNewPessoa, getPessoaById, getPessoaIdByName, getAllPessoas, getAllPessoasNotFuncionario, deletePessoa };
+export { insertNewPessoa, getPessoaById, getPessoaIdByName, getAllPessoas, getAllPessoasNotFuncionario, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, deletePessoa };

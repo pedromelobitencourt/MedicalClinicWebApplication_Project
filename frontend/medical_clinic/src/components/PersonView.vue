@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h4>
                     Pessoas Cadastradas
-                    <router-link to="/employees/create" class="btn btn-primary float-end">
+                    <router-link to="/person/create" class="btn btn-primary float-end">
                         Add Pessoa
                     </router-link>
                 </h4>
@@ -30,7 +30,7 @@
                             <td class="max-width"> {{person.telefone}} </td>
                             <td class="max-width"> {{person.enderecoCep}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/employees/'+person.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/person/'+person.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
                                 <button type="button" @click="deleteEmployee(person.id)" class="btn btn-danger float-end">
