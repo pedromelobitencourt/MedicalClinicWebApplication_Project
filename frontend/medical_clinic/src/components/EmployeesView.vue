@@ -26,7 +26,7 @@
                             <td> {{employee.id}} </td>
                             <td class="max-width2"> {{employee.name}} </td>
                             <td class="max-width"> {{employee.salario}} </td>
-                            <td class="max-width"> {{employee.dataContrato}} </td>
+                            <td class="max-width2"> {{employee.dataContrato}} </td>
                             <td class="min-width">
                                 <router-link :to="{ path: '/employees/'+employee.id+'/edit' }" class="btn btn-success float-end">
                                     Editar

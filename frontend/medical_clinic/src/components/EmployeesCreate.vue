@@ -20,6 +20,10 @@
           <input type="text" v-model="model.employee.salario" id="salario" class="form-control" required>
         </div>
         <div class="mb-3">
+          <label for="senha">Senha</label>
+          <input type="password" v-model="model.employee.senha" id="senha" class="form-control" required>
+        </div>
+        <div class="mb-3">
           <label for="dataContrato">Data de Contrato</label>
           <v-date-picker 
             v-model="model.employee.dataContrato"
@@ -50,6 +54,7 @@ export default {
           id: '',
           pessoaId: '',
           name: '',
+          senha: '',
           salario: '',
           dataContrato: null,
         },
@@ -79,6 +84,7 @@ export default {
                         id: '',
                         pessoaId: '',
                         salario: '',
+                        senha: '',
                         dataContrato: '',
                         name: null
                     }

@@ -8,7 +8,7 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
@@ -140,9 +140,9 @@ if(env.PORT !== undefined) {
 
   app.post('/funcionarios', async (req: Request, res: Response) => {
     try {
-      const { dataContrato, salario, pessoaId } = req.body;
+      const { dataContrato, salario, pessoaId, senha } = req.body;
   
-      const funcionario = {  dataContrato, salario, pessoaId };
+      const funcionario = {  dataContrato, salario, pessoaId, senha };
   
       await insertNewFuncionario(funcionario);
   
@@ -439,7 +439,7 @@ if(env.PORT !== undefined) {
 
   app.post('/employees', async (req: Request, res: Response) => {
     try {
-      const { dataContrato, salario, name } = req.body;
+      const { dataContrato, salario, name, senha } = req.body;
       
       const idResponse = await getPessoaIdByName(name);
 
@@ -449,7 +449,7 @@ if(env.PORT !== undefined) {
       
       if(idResponse !== undefined && idResponse.id) {
         const id = idResponse.id;
-        await insertNewFuncionario({ dataContrato: dateObject, salario: numberSalario, pessoaId: id })
+        await insertNewFuncionario({ dataContrato: dateObject, salario: numberSalario, pessoaId: id, senha })
 
         res.status(201).json({ message: 'Funcionário cadastrado com sucesso' });
         res.send();
@@ -488,13 +488,13 @@ if(env.PORT !== undefined) {
 
   app.put('/employees/:id/edit', async (req: Request, res: Response) => {
     try {
-      const { id, pessoaId, name, salario, dataContrato } = req.body;
-      console.log(id, pessoaId, name, salario, typeof(dataContrato))
-      const [ updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse ] = 
+      const { id, pessoaId, name, salario, dataContrato, senha } = req.body;
+      console.log(id, pessoaId, name, salario, senha)
+      const [ updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse, updateSenhaFuncionarioResponse ] = 
       await Promise.all
-      ( [updateSalarioFuncionario(id, salario), updateDataContratoFuncionario(id, dataContrato) ]);
+      ( [updateSalarioFuncionario(id, salario), updateDataContratoFuncionario(id, dataContrato), updateSenhaFuncionario(id, senha) ]);
       
-      return { updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse }
+      return { updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse, updateSenhaFuncionarioResponse }
     }
     catch (error) {
       console.log(error);

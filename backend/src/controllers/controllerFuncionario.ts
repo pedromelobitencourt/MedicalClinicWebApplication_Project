@@ -6,6 +6,7 @@ type Funcionario = {
     id?: number,
     dataContrato: Date,
     salario: number,
+    senha: string,
     pessoaId: number
 };
 
@@ -17,8 +18,8 @@ type FuncionarioName = {
 }
 
 async function insertNewFuncionario(funcionario: Funcionario): Promise<void> {
-    const sql = 'INSERT INTO Funcionario (dataContrato, salario, pessoaId) VALUES (?, ?, ?)';
-    const values = [funcionario.dataContrato, funcionario.salario, funcionario.pessoaId]; // Replace with your actual column names
+    const sql = 'INSERT INTO Funcionario (dataContrato, salario, pessoaId, senha) VALUES (?, ?, ?, ?)';
+    const values = [funcionario.dataContrato, funcionario.salario, funcionario.pessoaId, funcionario.senha]; // Replace with your actual column names
 
     let connection;
 
@@ -209,4 +210,24 @@ async function updateDataContratoFuncionario(id: number, dataContrato: string) {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, deleteFuncionario };
+async function updateSenhaFuncionario(id: number, senha: string) {
+    const sql = `UPDATE Funcionario
+                    SET senha = ?
+                    WHERE id = ?;
+                `;
+    const values = [ senha, id ];
+    
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario };

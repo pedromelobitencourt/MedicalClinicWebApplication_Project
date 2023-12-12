@@ -20,6 +20,10 @@
                         <input type="text" v-model="model.employee.salario" name="" id="" class="form-control">
                     </div>
                     <div class="mb-3">
+                        <label for="">Senha</label>
+                        <input type="text" v-model="model.employee.senha" name="" id="" class="form-control">
+                    </div>
+                    <div class="mb-3">
                         <label for="">Data de Contrato</label>
                         <v-date-picker 
                             v-model="model.employee.dataContrato"
@@ -52,6 +56,7 @@ export default {
                     id: '',
                     pessoaId: '',
                     name: '',
+                    senha: '',
                     salario: '',
                     dataContrato: null,
                 },
@@ -76,6 +81,7 @@ export default {
                     this.model.employee.pessoaId = data.pessoaId;
                     this.model.employee.name = data.name;
                     this.model.employee.salario = data.salario.toFixed(2);
+                    this.model.employee.senha = data.senha;
 
                     const index = this.options.findIndex(option => option.name === data.name);
                     if (index !== -1) {
