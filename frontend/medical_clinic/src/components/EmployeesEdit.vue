@@ -43,7 +43,7 @@
 import axios from 'axios';
 
 export default {
-    name: 'HandbookEdit',
+    name: 'EmployeeEdit',
     data() {
         return {
             errorList: null,

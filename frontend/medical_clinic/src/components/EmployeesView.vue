@@ -60,7 +60,7 @@
     import axios from 'axios';
 
 export default {
-    name: 'handbook',
+    name: 'EmployeesView',
     data() {
         return {
             employees: [],
