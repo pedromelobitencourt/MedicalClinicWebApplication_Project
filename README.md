@@ -25,6 +25,41 @@ The restricted access part of the application includes screens/pages for the fol
 7. **List of All Appointment Bookings:** Shows all appointment bookings made by clients.
 8. **List of Appointment Bookings (for Doctors):** Displays appointment bookings only for the logged-in doctor, if applicable.
 
+
+## Technologies Used
+
+Below are the main technologies and libraries used in this project, listed based on the `package.json` and `package-lock.json` files.
+
+### Dependencies
+
+- **[Vue.js](https://vuejs.org/)**: JavaScript framework for building user interfaces.
+- **[Axios](https://axios-http.com/)**: HTTP client for making requests.
+- **[Bootstrap](https://getbootstrap.com/)**: Design and styling framework.
+- **[Bootstrap Vue](https://bootstrap-vue.org/)**: Vue components for Bootstrap.
+- **[Core-js](https://github.com/zloirock/core-js)**: Modular set of polyfills for JavaScript.
+- **[Moment.js](https://momentjs.com/)**: Date and time manipulation in JavaScript.
+- **[Vue Router](https://router.vuejs.org/)**: Official router for Vue.js.
+- **[Vue Select](https://vue-select.org/)**: Select component for Vue.js.
+- **[Vue3 Select2 Component](https://www.npmjs.com/package/vue3-select2-component)**: Select component for Vue 3.
+- **[Vuetify](https://vuetifyjs.com/)**: Vue.js component framework based on Material Design.
+- **[Sass](https://sass-lang.com/)**: Styles preprocessor.
+
+### Development Dependencies
+
+- **[@vue/cli-plugin-babel](https://cli.vuejs.org/)**: Babel plugin for Vue CLI.
+- **[@vue/cli-plugin-eslint](https://cli.vuejs.org/)**: ESLint plugin for Vue CLI.
+- **[@vue/cli-service](https://cli.vuejs.org/)**: Vue CLI service.
+- **[Babel-eslint](https://github.com/babel/babel-eslint)**: ESLint-compatible parser for Babel.
+- **[ESLint](https://eslint.org/)**: Static code analysis tool.
+- **[ESLint Plugin Vue](https://eslint.vuejs.org/)**: ESLint plugin for Vue.js.
+- **[Node-sass](https://www.npmjs.com/package/node-sass)**: Node.js wrapper for LibSass.
+- **[Sass-loader](https://www.npmjs.com/package/sass-loader)**: Sass loader for Webpack.
+- **[@vue/cli-plugin-vuetify](https://github.com/vuetifyjs/vue-cli-plugin-vuetify)**: Vuetify plugin for Vue CLI.
+- **[Vue Template Compiler](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only)**: Template compiler for Vue.js.
+- **[Vuetify-loader](https://github.com/vuetifyjs/vuetify-loader)**: Vuetify loader for Webpack.
+- **[Webpack](https://webpack.js.org/)**: Module bundler.
+
+
 ## Getting Started
 
 To run this web application locally, follow these steps:
