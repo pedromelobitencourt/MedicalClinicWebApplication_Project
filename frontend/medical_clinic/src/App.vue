@@ -2,7 +2,7 @@
   
 
   <div id="app">
-    <Nav />
+      <Nav /> 
 
    
         <router-view />
@@ -25,7 +25,7 @@
       }
     },
     components: {
-      Nav, Footer
+       Nav,Footer
     },
     }
     

@@ -26,7 +26,7 @@
               <router-link to="" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar todos agendamentos</router-link>
             </li>
             <li class="nav-item">
-              <router-link v-if="isDoctor" to="" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agedamentos</router-link>
+              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agedamentos</router-link>
             </li>
            
             <li class="nav-item">
@@ -39,13 +39,13 @@
   </template>
   
   <script>
-  
+  import axios from 'axios';
   export default {
     name: 'EmployeesNav',
     data() {
       return {
         user : null,
-        isDoctor:null
+        isADoctor:null
       }
     },
     methods: {
@@ -55,11 +55,23 @@
         this.isLoggedIn = false;
         console.log(this.isLoggedIn);
       this.$router.push('/');
-    }
+    },
+    async isDoctor(id) {
+            console.log("id", id);
+            await axios.post('http://localhost:8000/employees/isDoctor', JSON.parse(localStorage.getItem('user')))
+                .then(res => {
+                    const data = res.data;
+                    console.log("isdoctor", data)
+                    this.isADoctor = data;
+                   
+                })
+        }
+    
   },
-  created() {
-      this.user = JSON.parse(localStorage.getItem('user'));
-        
+  async created() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.isADoctor = await this.isDoctor(this.user.id);
+    console.log("doctor", this.isADoctor)
     }
   }
   </script>

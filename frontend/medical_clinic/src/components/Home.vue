@@ -1,4 +1,4 @@
-<template>
+<template>  
     <div class="root">
     <div class="conteudo-ImagemPrincipal">
         <div class="filtro-ImagemPrincipal">
@@ -158,7 +158,7 @@ height: 1px;background: #000;">
 <script>
 
     export default {
-        name: 'Home'
+      name: 'Home',
     }
 
 </script>

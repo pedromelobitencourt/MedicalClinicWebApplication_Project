@@ -137,5 +137,23 @@ async function deleteMedico(id: number): Promise<void> {
         throw error;
     }
 }
+async function getMedicoIdByFuncionarioId(id: number) {
+    const sql = `SELECT M.id AS idMedico
+                FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
+                WHERE F.id = ?;`
+    const values = [ id ];
+    let connection;
 
-export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico,getMedicosNamesByEspecialidade }
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico,getMedicosNamesByEspecialidade,getMedicoIdByFuncionarioId }
