@@ -67,10 +67,20 @@ export default {
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
+            isLoggedIn: false
         }
     },
-    mounted() {
-
+    computed: {
+        user() {
+            const answer = JSON.parse(localStorage.getItem('user'));
+            console.log("O useraaaaaaaaaaaaaaaaaaa", answer)
+            return answer; 
+        }
+    },
+    created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
         this.getEmployees();
     },
     methods: {
@@ -116,6 +126,7 @@ export default {
         changePage(offset) {
             this.currentPage += offset;
             this.getEmployees();
+            this.logout();
         },
         async deleteEmployee(id) {
             console.log("O ID", id)
@@ -130,6 +141,11 @@ export default {
                         alert(error.message);
                     });
             }
+        },
+        logout() {
+            localStorage.removeItem('user');
+            this.isLoggedIn = false;
+            console.log(this.isLoggedIn)
         }
     }
 }

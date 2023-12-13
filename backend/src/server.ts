@@ -10,6 +10,8 @@ import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes }
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName,  getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
+import { validateLogin } from './controllers/controllerLogin';
+
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
@@ -619,4 +621,18 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
+
+  app.post('/login', async (req: Request, res: Response) => {
+    const { email, senha } = req.body;
+    console.log(email, senha)
+
+    try {
+      await validateLogin(email, senha);
+      res.status(201).json({ message: `Login realizado com sucesso`, response: { email, senha } });
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }

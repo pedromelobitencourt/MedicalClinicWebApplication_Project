@@ -17,6 +17,10 @@ type FuncionarioName = {
     name: string
 }
 
+interface PasswordRetrievalResult {
+    senha: string;
+}
+
 async function insertNewFuncionario(funcionario: Funcionario): Promise<void> {
     const sql = 'INSERT INTO Funcionario (dataContrato, salario, pessoaId, senha) VALUES (?, ?, ?, ?)';
     const values = [funcionario.dataContrato, funcionario.salario, funcionario.pessoaId, funcionario.senha]; // Replace with your actual column names
@@ -152,6 +156,27 @@ async function getFuncionarioNameFromId(id: number): Promise<FuncionarioName | u
     }
 }
 
+async function getFuncionarioSenhaByEmail(email: string) {
+    const sql = 'SELECT F.senha FROM Funcionario F JOIN Pessoa P ON F.pessoaId = P.id WHERE P.email = ?';
+    const values = [email];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const result: PasswordRetrievalResult[] = await query({ sql, values }) as PasswordRetrievalResult[];
+
+        if (result.length > 0) {
+            return result[0].senha;
+        } else {
+            return null; // E-mail não encontrado
+        }
+    } catch (error) {
+        throw error;
+    } 
+}
 
 async function deleteFuncionario(id: number): Promise<void> {
     const sql = 'DELETE FROM Funcionario WHERE id = ?';
@@ -230,4 +255,4 @@ async function updateSenhaFuncionario(id: number, senha: string) {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario };
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario };
