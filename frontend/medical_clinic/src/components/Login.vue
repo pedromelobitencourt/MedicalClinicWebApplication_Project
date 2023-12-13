@@ -1,18 +1,18 @@
 <template>
      <div class="auth-wrapper">
       <div class="auth-inner">
-    <form>
+    <form @submit.prevent="handleSubmit">
         <h3>Login</h3>
 
         <div class="form-group my-3">
             <label class="mb-1" style="font-weight: bold;">Email</label>
-            <input type="email" class="form-control mb-1" placeholder="Email...">
+            <input type="email" v-model="model.login.email" class="form-control mb-1" placeholder="Email...">
             <small id="emailHelp" class="form-text text-muted">Nós nunca compartilharemos seu e-mail.</small>
         </div>
 
         <div class="form-group my-3">
             <label class="mb-1" style="font-weight: bold;">Senha</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
+            <input type="password" v-model="model.login.senha" class="form-control" id="exampleInputPassword1" placeholder="Senha">
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Login</button>
@@ -22,8 +22,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-    name: 'Login'
+    name: 'Login',
+    data() {
+      return {
+          model: {
+            login: {
+              email: '',
+              senha: ''
+            }
+          }
+      }
+    },
+    created() {
+      const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
+
+        if(this.isLoggedIn) {
+            this.$router.push('/handbook')
+        }
+    },
+    methods: {
+      async handleSubmit() {
+        const response = await axios.post('http://localhost:8000/login', {
+          email: this.model.login.email,
+          senha: this.model.login.senha
+        });
+
+        const login = response.data.response;
+        console.log(login);
+
+        localStorage.setItem('user', JSON.stringify(login));
+        this.$router.push('/employees');
+      }
+    }
 }
 </script>
 <style scoped>

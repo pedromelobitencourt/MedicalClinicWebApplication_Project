@@ -1,17 +1,20 @@
 <template>
   <nav class="navbar-light navbar navbar-expand fixed-top bg-light mb-20" style="position: relative;">
-    <img class = "logo" src="../assets/Logo2.png" alt=" mb-20">
+    <router-link to="/" class="nav-link">
+      <img class = "logo" src="../assets/Logo2.png" alt=" mb-20">
+    </router-link>
+
     <div class="container">
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a href="#" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 40px;">Principal</a>
+            <router-link to="/" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Principal</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Galeria</a>
+            <router-link to="/photo" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Galeria</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Cadastrar Endereço</a>
+            <router-link to="/address" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Cadastrar Endereço</router-link>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Agendamento</a>
@@ -22,7 +25,7 @@
           </svg>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; ">Login</a>
+            <router-link to="/login" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; ">Login</router-link>
           </li>
         </ul>
       </div>

@@ -56,18 +56,27 @@ export default {
             options: [],
         }
     },
+    created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
+
+        if(!this.isLoggedIn) {
+            this.$router.push('/login')
+        }
+    },
     mounted() {
         this.fetchOptions();
     },
     methods: {
-        saveHandbook() {
+        async saveHandbook() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
             console.log("O nome", name)
             this.model.handbook.name = name;
 
-            axios.post('http://localhost:8000/handbook', this.model.handbook)
+            await axios.post('http://localhost:8000/handbook', this.model.handbook)
                 .then(res => {
                     console.log(res.data);
 
@@ -101,6 +110,12 @@ export default {
                 console.error("Handbook creation: ", error);
             }
         },
+        logout() {
+            localStorage.removeItem('user');
+            this.isLoggedIn = false;
+            console.log(this.isLoggedIn);
+            this.$router.push('/login');
+        }
     }
 }
 </script>

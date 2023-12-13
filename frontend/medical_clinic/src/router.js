@@ -8,6 +8,13 @@ import Handbook from './components/Handbook.vue';
 import HandbookCreate from './components/HandbookCreate.vue';
 import HandbookEdit from './components/HandbookEdit.vue';
 import AppointmentScheduling from './components/AppointmentScheduling.vue';
+import PhotoPage from './components/PhotoPage.vue';
+import EmployeesView from './components/EmployeesView.vue';
+import EmployeesCreate from './components/EmployeesCreate.vue';
+import EmployeesEdit from './components/EmployeesEdit.vue';
+import PersonCreate from './components/PersonCreate.vue';
+import PersonView from './components/PersonView.vue';
+import PersonEdit from './components/PersonEdit.vue';
 import PacienteCreate from './components/PacienteCreate.vue';
 import Paciente from './components/Paciente.vue';
 import PacienteEdit from './components/PacienteEdit.vue';
@@ -24,6 +31,14 @@ export default new Router({
         { path: '/handbook', name: 'handbook' , component: Handbook },
         { path: '/handbook/create', component: HandbookCreate },
         { path: '/handbook/:id/edit', component: HandbookEdit },
+        { path: '/scheduling', component: AppointmentScheduling },
+        { path: '/photo', component: PhotoPage },
+        { path: '/employees', component: EmployeesView },
+        { path: '/employees/create', component: EmployeesCreate },
+        { path: '/employees/:id/edit', component: EmployeesEdit },
+        { path: '/people', component: PersonView },
+        { path: '/person/create', component: PersonCreate },
+        { path: '/person/:id/edit', component: PersonEdit },
         { path: '/scheduling', component: AppointmentScheduling },
         { path: '/paciente/create', component: PacienteCreate },
         { path: '/paciente', component: Paciente },

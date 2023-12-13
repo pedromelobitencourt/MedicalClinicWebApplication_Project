@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-header">
                 <h4>
-                    Prontuário
-                    <router-link to="/handbook/create" class="btn btn-primary float-end">
-                        Add Prontuário
+                    Funcionários
+                    <router-link to="/employees/create" class="btn btn-primary float-end">
+                        Add Funcionário
                     </router-link>
                 </h4>
             </div>
@@ -15,25 +15,23 @@
                         <tr>
                             <th>ID</th>
                             <th class="max-width">Nome</th>
-                            <th class="max-width">Anamnese</th>
-                            <th class="max-width">Medicamentos</th>
-                            <th class="max-width">Atestados</th>
+                            <th class="max-width">Salário</th>
+                            <th class="max-width">Data de Contrato</th>
                             <th class="min-width">Ação</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="handbooks.length > 0">
-                        <tr v-for="(handbook, index) in handbooks" :key="index">
-                            <td> {{handbook.id}} </td>
-                            <td class="max-width2"> {{handbook.name}} </td>
-                            <td class="max-width2"> {{handbook.anamnese}} </td>
-                            <td class="max-width2"> {{handbook.medicamentos}} </td>
-                            <td class="max-width2"> {{handbook.atestados}} </td>
+                    <tbody v-if="employees.length > 0">
+                        <tr v-for="(employee, index) in employees" :key="index">
+                            <td> {{employee.id}} </td>
+                            <td class="max-width2"> {{employee.name}} </td>
+                            <td class="max-width"> {{employee.salario}} </td>
+                            <td class="max-width2"> {{employee.dataContrato}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/employees/'+employee.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" @click="deleteHandbook(handbook.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deleteEmployee(employee.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -62,13 +60,14 @@
     import axios from 'axios';
 
 export default {
-    name: 'handbook',
+    name: 'EmployeesView',
     data() {
         return {
-            handbooks: [],
+            employees: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
+            isLoggedIn: false
         }
     },
     created() {
@@ -79,29 +78,57 @@ export default {
         if(!this.isLoggedIn) {
             this.$router.push('/login')
         }
-    },
-    mounted() {
-        this.getHandbooks();
+
+        this.getEmployees();
     },
     methods: {
-        async getHandbooks() {
+        async getEmployees() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/handbook')
+            await axios.get('http://localhost:8000/employees')
                 .then(res => {
-                    this.totalItems = res.data.response.length;
-                    this.handbooks = res.data.response.slice(startIndex, endIndex);
+                    const formattedData = res.data.response.map(employee => {
+                    const formattedDate = new Date(employee.dataContrato).toLocaleDateString('pt-BR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'UTC', // ajuste conforme necessário
+                    });
+
+                    const formattedSalary = parseFloat(employee.salario).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                        minimumFractionDigits: 2,
+                    });
+
+                    return {
+                        ...employee,
+                        dataContrato: formattedDate,
+                        salario: formattedSalary,
+                        // Adicione outras formatações conforme necessário
+                    };
+                    });
+
+                    console.log("Employees", formattedData);
+                    this.totalItems = formattedData.length;
+                    this.employees = formattedData.slice(startIndex, endIndex);
                 })
+                .catch(error => {
+                    console.error("Error fetching employees", error);
+                });
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getHandbooks();
-            this.logout();
+            this.getEmployees();
         },
-        async deleteHandbook(id) {
+        async deleteEmployee(id) {
+            console.log("O ID", id)
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                await axios.delete(`http://localhost:8000/employees/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
@@ -148,7 +175,7 @@ export default {
         max-width: 100px;
     }
     .max-width2 {
-        max-width: 200px;
+        max-width: 250px;
     }
 
     .pagination-container {
@@ -163,7 +190,7 @@ export default {
         margin-left: 15px;
     }
     .min-width {
-        min-width: 150px;
+        min-width: 100px;
     }
 
     th {

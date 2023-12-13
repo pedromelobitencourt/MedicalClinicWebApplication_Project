@@ -9,6 +9,10 @@ type Address = {
     logradouro: string
 };
 
+type Cep = {
+    cep: string,
+}
+
 export async function insertNewAddress(address: Address): Promise<void> {
     const sql = 'INSERT INTO BaseDeEnderecos (cep, estado, cidade, bairro, logradouro) VALUES (?, ?, ?, ?, ?)';
     const values = [address.cep, address.estado, address.cidade, address.bairro, address.logradouro]; // Replace with your actual column names
@@ -21,6 +25,23 @@ export async function insertNewAddress(address: Address): Promise<void> {
 
         await query({ sql, values });
         console.log("Endereço inserido com sucesso!");
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function getAllCeps(): Promise<Cep[]> {
+    const sql = 'SELECT * FROM BaseDeEnderecos';
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql }) as Cep[];
+        return response;
     } 
     catch (error) {
         throw error;
