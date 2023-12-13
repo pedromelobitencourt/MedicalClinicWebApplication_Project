@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         getPacienteData(id) {
-            axios.get(`http://localhost:5000/paciente/${id}/edit`)
+            axios.get(`http://localhost:8000/paciente/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
                     console.log(data);
@@ -78,17 +78,6 @@ export default {
                     this.model.paciente.peso = data.peso;
                     this.model.paciente.altura = data.altura;
                     this.model.paciente.tipoSanguineo = data.tipoSanguineo;
-                    // const index = this.options.findIndex(option => option.name === data.nome);
-
-                    // console.log("Data: ", data);
-                    // if (index !== -1) {
-                    //     // Definir selectedOption com base no índice encontrado
-                    //     this.selectedOption = this.options[index].id;
-                    // } else {
-                    //     // Lidar com o caso em que a opção não foi encontrada
-                    //     console.error('Opção não encontrada:', data.nome);
-                    // }
-
                 })
         },
 
@@ -100,7 +89,7 @@ export default {
 
             this.model.paciente.id = this.$route.params.id;
 
-            axios.put(`http://localhost:5000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
+            axios.put(`http://localhost:8000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
                 .then(res => {
                     if (res.status === 201) {
                         const msg = "Paciente editado com sucesso";

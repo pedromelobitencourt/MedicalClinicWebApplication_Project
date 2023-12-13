@@ -81,7 +81,7 @@ export default {
             const pessoaId = this.options[this.$refs.selectedOption.selectedIndex - 1].id;
             this.model.paciente.pessoaId = pessoaId;
 
-            axios.post('http://localhost:5000/pacientes', this.model.paciente)
+            axios.post('http://localhost:8000/pacientes', this.model.paciente)
                 .then(res => {
                     if (res.status === 201) {
                         const msg = "Paciente cadastrado com sucesso";
@@ -106,7 +106,7 @@ export default {
         async fetchOptions() {
             try {
                 console.log("Pessoa creation: ");
-                const response = await axios.get('http://localhost:5000/pessoa');
+                const response = await axios.get('http://localhost:8000/pessoa');
                 this.options = response.data;
                 console.log("Pessoa End ");
                 console.log(this.options);

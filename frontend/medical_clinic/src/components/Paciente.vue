@@ -78,7 +78,7 @@ export default {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:5000/pacientes')
+            axios.get('http://localhost:8000/pacientes')
                 .then(res => {
                     this.totalItems = res.data.length;
                     this.pacientes = res.data.slice(startIndex, endIndex);
@@ -91,7 +91,7 @@ export default {
         deletePaciente(id) {
 
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:5000/pacientes/${id}`)
+                axios.delete(`http://localhost:8000/pacientes/${id}`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
