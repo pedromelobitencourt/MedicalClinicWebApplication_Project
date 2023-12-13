@@ -14,10 +14,10 @@
             <router-link to="/photo" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Galeria</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/address" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Cadastrar Endereço</router-link>
+            <router-link to="/address/create" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Cadastrar Endereço</router-link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Agendamento</a>
+            <router-link to="/scheduling" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Agendamento</router-link>
           </li>
           <li class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="48" viewBox="0 0 54 48" fill="none"  style="padding-top: 10px;margin-right: 40px">

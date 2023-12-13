@@ -6,13 +6,14 @@ import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep, getAllCeps } fr
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
-import { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById } from './controllers/controllerAgenda';
+
 import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames} from './controllers/controllerAgenda';
 
-import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoNameById } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getAllFuncionariosNotMedicos, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, getFuncionarioIdByName } from './controllers/controllerFuncionario';
-import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor } from './controllers/controllerFuncionario';
+
+
+import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId,getMedicoNameById } from './controllers/controllerMedico';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor,getFuncionarioIdByName,getAllFuncionariosNotMedicos} from './controllers/controllerFuncionario';
+
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -836,7 +837,6 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
-
   app.get('/agendas', async (req: Request, res: Response) => {
     try {
       console.log("iniciou a req");

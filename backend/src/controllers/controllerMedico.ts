@@ -127,24 +127,6 @@ async function getMedicoNameById(id: number) {
     }
 }
 
-async function getMedicoIdByFuncionarioId(id: number) {
-    const sql = `SELECT M.id AS idMedico
-                FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
-                WHERE F.id = ?;`
-    const values = [ id ];
-    let connection;
-
-    try {
-        connection = await getDB();
-        const query = promisify(connection.query).bind(connection);
-
-        const response = await query({ sql, values });
-        return response;
-    }
-    catch (error) {
-        throw error;
-    }
-}
 
 async function getMedicosNamesByEspecialidade(especialidade: string) {
     //const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
@@ -183,7 +165,6 @@ async function deleteMedico(id: number): Promise<void> {
         throw error;
     }
 }
-
 async function getMedicoIdByFuncionarioId(id: number) {
     const sql = `SELECT M.id AS idMedico
                 FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
@@ -203,4 +184,4 @@ async function getMedicoIdByFuncionarioId(id: number) {
     }
 }
 
-export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId, getMedicoNameById, getMedicoIdByFuncionarioId, deleteMedico }
+export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, getMedicosNamesByEspecialidade, getMedicoNameById, getMedicoIdByFuncionarioId, deleteMedico }

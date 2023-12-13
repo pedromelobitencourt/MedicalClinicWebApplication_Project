@@ -71,6 +71,8 @@ export default {
           console.log(login);
           localStorage.setItem('user', JSON.stringify(login));
           this.registerMessage('Logado com sucesso')
+        window.location.reload();
+        //this.$router.push('/');
         }).catch(() => {
           this.registerMessage("Email ou senha inválidos")
         }) 

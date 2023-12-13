@@ -47,8 +47,8 @@ export default new Router({
         { path: '/paciente/create', component: PacienteCreate },
         { path: '/paciente', component: Paciente },
         { path: '/paciente/:id/edit', component: PacienteEdit },
-        {path: '/agenda', component: AgendaList},
-        {path: '/agenda/medico', component: AgendaMedico}
+        { path: '/agenda', component: AgendaList},
+        { path: '/agenda/medico', component: AgendaMedico},
         { path: '/paciente/:id/edit', component: PacienteEdit },
         { path: '/doctors', component: DoctorsView },
         { path: '/doctor/create', component: DoctorCreate }

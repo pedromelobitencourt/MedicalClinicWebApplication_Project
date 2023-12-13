@@ -1,29 +1,50 @@
 <template>
+  
+
   <div id="app">
-    <Nav />
+      <Nav v-if=" user=== null" /> 
+      <EmployeesNav v-if="user !== null"  />
 
    
         <router-view />
      
-      <!-- <Footer /> -->
+    <Footer /> 
 </div>
+
+
 </template>
 
 <script>
   import Nav from './components/Nav.vue';
   import Footer from './components/Footer.vue';
+  import EmployeesNav from './components/EmployeesNav.vue';
 
   export default {
     name: 'app',
     data() {
       return {
-        
+        isLogged:null,
+        user:null
       }
     },
     components: {
-      Nav, Footer
-    },
+      EmployeesNav, Nav,Footer
     }
+    ,
+    mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log('Componente App foi montado no DOM. User:',this.user );
+  }
+  // ,watch: {
+  //     user(newVal) {
+  //       this.user = JSON.parse(localStorage.getItem('user'));
+  //       console.log('user foi atualizado. User:', );
+        
+  //     },
+  //   },
+
+    }
+    
     
 </script>
 

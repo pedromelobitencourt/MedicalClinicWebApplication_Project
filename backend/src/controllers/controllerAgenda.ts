@@ -7,7 +7,8 @@ type Agenda = {
     horario: string,
     name: string,
     email:string,
-    medicoID: number
+    medicoID: number,
+    telefone: string
 };
 
 async function getAgendaByMedicoId(id: number){
@@ -53,9 +54,9 @@ async function getAllAgenda(){
 }
 
 async function insertNewAgenda(agenda: Agenda): Promise<void> {
-    const sql = 'INSERT INTO Agenda (data, horario, name,email,medicoID) VALUES (STR_TO_DATE(?, \'%Y-%m-%d %H:%i:%s\'), ?, ?,?,?)';
+    const sql = 'INSERT INTO Agenda (data, horario, name,email,medicoID,telefone) VALUES (STR_TO_DATE(?, \'%Y-%m-%d %H:%i:%s\'), ?, ?,?,?,?)';
 
-    const values = [new Date(agenda.data).toISOString().slice(0, 19).replace('T', ' '), agenda.horario, agenda.name, agenda.email, agenda.medicoID];
+    const values = [new Date(agenda.data).toISOString().slice(0, 19).replace('T', ' '), agenda.horario, agenda.name, agenda.email, agenda.medicoID,agenda.telefone];
 
     console.log("valores que chegaram no controler da agenda",values);
     let connection;

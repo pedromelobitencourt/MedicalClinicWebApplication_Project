@@ -1,5 +1,5 @@
 <template>
-    <div class="paciente-wrapper container">
+    <div class="paciente-wrapper container" style="margin-bottom: 200px;">
         <div class="card">
             <div class="card-header">
                 <h4>
