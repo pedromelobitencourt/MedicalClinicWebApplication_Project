@@ -4,34 +4,34 @@
         <img class = "logo" src="../assets/Logo2.png" alt=" mb-20">
       </router-link>
   
-      <div class="container">
+      <div class="container" style="margin-left: -90px;">
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link to="/employees/create" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Novo Funcionario</router-link>
+              <router-link to="/employees/create" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Novo Funcionario</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/paciente/create" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Novo Paciente</router-link>
+              <router-link to="/paciente/create" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Novo Paciente</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/employees" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar Funcionario</router-link>
+              <router-link to="/employees" class="nav-link" style="font-size: 20px;;padding-bottom: 50px;margin-right: 20px; ">Listar Funcionario</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/paciente" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar pacientes</router-link>
+              <router-link to="/paciente" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar pacientes</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/address" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar endereços</router-link>
+              <router-link to="/address" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar endereços</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar todos agendamentos</router-link>
+              <router-link to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar todos agendamentos</router-link>
             </li>
             <li class="nav-item">
-              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agedamentos</router-link>
+              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agedamentos</router-link>
             </li>
            
-            <li class="nav-item">
-              <router-link to="/" class="nav-link" style="font-size: 20px;font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; " @click="logout">Logout</router-link>
-            </li>
+            <li class="nav-item" @click="logout" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; margin-left: -20px; cursor: pointer;">
+    <span>Logout</span>
+</li>
           </ul>
         </div>
       </div>
@@ -54,7 +54,10 @@
         localStorage.removeItem('user');
         this.isLoggedIn = false;
         console.log(this.isLoggedIn);
-      this.$router.push('/');
+        console.log(localStorage.getItem('user'));
+        this.$router.push('/');
+        this.$router.go(0);
+        
     },
     async isDoctor(id) {
             console.log("id", id);
@@ -70,7 +73,7 @@
   },
   async created() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    this.isADoctor = await this.isDoctor(this.user.id);
+    await this.isDoctor(this.user.id);
     console.log("doctor", this.isADoctor)
     }
   }

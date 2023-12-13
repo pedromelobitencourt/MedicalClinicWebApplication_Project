@@ -1,6 +1,6 @@
 <template>
-  <form @submit.prevent="saveEmployee" class="container">
-    <div class="card">
+  <form @submit.prevent="saveEmployee" class="container" style="margin-bottom: 300px;">
+    <div class="card" >
       <div class="card-header">
         <h4>Adicionar Funcionário</h4>
       </div>
