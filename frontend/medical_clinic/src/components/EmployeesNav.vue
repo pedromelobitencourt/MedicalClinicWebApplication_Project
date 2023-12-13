@@ -8,10 +8,10 @@
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <router-link to="/employees/create" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Novo Funcionario</router-link>
+              <router-link to="/employees" class="nav-link" style="margin-left: 80px;font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Funcionarios</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/paciente/create" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Novo Paciente</router-link>
+              <router-link to="/paciente" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Pacientes</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/employees" class="nav-link" style="font-size: 20px;;padding-bottom: 50px;margin-right: 20px; ">Listar Funcionario</router-link>

@@ -20,9 +20,9 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="">Pessoa</label>
-                    <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                    <select required v-model="selectedOption1" ref="selectedOption1" class="block mt-1 w-100">
                         <option value="" selected>-- Escolha uma opção --</option>
-                        <option v-for="pessoa in options" :key="pessoa.id" :value="pessoa.id">
+                        <option v-for="pessoa in options1" :key="pessoa.id" :value="pessoa.id">
                             {{ pessoa.name }}
                         </option>
                     </select>
@@ -37,7 +37,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Tipo Sanguineo</label>
-                    <input type="text" v-model="model.paciente.tipoSanguineo" name="" id="" class="form-control">
+                    <select required v-model="selectedOption2" ref="selectedOption2" class="block mt-1 w-100">
+                            <option value="" selected>-- Escolha uma opção --</option>
+                            <option v-for="option in options2" :key="option.type">
+                                {{ option.type }}
+                            </option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -68,16 +73,8 @@ export default {
                 },
             },
             selectedOption: null,
-            options: [],
-        }
-    },
-    created() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
-        console.log("Ta logado", this.isLoggedIn);
-
-        if(!this.isLoggedIn) {
-            this.$router.push('/login')
+            options1: [],
+            options2: [],
         }
     },
     mounted() {
@@ -91,15 +88,18 @@ export default {
             this.$router.push('/login')
         }
 
-        this.selectedOption = ''
+        this.selectedOption1 = ''
+        this.selectedOption2 = ''
         this.fetchOptions();
     },
     methods: {
         async savePaciente() {
             var myThis = this;
 
-            const pessoaId = this.options[this.$refs.selectedOption.selectedIndex - 1].id;
+            const pessoaId = this.options1[this.$refs.selectedOption1.selectedIndex - 1].id;
+            const tipoSanguineo = this.options2[this.$refs.selectedOption2.selectedIndex - 1].type;
             this.model.paciente.pessoaId = pessoaId;
+            this.model.paciente.tipoSanguineo = tipoSanguineo;
 
             await axios.post('http://localhost:8000/pacientes', this.model.paciente)
                 .then(res => {
@@ -126,10 +126,12 @@ export default {
         async fetchOptions() {
             try {
                 console.log("Pessoa creation: ");
-                const response = await axios.get('http://localhost:8000/pessoa');
-                this.options = response.data;
+                const response1 = await axios.get('http://localhost:8000/pessoa');
+                const response2 = await axios.get('http://localhost:8000/people/blood-types')
+                this.options1 = response1.data;
+                this.options2 = response2.data.bloodTypes;
                 console.log("Pessoa End ");
-                console.log(this.options);
+                console.log(this.options2);
             }
             catch (error) {
                 console.error("Pessoa creation: ", error);

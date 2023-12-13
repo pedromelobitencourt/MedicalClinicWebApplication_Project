@@ -308,6 +308,7 @@ if(env.PORT !== undefined) {
       const { peso, altura, tipoSanguineo, pessoaId } = req.body;
   
       const paciente = { peso, altura, tipoSanguineo, pessoaId };
+      console.log("paciente", paciente)
   
       await insertNewPaciente(paciente);
   
