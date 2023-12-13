@@ -89,4 +89,31 @@ async function deleteAgendaById(id: number): Promise<void> {
     }
 }
 
-export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById };
+async function getAllAgendaMedNames(){
+    const sql = `select P.name as 'medico', A.data, A.name, A.email, A.telefone from Agenda A inner join Medico M on 
+    A.medicoID = M.id inner join Funcionario F on M.funcionarioID = F.id inner join Pessoa P on F.pessoaID = P.id
+    order by A.data;`;
+    
+
+    let connection;
+
+    try {
+        console.log("iniciou a req controller");
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+        console.log("Terminou a req");
+        
+        const response = await query(sql);
+        console.log("Exec a query");
+        console.log(response);
+        return response;
+        
+
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames };

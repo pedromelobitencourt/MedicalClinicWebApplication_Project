@@ -6,7 +6,7 @@ import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep, getAllCeps } fr
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
-import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById} from './controllers/controllerAgenda';
+import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames} from './controllers/controllerAgenda';
 
 import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
@@ -826,6 +826,19 @@ if(env.PORT !== undefined) {
       const { peso, altura, tipoSanguineo } = req.body;
       await updatePaciente( peso, altura, tipoSanguineo, numberId);
       res.status(201).send({ message: 'Paciente atualizado com sucesso' });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.get('/agendas', async (req: Request, res: Response) => {
+    try {
+      console.log("iniciou a req");
+      const response = await getAllAgendaMedNames();
+      res.status(201).json({ message: 'Agenda obtida com sucesso', response });
+      console.log("Agenda obtida com sucesso");
     }
     catch (error) {
       console.log(error);
