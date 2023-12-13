@@ -1,48 +1,65 @@
 <template>
-  <form @submit.prevent="saveEmployee" class="container">
-    <div class="card">
-      <div class="card-header">
-        <h4>Adicionar Funcionário</h4>
+  <div>
+
+    <div id="fade" class="hide" ref="fade">
+            <div id="message" class="hide" ref="message">
+                <div class="alert alert-light" role="alert">
+                    <h4>Mensagem:</h4>
+                    <p ref="message_p"></p>
+
+                    <button id="close-message" class="btn btn-secondary" ref="close_button" @click="closeMessage">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <form @submit.prevent="saveEmployee" class="container">
+      <div class="card">
+        <div class="card-header">
+          <h4>Adicionar Funcionário</h4>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="selectedOption">Funcionário</label>
+            <select required v-model="selectedOption" id="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+              <option value="" selected>-- Escolha uma opção --</option>
+              <option value="" selected>-- Se não houver opção, não há pessoas cadastradas que não são funcionários --</option>
+              <option v-for="person in options" :key="person.name" :value="person.name">
+                {{ person.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="salario">Salario</label>
+            <input type="text" v-model="model.employee.salario" id="salario" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="senha">Senha</label>
+            <input type="password" v-model="model.employee.senha" id="senha" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="dataContrato">Data de Contrato</label>
+            <v-date-picker 
+              v-model="model.employee.dataContrato"
+              dark
+              :locale="locale"
+              full-width
+              class="custom-date-picker">
+            </v-date-picker>
+          </div>
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary w-100">Salvar</button>
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="selectedOption">Funcionário</label>
-          <select required v-model="selectedOption" id="selectedOption" ref="selectedOption" class="block mt-1 w-100">
-            <option value="" selected>-- Escolha uma opção --</option>
-            <option value="" selected>-- Se não houver opção, não há pessoas cadastradas que não são funcionários --</option>
-            <option v-for="person in options" :key="person.name" :value="person.name">
-              {{ person.name }}
-            </option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="salario">Salario</label>
-          <input type="text" v-model="model.employee.salario" id="salario" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="senha">Senha</label>
-          <input type="password" v-model="model.employee.senha" id="senha" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="dataContrato">Data de Contrato</label>
-          <v-date-picker 
-            v-model="model.employee.dataContrato"
-            dark
-            :locale="locale"
-            full-width
-            class="custom-date-picker">
-          </v-date-picker>
-        </div>
-        <div class="mb-3">
-          <button type="submit" class="btn btn-primary w-100">Salvar</button>
-        </div>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
   name: 'EmployeeCreate',
@@ -133,7 +150,20 @@ export default {
       this.isLoggedIn = false;
       console.log(this.isLoggedIn);
       this.$router.push('/login');
-    }
+    },
+    toggleMessage(msg) {
+          this.$refs.message_p.innerText = msg;
+          this.$refs.fade.classList.toggle("hide");
+          this.$refs.message.classList.toggle("hide");
+      },
+        closeMessage() {
+            this.toggleMessage();
+            router.push('/employees');
+        },
+        registerMessage(msg) {
+            this.toggleMessage(msg);
+            //this.resetFormValues();
+        }
   },
 };
 </script>
