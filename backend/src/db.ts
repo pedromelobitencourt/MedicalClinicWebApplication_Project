@@ -1,4 +1,4 @@
-import * as mysql from 'mysql';
+import * as mysql from 'mysql2';
 import { Connection } from 'mysql'
 import { promisify } from 'util';
 const path = require('path');

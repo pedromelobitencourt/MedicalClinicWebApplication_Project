@@ -2,10 +2,10 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { getDB } from './db';
-import { insertNewAddress, getAllCeps } from './controllers/controllerBaseDeEnderecos';
+import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep, getAllCeps } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
-import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
+import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
@@ -58,6 +58,52 @@ if(env.PORT !== undefined) {
     }
   });
 
+  app.get('/address', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllEnderecos();
+
+      res.status(201).send({ response });
+      //console.log(res.getHeaders());
+      console.log("Registros listados com sucesso!");
+    } catch (error) {
+      console.log("Pegou erro no getAllEnderecos");
+      //Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        console.log(res.getHeaders());
+        console.log((error as CustomError).code)
+        console.log("2 repostas ");
+        //res.status(500).send((error as CustomError).code);
+      } else {
+        console.log("3 repostas ");
+        // Se 'code' não estiver presente, trate de outra forma
+       // res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+
+  app.delete('/address/:cep', async (req: Request, res: Response) => {
+    try {
+      const cep = req.params.cep;
+      const cepString = cep.toString();
+  
+      await deleteEnderecoByCep(cepString);
+  
+      res.status(200).json({ message: 'Endereço deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        console.log((error as CustomError).code);
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        console.log(error);
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
+
   app.get('/medicos', async (req: Request, res: Response) => {
     try {
       const medicos = await getAllMedicos();
@@ -105,8 +151,10 @@ if(env.PORT !== undefined) {
 
   app.get('/pessoa', async (req: Request, res: Response) => {
     try {
-      const pessoas = await getAllPessoas();
-      res.status(200).send(pessoas);
+      const response = await getAllPessoas();
+      console.log(response);
+      res.status(201).json(response);
+      console.log("back ok");
     } catch (error) {
       // Verifique se 'error' é do tipo CustomError
       if ((error as CustomError).code) {
@@ -246,25 +294,25 @@ if(env.PORT !== undefined) {
     }
   });
 
-  // app.delete('/pacientes/:id', async (req: Request, res: Response) => {
-  //   try {
-  //     const id = parseInt(req.params.id);
+  app.delete('/pacientes/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
   
-  //     await deletePaciente(id);
+      await deletePaciente(id);
   
-  //     res.status(200).json({ message: 'Paciente deletado com sucesso' });
-  //     res.send();
-  //   } 
-  //   catch (error) {  
-  //     // Verifique se 'error' é do tipo CustomError
-  //     if ((error as CustomError).code) { 
-  //       res.status(500).send((error as CustomError).code);
-  //     } else { 
-  //       // Se 'code' não estiver presente, trate de outra forma
-  //       res.status(500).json({ error: 'Erro desconhecido' }); 
-  //     }
-  //   }
-  // });
+      res.status(200).json({ message: 'Paciente deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
   
   app.delete('/pessoa/:id', async (req: Request, res: Response) => {
     try {
@@ -636,5 +684,46 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+  
+
+  app.get('/paciente/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      console.log(numberId);
+      const dataResponse = await getPacienteById(numberId);
+      console.log(dataResponse);
+
+
+      if(dataResponse) {
+        const response = dataResponse;
+
+        console.log("paciente response", response)
+
+        res.status(201).json({ message: 'Paciente com id específico obtido com sucesso', response });
+      }
+      else throw new Error('Não obteve Resposta do banco de dados')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.put('/paciente/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const  { id }  = req.params;
+      const numberId = parseInt(id);
+      const { peso, altura, tipoSanguineo } = req.body;
+      await updatePaciente( peso, altura, tipoSanguineo, numberId);
+      res.status(201).send({ message: 'Paciente atualizado com sucesso' });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
 }
