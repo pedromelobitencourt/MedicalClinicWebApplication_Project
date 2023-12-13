@@ -339,7 +339,7 @@ if(env.PORT !== undefined) {
     try {
       const response = await getAllProntuarioRecords();
       res.status(201).json({ response });
-      res.send();
+      // res.send();
     }
     catch (error) {
       console.error(error);

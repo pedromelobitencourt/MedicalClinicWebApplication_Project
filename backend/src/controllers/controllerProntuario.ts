@@ -28,10 +28,12 @@ export async function getAllProntuarioRecords() {
 `;
 
     let connection;
-
+    
     try {
         connection = await getDB();
+        console.log("oijhoihoidsjhoihoho")
         const query = promisify(connection.query).bind(connection);
+
 
         const response = await query({ sql });
         console.log("Registros listados com sucesso!");

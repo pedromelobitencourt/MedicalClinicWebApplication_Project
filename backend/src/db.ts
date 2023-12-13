@@ -1,4 +1,4 @@
-import * as mysql from 'mysql2';
+import * as mysql from 'mysql';
 import { Connection } from 'mysql'
 import { promisify } from 'util';
 const path = require('path');
@@ -29,7 +29,7 @@ async function connectToDB(): Promise<Connection> {
                     reject(err);
                 } else {
                     console.log("Conectado ao MySQL");
-                    resolve(connection);
+                    resolve(connection)
                 }
             });
         } else {
