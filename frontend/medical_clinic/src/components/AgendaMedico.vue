@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    import axios, { formToJSON } from 'axios';
+    import axios from 'axios';
 
 export default {
     name: 'agenda',
@@ -67,7 +67,7 @@ export default {
         this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
         console.log("Ta logado", this.isLoggedIn);
         console.log(user);
-        const medicoId = 0;
+        
 
         if(!this.isLoggedIn) {
             this.$router.push('/login')
@@ -78,9 +78,9 @@ export default {
                     console.log(res.data);
                     if(res.data.isDoctor) {
                         const id = res.data.doctorId[0];
-                        this.medicoId = id;
-                        console.log(this.medicoId);
-                        this.getAgendaMedico(this.medicoId);
+                        const medicoId = id;
+                        console.log(medicoId);
+                        this.getAgendaMedico(medicoId);
                     }else {
                         this.$router.push('/login')
                     }
