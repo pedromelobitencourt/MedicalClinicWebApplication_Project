@@ -350,4 +350,40 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, getFuncionarioIdByEmail, getAllFuncionariosNotMedicos, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor, deleteFuncionario };
+async function isDoctor(id: number) {
+    const sql = `SELECT
+                IF(M.id IS NOT NULL, 1, 0) AS eMedico
+                FROM Funcionario F
+                LEFT JOIN
+                Medico M ON F.id = M.funcionarioId
+                WHERE F.id = ? ;`
+    const values = [id];
+
+    console.log();
+    console.log(values);
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values }) as CustomBoolean[];
+        console.log(response, "oioi");
+
+        // Verifica se há algum resultado na resposta
+        if (response && response.length > 0) {
+            // Acesse o valor booleano usando response[0].eMedico
+            console.log("É médico:", response[0].eMedico === 1);
+            return response[0].eMedico === 1;
+        } else {
+            // Não há resultados, não é médico
+            console.log("Não é médico");
+            return false;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, getFuncionarioIdByEmail, getAllFuncionariosNotMedicos, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario, isDoctor };
