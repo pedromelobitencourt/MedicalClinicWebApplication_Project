@@ -72,5 +72,21 @@ async function insertNewAgenda(agenda: Agenda): Promise<void> {
         throw error;
     }
 };
+async function deleteAgendaById(id: number): Promise<void> {
+    const sql = 'DELETE FROM Agenda WHERE id = ?';
+    const values = [id];
 
-export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda };
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById };

@@ -6,7 +6,7 @@ import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
-import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda} from './controllers/controllerAgenda';
+import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById} from './controllers/controllerAgenda';
 
 import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
@@ -319,6 +319,25 @@ if(env.PORT !== undefined) {
       await deleteFuncionario(id);
   
       res.status(200).json({ message: 'Funcionário deletado com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) { 
+        res.status(500).send((error as CustomError).code);
+      } else { 
+        // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' }); 
+      }
+    }
+  });
+  app.delete('/agenda/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+  
+      await deleteAgendaById(id);
+  
+      res.status(200).json({ message: 'Agenda deletada com sucesso' });
       res.send();
     } 
     catch (error) {  
