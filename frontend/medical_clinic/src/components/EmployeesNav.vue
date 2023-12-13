@@ -26,7 +26,7 @@
               <router-link to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar todos agendamentos</router-link>
             </li>
             <li class="nav-item">
-              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agedamentos</router-link>
+              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agendamentos</router-link>
             </li>
            
             <li class="nav-item" @click="logout" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; margin-left: -20px; cursor: pointer;">
