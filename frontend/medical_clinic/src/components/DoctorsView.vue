@@ -1,11 +1,11 @@
 <template>
-    <div class="paciente-wrapper container">
+    <div class="handbook-wrapper container">
         <div class="card">
             <div class="card-header">
                 <h4>
-                    Paciente
-                    <router-link to="/paciente/create" class="btn btn-primary float-end">
-                        Add Paciente
+                    Médicos
+                    <router-link to="/doctor/create" class="btn btn-primary float-end">
+                        Add Médico
                     </router-link>
                 </h4>
             </div>
@@ -13,28 +13,19 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th class="max-width">Nome</th>
-                            <th class="max-width">Peso</th>
-                            <th class="max-width">Altura</th>
-                            <th class="max-width">Tipo Sanguineo</th>
-                            <th class="min-width">Ação</th>
+                            <th class="max-width">CRM</th>
+                            <th class="max-width">Especialidade</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="pacientes.length > 0">
-                        <tr v-for="(paciente, index) in pacientes" :key="index">
-                            <td class="max-width"> {{paciente.name}} </td>
-                            <td class="max-width2"> {{paciente.peso}} </td>
-                            <td class="max-width2"> {{paciente.altura}} </td>
-                            <td class="max-width2"> {{paciente.tipoSanguineo}} </td>
-                            <td class="min-width">
-                                <router-link :to="{ path: '/paciente/'+paciente.id+'/edit' }" class="btn btn-success float-end">
-                                    Editar
-                                </router-link>
-                                <button type="button" @click="deletePaciente(paciente.id)" class="btn btn-danger float-end">
-                                    Deletar
-                                </button>
-                            </td>
+                    <tbody v-if="doctors.length > 0">
+                        <tr v-for="(doctor, index) in doctors" :key="index">
+                            <td> {{doctor.id}} </td>
+                            <td class="max-width2"> {{doctor.nomeMedico}} </td>
+                            <td class="max-width"> {{doctor.crm}} </td>
+                            <td class="max-width2"> {{doctor.especialidade}} </td>
                         </tr>
                     </tbody>
 
@@ -60,48 +51,54 @@
     import axios from 'axios';
 
 export default {
-    name: 'paciente',
+    name: 'DoctorsView',
     data() {
         return {
-            pacientes: [],
+            doctors: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
+            isLoggedIn: false,
+            isADoctor: false,
+            currentDoctorId: null
         }
     },
-    mounted() {
+    async created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", user);
 
-        this.getPacientes();
+        if(!this.isLoggedIn) {
+            this.$router.push('/login')
+        }
+
+        this.getDoctors();
     },
     methods: {
-        async getPacientes() {
+        async getDoctors() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/pacientes')
+            await axios.get('http://localhost:8000/medicos')
                 .then(res => {
-                    this.totalItems = res.data.length;
-                    this.pacientes = res.data.slice(startIndex, endIndex);
+                    const data = res.data;
+                    this.totalItems = data.length;
+                    this.doctors = data.slice(startIndex, endIndex);
                 })
+                .catch(error => {
+                    console.error("Error fetching employees", error);
+                });
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getPacientes();
+            this.getDoctors();
         },
-        async deletePaciente(id) {
-
-            if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/pacientes/${id}`)
-                    .then(res => {
-                        const message = res.data.message;
-                        alert(message);
-                        this.$router.go();
-                    })
-                    .catch(error => {
-                        alert(error.message);
-                    });
-            }
-        }
+        logout() {
+            localStorage.removeItem('user');
+            this.isLoggedIn = false;
+            console.log(this.isLoggedIn);
+            this.$router.push('/login');
+        },
     }
 }
 </script>
@@ -132,7 +129,7 @@ export default {
         max-width: 100px;
     }
     .max-width2 {
-        max-width: 200px;
+        max-width: 250px;
     }
 
     .pagination-container {
@@ -147,7 +144,7 @@ export default {
         margin-left: 15px;
     }
     .min-width {
-        min-width: 150px;
+        min-width: 100px;
     }
 
     th {

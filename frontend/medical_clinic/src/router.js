@@ -18,6 +18,8 @@ import PersonEdit from './components/PersonEdit.vue';
 import PacienteCreate from './components/PacienteCreate.vue';
 import Paciente from './components/Paciente.vue';
 import PacienteEdit from './components/PacienteEdit.vue';
+import DoctorsView from './components/DoctorsView.vue';
+import DoctorCreate from './components/DoctorCreate.vue';
 
 Vue.use(Router);
 
@@ -42,6 +44,8 @@ export default new Router({
         { path: '/scheduling', component: AppointmentScheduling },
         { path: '/paciente/create', component: PacienteCreate },
         { path: '/paciente', component: Paciente },
-        { path: '/paciente/:id/edit', component: PacienteEdit }
+        { path: '/paciente/:id/edit', component: PacienteEdit },
+        { path: '/doctors', component: DoctorsView },
+        { path: '/doctor/create', component: DoctorCreate }
     ] 
 })

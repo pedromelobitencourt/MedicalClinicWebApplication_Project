@@ -1,5 +1,19 @@
 <template>
     <div>
+
+        <div id="fade" class="hide" ref="fade">
+            <div id="message" class="hide" ref="message">
+                <div class="alert alert-light" role="alert">
+                    <h4>Mensagem:</h4>
+                    <p ref="message_p"></p>
+
+                    <button id="close-message" class="btn btn-secondary" ref="close_button" @click="closeMessage">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <form  @submit.prevent="editHandbook" class="container">
             <div class="card">
                 <div class="card-header">
@@ -39,6 +53,7 @@
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
     name: 'HandbookEdit',
@@ -141,6 +156,19 @@ export default {
             this.isLoggedIn = false;
             console.log(this.isLoggedIn);
             this.$router.push('/login');
+        },
+        toggleMessage(msg) {
+          this.$refs.message_p.innerText = msg;
+          this.$refs.fade.classList.toggle("hide");
+          this.$refs.message.classList.toggle("hide");
+      },
+        closeMessage() {
+            this.toggleMessage();
+            router.push('/handbook');
+        },
+        registerMessage(msg) {
+            this.toggleMessage(msg);
+            //this.resetFormValues();
         }
     }
 }

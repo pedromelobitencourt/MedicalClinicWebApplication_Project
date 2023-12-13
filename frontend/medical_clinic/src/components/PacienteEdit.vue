@@ -32,7 +32,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Tipo Sanguineo</label>
-                    <input type="text" v-model="model.paciente.tipoSanguineo" name="" id="" class="form-control">
+                    <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                            <option value="" selected>-- Escolha uma opção --</option>
+                            <option v-for="option in options" :key="option.type">
+                                {{ option.type }}
+                            </option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -61,15 +66,17 @@ export default {
                     tipoSanguineo: ''
                 },
                 nome : ''
-            }
+            },
+            options: []
         }
     },
     mounted() {
-        this.getPacienteData(this.$route.params.id)
+        this.fetchOptions();
+        this.getPacienteData(this.$route.params.id);
     },
     methods: {
-        getPacienteData(id) {
-            axios.get(`http://localhost:8000/paciente/${id}/edit`)
+        async getPacienteData(id) {
+            await axios.get(`http://localhost:8000/paciente/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
                     console.log(data);
@@ -78,18 +85,29 @@ export default {
                     this.model.paciente.peso = data.peso;
                     this.model.paciente.altura = data.altura;
                     this.model.paciente.tipoSanguineo = data.tipoSanguineo;
-                })
+
+                    const index = this.options.findIndex(option => option.type === data.tipoSanguineo);
+                    if (index !== -1) {
+                        // Definir selectedOption com base no índice encontrado
+                        this.selectedOption = this.options[index].type;
+                        console.log("OPCAO", this.selectedOption)
+                    } else {
+                        // Lidar com o caso em que a opção não foi encontrada
+                        console.error('Opção não encontrada:', data.nome);
+                    }
+                        })
         },
 
-        editPaciente() {
+        async editPaciente() {
             var myThis = this;
 
-            // const pessoaId = this.options[this.$refs.selectedOption.selectedIndex - 1].id;
-            // this.model.paciente.pessoaId = pessoaId;
+            const bloodType = this.options[this.$refs.selectedOption.selectedIndex - 1].type;
+            this.model.paciente.tipoSanguineo = bloodType;
+            console.log(this.model.paciente.tipoSanguineo)
 
             this.model.paciente.id = this.$route.params.id;
 
-            axios.put(`http://localhost:8000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
+            await axios.put(`http://localhost:8000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
                 .then(res => {
                     if (res.status === 201) {
                         const msg = "Paciente editado com sucesso";
@@ -124,7 +142,14 @@ export default {
                 this.toggleMessage(msg);
 
                 //this.resetFormValues();
-            }
+            },
+        async fetchOptions() {
+            await axios.get('people/blood-types')
+                .then(res => {
+                    this.options = res.data.bloodTypes;
+                    console.log("blood", this.options)
+                })
+        }
     }
 }
 </script>
