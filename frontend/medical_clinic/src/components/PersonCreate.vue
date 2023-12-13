@@ -73,6 +73,15 @@ export default {
       locale: 'pt-BR',
     };
   },
+  created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+    console.log("Ta logado", this.isLoggedIn);
+
+    if(!this.isLoggedIn) {
+        this.$router.push('/login')
+    }
+  },
   mounted() {
     this.fetchOptions();
   },
@@ -128,6 +137,12 @@ export default {
         console.error('cep creation: ', error);
       }
     },
+    logout() {
+      localStorage.removeItem('user');
+      this.isLoggedIn = false;
+      console.log(this.isLoggedIn);
+      this.$router.push('/login');
+    }
   },
 };
 </script>

@@ -25,7 +25,7 @@
                     <tbody v-if="handbooks.length > 0">
                         <tr v-for="(handbook, index) in handbooks" :key="index">
                             <td> {{handbook.id}} </td>
-                            <td class="max-width"> {{handbook.name}} </td>
+                            <td class="max-width2"> {{handbook.name}} </td>
                             <td class="max-width2"> {{handbook.anamnese}} </td>
                             <td class="max-width2"> {{handbook.medicamentos}} </td>
                             <td class="max-width2"> {{handbook.atestados}} </td>
@@ -71,8 +71,16 @@ export default {
             totalItems: 0,
         }
     },
-    mounted() {
+    created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
 
+        if(!this.isLoggedIn) {
+            this.$router.push('/login')
+        }
+    },
+    mounted() {
         this.getHandbooks();
     },
     methods: {
@@ -102,6 +110,12 @@ export default {
                         alert(error.message);
                     });
             }
+        },
+        logout() {
+            localStorage.removeItem('user');
+            this.isLoggedIn = false;
+            console.log(this.isLoggedIn);
+            this.$router.push('/login');
         }
     }
 }

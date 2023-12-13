@@ -67,6 +67,15 @@ export default {
   mounted() {
       this.fetchOptions();
   },
+  created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+    console.log("Ta logado", this.isLoggedIn);
+
+    if(!this.isLoggedIn) {
+        this.$router.push('/login')
+    }
+  },
   methods: {
     async saveEmployee() {
       try {
@@ -117,6 +126,12 @@ export default {
         console.error('Funcionario creation: ', error);
       }
     },
+    logout() {
+      localStorage.removeItem('user');
+      this.isLoggedIn = false;
+      console.log(this.isLoggedIn);
+      this.$router.push('/login');
+    }
   },
 };
 </script>
