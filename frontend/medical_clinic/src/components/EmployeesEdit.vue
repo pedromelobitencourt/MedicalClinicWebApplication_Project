@@ -1,31 +1,37 @@
 <template>
     <div>
-        <form  @submit.prevent="editHandbook" class="container">
+        <form  @submit.prevent="editEmployee" class="container">
             <div class="card">
                 <div class="card-header">
-                    <h4>Editar Prontuário</h4>
+                    <h4>Editar Funcionário</h4>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="">Paciente</label>
-                        <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+                        <label for="">Funcionário</label>
+                        <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100" disabled>
                             <option value="" selected>-- Escolha uma opção --</option>
-                            <option v-for="pacient in options" :key="pacient.id" :value="pacient.id">
-                                {{ pacient.name }}
+                            <option v-for="employee in options" :key="employee.id" :value="employee.id">
+                                {{ employee.name }}
                             </option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="">Anamnese</label>
-                        <input type="text" v-model="model.handbook.anamnese" id="" class="form-control">
+                        <label for="">Salario</label>
+                        <input type="text" v-model="model.employee.salario" name="" id="" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="">Medicamentos</label>
-                        <input type="text" v-model="model.handbook.medicamentos" name="" id="" class="form-control">
+                        <label for="">Senha</label>
+                        <input type="text" v-model="model.employee.senha" name="" id="" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="">Atestados</label>
-                        <input type="text" v-model="model.handbook.atestados" name="" id="" class="form-control">
+                        <label for="">Data de Contrato</label>
+                        <v-date-picker 
+                            v-model="model.employee.dataContrato"
+                            dark
+                            full-width
+                            :value="model.employee.dataContrato"
+                            class="custom-date-picker">
+                        </v-date-picker>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -41,16 +47,18 @@
 import axios from 'axios';
 
 export default {
-    name: 'HandbookEdit',
+    name: 'EmployeeEdit',
     data() {
         return {
             errorList: null,
             model: {
-                handbook: {
-                    anamnese: '',
-                    medicamentos: '',
-                    atestados: '',
-                    name: null
+                employee: {
+                    id: '',
+                    pessoaId: '',
+                    name: '',
+                    senha: '',
+                    salario: '',
+                    dataContrato: null,
                 },
             },
             selectedOption: null,
@@ -68,19 +76,23 @@ export default {
     },
     mounted() {
         this.fetchOptions(this.$route.params.id);
-
-        this.getHandbookData(this.$route.params.id)
+        this.getFuncionarioData(this.$route.params.id)
     },
     methods: {
-        async getHandbookData(id) {
-            await axios.get(`http://localhost:8000/handbook/${id}/edit`)
+        async getFuncionarioData(id) {
+            console.log(id);
+            await axios.get(`http://localhost:8000/employees/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
-                    this.model.handbook.anamnese = data.anamnese;
-                    this.model.handbook.medicamentos = data.medicamentos;
-                    this.model.handbook.atestados = data.atestados;
-                    const index = this.options.findIndex(option => option.name === data.nome);
 
+                    this.model.employee.id = data.id;
+                    this.model.employee.dataContrato = data.dataContrato.substr(0, 10);
+                    this.model.employee.pessoaId = data.pessoaId;
+                    this.model.employee.name = data.name;
+                    this.model.employee.salario = data.salario.toFixed(2);
+                    this.model.employee.senha = data.senha;
+
+                    const index = this.options.findIndex(option => option.name === data.name);
                     if (index !== -1) {
                         // Definir selectedOption com base no índice encontrado
                         this.selectedOption = this.options[index].id;
@@ -92,22 +104,23 @@ export default {
                 })
         },
 
-        async editHandbook() {
+        async editEmployee() {
             var myThis = this;
 
             const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
-            this.model.handbook.name = name;
-            this.model.handbook.id = this.$route.params.id;
+            this.model.employee.name = name;
+            this.model.employee.id = this.$route.params.id;
 
-            await axios.put(`http://localhost:8000/handbook/${this.model.handbook.id}/edit`, this.model.handbook)
+            await axios.put(`http://localhost:8000/employees/${this.model.employee.id}/edit`, this.model.employee)
                 .then(res => {
                     console.log(res.data);
 
-                    this.model.handbook = {
-                        anamnese: '',
-                        medicamentos: '',
-                        atestados: '',
-                        name: null,
+                    this.model.employee = {
+                        id: '',
+                        pessoaId: '',
+                        name: '',
+                        salario: '',
+                        dataContrato: null,
                     }
 
                     this.$router.go();

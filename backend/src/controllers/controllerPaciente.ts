@@ -56,9 +56,7 @@ export async function getIdFromName(name: string): Promise<PacienteIdResult | un
         const query = promisify(connection.query).bind(connection);
         const values = [name];
 
-        // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
         const response = await query({ sql, values }) as PacienteIdResult[];
-        
         
         // Se houver pelo menos um resultado
         if (response.length > 0) {

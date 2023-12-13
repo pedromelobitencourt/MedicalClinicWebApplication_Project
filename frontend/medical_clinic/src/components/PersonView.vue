@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-header">
                 <h4>
-                    Prontuário
-                    <router-link to="/handbook/create" class="btn btn-primary float-end">
-                        Add Prontuário
+                    Pessoas Cadastradas
+                    <router-link to="/person/create" class="btn btn-primary float-end">
+                        Add Pessoa
                     </router-link>
                 </h4>
             </div>
@@ -15,25 +15,25 @@
                         <tr>
                             <th>ID</th>
                             <th class="max-width">Nome</th>
-                            <th class="max-width">Anamnese</th>
-                            <th class="max-width">Medicamentos</th>
-                            <th class="max-width">Atestados</th>
+                            <th class="max-width">Email</th>
+                            <th class="max-width">Telefone</th>
+                            <th class="max-width">CEP</th>
                             <th class="min-width">Ação</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="handbooks.length > 0">
-                        <tr v-for="(handbook, index) in handbooks" :key="index">
-                            <td> {{handbook.id}} </td>
-                            <td class="max-width2"> {{handbook.name}} </td>
-                            <td class="max-width2"> {{handbook.anamnese}} </td>
-                            <td class="max-width2"> {{handbook.medicamentos}} </td>
-                            <td class="max-width2"> {{handbook.atestados}} </td>
+                    <tbody v-if="people.length > 0">
+                        <tr v-for="(person, index) in people" :key="index">
+                            <td> {{person.id}} </td>
+                            <td class="max-width2"> {{person.name}} </td>
+                            <td class="max-width2"> {{person.email}} </td>
+                            <td class="max-width"> {{person.telefone}} </td>
+                            <td class="max-width"> {{person.enderecoCep}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/person/'+person.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" @click="deleteHandbook(handbook.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deletePerson(person.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -62,10 +62,10 @@
     import axios from 'axios';
 
 export default {
-    name: 'handbook',
+    name: 'PeopleView',
     data() {
         return {
-            handbooks: [],
+            people: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
@@ -77,31 +77,38 @@ export default {
         console.log("Ta logado", this.isLoggedIn);
 
         if(!this.isLoggedIn) {
-            this.$router.push('/login')
+            this.$router.push('/login');
         }
     },
     mounted() {
-        this.getHandbooks();
+        this.getPeople();
     },
     methods: {
-        async getHandbooks() {
+        async getPeople() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/handbook')
+            await axios.get('http://localhost:8000/people')
                 .then(res => {
-                    this.totalItems = res.data.response.length;
-                    this.handbooks = res.data.response.slice(startIndex, endIndex);
+                    this.people = res.data.response
+                    this.totalItems = this.people.length;
+                    this.people = this.people.slice(startIndex, endIndex);
+                    console.log(res.data);
                 })
+                .catch(error => {
+                    console.error("Error fetching employees", error);
+                });
+
+            
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getHandbooks();
-            this.logout();
+            this.getPeople();
         },
-        async deleteHandbook(id) {
+        async deletePerson(id) {
+            console.log("O ID", id)
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                await axios.delete(`http://localhost:8000/person/${id}/delete`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
@@ -145,10 +152,10 @@ export default {
     }
 
     .max-width {
-        max-width: 100px;
+        max-width: 60px;
     }
     .max-width2 {
-        max-width: 200px;
+        max-width: 250px;
     }
 
     .pagination-container {
@@ -163,7 +170,7 @@ export default {
         margin-left: 15px;
     }
     .min-width {
-        min-width: 150px;
+        min-width: 100px;
     }
 
     th {

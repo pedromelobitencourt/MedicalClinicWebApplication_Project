@@ -101,8 +101,8 @@ export default {
         return weekday === 0 || weekday === 6 || day === 13
       },
 
-      carregarMedicos(){
-        axios.get('http://localhost:8000/medico').then(res =>{
+      async carregarMedicos(){
+        await axios.get('http://localhost:8000/medico').then(res =>{
 
           console.log(res.data);
           this.medicos = res.data.response;
