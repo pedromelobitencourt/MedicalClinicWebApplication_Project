@@ -64,9 +64,11 @@ export default {
         if(!this.isLoggedIn) {
             this.$router.push('/login')
         }
+
+        this.selectedOption = ''
+        this.fetchOptions();
     },
     mounted() {
-        this.fetchOptions();
     },
     methods: {
         async saveHandbook() {

@@ -63,6 +63,7 @@ export default {
         this.$router.push('/login')
     }
 
+    this.selectedOption = ''
     this.fetchOptions();
   },
   methods: {
