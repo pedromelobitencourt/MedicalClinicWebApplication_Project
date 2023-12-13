@@ -47,6 +47,7 @@ export default {
         console.log(login);
 
         localStorage.setItem('user', JSON.stringify(login));
+        this.$router.push('/employees');
       }
     }
 }
