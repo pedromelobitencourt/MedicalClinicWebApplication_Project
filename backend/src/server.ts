@@ -5,7 +5,7 @@ import { getDB } from './db';
 import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
-import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente } from './controllers/controllerPaciente';
+import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
 
 import { getAllMedicos, insertNewMedico, deleteMedico } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
@@ -437,5 +437,45 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+
+  app.get('/paciente/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const numberId = parseInt(id);
+      console.log(numberId);
+      const dataResponse = await getPacienteById(numberId);
+      console.log(dataResponse);
+
+
+      if(dataResponse) {
+        const response = dataResponse;
+
+        console.log("paciente response", response)
+
+        res.status(201).json({ message: 'Paciente com id específico obtido com sucesso', response });
+      }
+      else throw new Error('Não obteve Resposta do banco de dados')
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.put('/paciente/:id/edit', async (req: Request, res: Response) => {
+    try {
+      const  { id }  = req.params;
+      const numberId = parseInt(id);
+      const { peso, altura, tipoSanguineo } = req.body;
+      await updatePaciente( peso, altura, tipoSanguineo, numberId);
+      res.status(201).send({ message: 'Paciente atualizado com sucesso' });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
 }

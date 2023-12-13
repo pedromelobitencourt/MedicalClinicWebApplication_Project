@@ -9,6 +9,8 @@ import HandbookCreate from './components/HandbookCreate.vue';
 import HandbookEdit from './components/HandbookEdit.vue';
 import AppointmentScheduling from './components/AppointmentScheduling.vue';
 import PacienteCreate from './components/PacienteCreate.vue';
+import Paciente from './components/Paciente.vue';
+import PacienteEdit from './components/PacienteEdit.vue';
 
 Vue.use(Router);
 
@@ -22,7 +24,9 @@ export default new Router({
         { path: '/handbook', name: 'handbook' , component: Handbook },
         { path: '/handbook/create', component: HandbookCreate },
         { path: '/handbook/:id/edit', component: HandbookEdit },
-        {path: '/scheduling', component: AppointmentScheduling},
-        {path: '/paciente/create', component: PacienteCreate}
+        { path: '/scheduling', component: AppointmentScheduling },
+        { path: '/paciente/create', component: PacienteCreate },
+        { path: '/paciente', component: Paciente },
+        { path: '/paciente/:id/edit', component: PacienteEdit }
     ] 
 })

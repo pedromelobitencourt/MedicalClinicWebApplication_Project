@@ -28,9 +28,9 @@
                             <td class="max-width2"> {{paciente.altura}} </td>
                             <td class="max-width2"> {{paciente.tipoSanguineo}} </td>
                             <td class="min-width">
-                                <!-- <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/paciente/'+paciente.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
-                                </router-link> -->
+                                </router-link>
                                 <button type="button" @click="deletePaciente(paciente.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
