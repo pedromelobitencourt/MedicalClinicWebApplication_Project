@@ -4,6 +4,9 @@
             <div class="card-header">
                 <h4>
                     Médicos
+                    <router-link to="/doctors/create" class="btn btn-primary float-end">
+                        Add Médico
+                    </router-link>
                 </h4>
             </div>
             <div class="card-body table-container">

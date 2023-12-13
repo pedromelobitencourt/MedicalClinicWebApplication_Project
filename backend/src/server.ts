@@ -9,7 +9,7 @@ import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes ,
 import { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById } from './controllers/controllerAgenda';
 
 import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoNameById } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getAllFuncionariosNotMedicos, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -833,4 +833,17 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
+
+  app.get('/doctor/create/employees', async (req: Request, res: Response) => {
+    try {
+      console.log("antes")
+      const response = await getAllFuncionariosNotMedicos();
+      console.log("depos");
+      res.status(201).send({ message: 'Funcionários que não são médicos obtidos', response });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  })
 }

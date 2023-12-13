@@ -205,6 +205,38 @@ async function getFuncionarioIdByEmail(email: string) {
     } 
 }
 
+async function getAllFuncionariosNotMedicos() {
+    const sql = `SELECT 
+                Funcionario.id AS funcionarioId,
+                Pessoa.name,
+                Pessoa.email,
+                Funcionario.dataContrato,
+                Funcionario.salario,
+                Funcionario.senha,
+                Pessoa.telefone
+                FROM Funcionario
+                JOIN Pessoa ON Funcionario.pessoaId = Pessoa.id
+                LEFT JOIN Medico ON Funcionario.id = Medico.funcionarioId
+                WHERE Medico.id IS NULL;`;
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const result: Funcionario[] = await query({ sql }) as Funcionario[];
+
+        if (result.length > 0) {
+            return result;
+        } else {
+            return null; // E-mail não encontrado
+        }
+    } catch (error) {
+        throw error;
+    } 
+}
+
 async function updateSalarioFuncionario(id: number, salario: number) {
     const sql = `UPDATE Funcionario
                     SET salario = ?
@@ -318,4 +350,4 @@ async function deleteFuncionario(id: number): Promise<void> {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor, deleteFuncionario };
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, getFuncionarioIdByEmail, getAllFuncionariosNotMedicos, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor, deleteFuncionario };
