@@ -1,11 +1,11 @@
 <template>
-    <div class="handbook-wrapper container">
+    <div class="paciente-wrapper container">
         <div class="card">
             <div class="card-header">
                 <h4>
-                    Prontuário
-                    <router-link to="/handbook/create" class="btn btn-primary float-end">
-                        Add Prontuário
+                    Paciente
+                    <router-link to="/paciente/create" class="btn btn-primary float-end">
+                        Add Paciente
                     </router-link>
                 </h4>
             </div>
@@ -13,27 +13,25 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th class="max-width">Nome</th>
-                            <th class="max-width">Anamnese</th>
-                            <th class="max-width">Medicamentos</th>
-                            <th class="max-width">Atestados</th>
+                            <th class="max-width">Peso</th>
+                            <th class="max-width">Altura</th>
+                            <th class="max-width">Tipo Sanguineo</th>
                             <th class="min-width">Ação</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="handbooks.length > 0">
-                        <tr v-for="(handbook, index) in handbooks" :key="index">
-                            <td> {{handbook.id}} </td>
-                            <td class="max-width2"> {{handbook.name}} </td>
-                            <td class="max-width2"> {{handbook.anamnese}} </td>
-                            <td class="max-width2"> {{handbook.medicamentos}} </td>
-                            <td class="max-width2"> {{handbook.atestados}} </td>
+                    <tbody v-if="pacientes.length > 0">
+                        <tr v-for="(paciente, index) in pacientes" :key="index">
+                            <td class="max-width"> {{paciente.name}} </td>
+                            <td class="max-width2"> {{paciente.peso}} </td>
+                            <td class="max-width2"> {{paciente.altura}} </td>
+                            <td class="max-width2"> {{paciente.tipoSanguineo}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
+                                <router-link :to="{ path: '/paciente/'+paciente.id+'/edit' }" class="btn btn-success float-end">
                                     Editar
                                 </router-link>
-                                <button type="button" @click="deleteHandbook(handbook.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deletePaciente(paciente.id)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -62,46 +60,38 @@
     import axios from 'axios';
 
 export default {
-    name: 'handbook',
+    name: 'paciente',
     data() {
         return {
-            handbooks: [],
+            pacientes: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
         }
     },
-    created() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
-        console.log("Ta logado", this.isLoggedIn);
-
-        if(!this.isLoggedIn) {
-            this.$router.push('/login')
-        }
-    },
     mounted() {
-        this.getHandbooks();
+
+        this.getPacientes();
     },
     methods: {
-        async getHandbooks() {
+        getPacientes() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/handbook')
+            axios.get('http://localhost:8000/pacientes')
                 .then(res => {
-                    this.totalItems = res.data.response.length;
-                    this.handbooks = res.data.response.slice(startIndex, endIndex);
+                    this.totalItems = res.data.length;
+                    this.pacientes = res.data.slice(startIndex, endIndex);
                 })
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getHandbooks();
-            this.logout();
+            this.getPacientes();
         },
-        async deleteHandbook(id) {
+        deletePaciente(id) {
+
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                axios.delete(`http://localhost:8000/pacientes/${id}`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
@@ -111,12 +101,6 @@ export default {
                         alert(error.message);
                     });
             }
-        },
-        logout() {
-            localStorage.removeItem('user');
-            this.isLoggedIn = false;
-            console.log(this.isLoggedIn);
-            this.$router.push('/login');
         }
     }
 }

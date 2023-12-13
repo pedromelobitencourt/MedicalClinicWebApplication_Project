@@ -29,7 +29,7 @@ async function connectToDB(): Promise<Connection> {
                     reject(err);
                 } else {
                     console.log("Conectado ao MySQL");
-                    resolve(connection);
+                    resolve(connection)
                 }
             });
         } else {

@@ -56,9 +56,7 @@ export async function getIdFromName(name: string): Promise<PacienteIdResult | un
         const query = promisify(connection.query).bind(connection);
         const values = [name];
 
-        // Use a dica de tipo com 'as' para informar ao TypeScript sobre o tipo esperado
         const response = await query({ sql, values }) as PacienteIdResult[];
-        
         
         // Se houver pelo menos um resultado
         if (response.length > 0) {
@@ -99,7 +97,7 @@ export async function insertNewPaciente(paciente: Paciente): Promise<void> {
 }
 
 export async function getAllPacientes(): Promise<Paciente[] | undefined> {
-    const sql = 'SELECT * FROM Paciente';
+    const sql = 'SELECT name, Paciente.id, Paciente.peso, Paciente.altura, Paciente.tipoSanguineo FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id)';
 
     let connection;
 
@@ -115,6 +113,64 @@ export async function getAllPacientes(): Promise<Paciente[] | undefined> {
             } 
             return undefined;
         }
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function deletePaciente (id: number): Promise<void> {
+    const sql = 'DELETE FROM Paciente WHERE id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+export async function getPacienteById(id: number) {
+    const sql = 'SELECT name, Paciente.id, Paciente.peso, Paciente.altura, Paciente.tipoSanguineo FROM (Paciente JOIN Pessoa ON Paciente.pessoaId = Pessoa.id) WHERE Paciente.id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const paciente = await query({ sql, values }) as Paciente[];
+
+        if (paciente.length > 0) {
+            return paciente[0];
+        } else {
+            throw new Error("Paciente não encontrado");
+        }
+    } 
+    catch (error) {
+        throw error;
+    }
+}
+
+
+export async function updatePaciente (peso: number, altura: number, tipoSanguineo: string, id: number ): Promise<void> {
+    const sql = 'UPDATE Paciente SET peso = ?, altura = ?, tipoSanguineo = ? WHERE id = ?';
+    const values = [peso, altura, tipoSanguineo, id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
     } 
     catch (error) {
         throw error;

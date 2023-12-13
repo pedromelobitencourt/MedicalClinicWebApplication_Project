@@ -4,9 +4,8 @@
 
    
         <router-view />
-      
-    
-      <Footer />
+     
+      <!-- <Footer /> -->
 </div>
 </template>
 
@@ -32,10 +31,7 @@
   body, html, #app, #root, .auth-wrapper {
     width: 100%;
     height: 100%;
-  }
-
-  #app {
-    text-align: center;
+    margin: 0%;
   }
 
   

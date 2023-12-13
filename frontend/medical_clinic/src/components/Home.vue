@@ -3,8 +3,10 @@
     <div class="conteudo-ImagemPrincipal">
         <div class="filtro-ImagemPrincipal">
             <div class="Texto-Primario">
-                <h1 class="TextoBranco" >AGENDAMENTO DE CONSULTAS MÉDICAS ESPECIALIZADAS DE FORMA FÁCIL, PRÁTICA E SEGURA.</h1>
-                <p class="TextoBranco" >Bem-vindo à nossa Clínica Mais Saúde, onde cuidar da sua saúde é tão simples quanto um clique! Somos dedicados a proporcionar um atendimento médico de qualidade, acessível e conveniente, tudo a partir do conforto do seu lar.</p>
+                <h1 class="TextoBranco" style="margin-top: 40px;">AGENDAMENTO DE CONSULTAS MÉDICAS ESPECIALIZADAS DE FORMA FÁCIL, PRÁTICA E SEGURA.</h1>
+                <p class="TextoBranco" style="margin-top: 40px;">
+                    Uma clínica médica fundamenta-se na ética, garantindo respeito à dignidade e autonomia do paciente. A humanização destaca-se pela empatia, acolhimento e consideração aos aspectos emocionais, promovendo uma experiência de cuidado completa.
+                </p>
             </div>
 
             <div class="Lista-CardDoutores">
@@ -232,9 +234,9 @@ background: #A2EEF1;
 }
 
  .root{
-overflow: hidden;    
-display: flex;
-flex-direction: column;
+    display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
  .conteudo-ImagemPrincipal{
 width: 100%;

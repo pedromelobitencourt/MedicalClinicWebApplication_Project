@@ -1,11 +1,11 @@
 <template>
-    <div class="handbook-wrapper container">
+    <div class="endereco-wrapper container">
         <div class="card">
             <div class="card-header">
                 <h4>
-                    Prontuário
-                    <router-link to="/handbook/create" class="btn btn-primary float-end">
-                        Add Prontuário
+                    Endereço
+                    <router-link to="/address/create" class="btn btn-primary float-end">
+                        Add Endereço
                     </router-link>
                 </h4>
             </div>
@@ -13,27 +13,23 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th class="max-width">Nome</th>
-                            <th class="max-width">Anamnese</th>
-                            <th class="max-width">Medicamentos</th>
-                            <th class="max-width">Atestados</th>
-                            <th class="min-width">Ação</th>
+                            <th class="max-width">CEP</th>
+                            <th class="max-width">Estado</th>
+                            <th class="max-width">Cidade</th>
+                            <th class="max-width">Bairro</th>
+                            <th class="min-width">Logradouro</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="handbooks.length > 0">
-                        <tr v-for="(handbook, index) in handbooks" :key="index">
-                            <td> {{handbook.id}} </td>
-                            <td class="max-width2"> {{handbook.name}} </td>
-                            <td class="max-width2"> {{handbook.anamnese}} </td>
-                            <td class="max-width2"> {{handbook.medicamentos}} </td>
-                            <td class="max-width2"> {{handbook.atestados}} </td>
+                    <tbody v-if="enderecos.length > 0">
+                        <tr v-for="(endereco, index) in enderecos" :key="index">
+                            <td class="max-width"> {{endereco.cep}} </td>
+                            <td class="max-width"> {{endereco.estado}} </td>
+                            <td class="max-width2"> {{endereco.cidade}} </td>
+                            <td class="max-width2"> {{endereco.bairro}} </td>
+                            <td class="max-width2"> {{endereco.logradouro}} </td>
                             <td class="min-width">
-                                <router-link :to="{ path: '/handbook/'+handbook.id+'/edit' }" class="btn btn-success float-end">
-                                    Editar
-                                </router-link>
-                                <button type="button" @click="deleteHandbook(handbook.id)" class="btn btn-danger float-end">
+                                <button type="button" @click="deleteEndereco(endereco.cep)" class="btn btn-danger float-end">
                                     Deletar
                                 </button>
                             </td>
@@ -62,46 +58,43 @@
     import axios from 'axios';
 
 export default {
-    name: 'handbook',
+    name: 'endereco',
     data() {
         return {
-            handbooks: [],
+            enderecos: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
         }
     },
-    created() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
-        console.log("Ta logado", this.isLoggedIn);
-
-        if(!this.isLoggedIn) {
-            this.$router.push('/login')
-        }
-    },
     mounted() {
-        this.getHandbooks();
+
+        this.getEnderecos();
     },
     methods: {
-        async getHandbooks() {
+        getEnderecos() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/handbook')
+            console.log(startIndex, endIndex);
+            console.log("chegou axios");
+            axios.get('http://localhost:8000/address')
                 .then(res => {
+                    console.log(res.data.response);
                     this.totalItems = res.data.response.length;
-                    this.handbooks = res.data.response.slice(startIndex, endIndex);
+                    this.enderecos = res.data.response.slice(startIndex, endIndex);
+                    //console.log()
                 })
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getHandbooks();
-            this.logout();
+            this.getEnderecos();
         },
-        async deleteHandbook(id) {
+        deleteEndereco(cep) {
+            console.log("chegou axios delete");
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/handbook/${id}/delete`)
+                console.log("chegou axios delete");
+                axios.delete(`http://localhost:8000/address/${cep}`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);
@@ -111,12 +104,6 @@ export default {
                         alert(error.message);
                     });
             }
-        },
-        logout() {
-            localStorage.removeItem('user');
-            this.isLoggedIn = false;
-            console.log(this.isLoggedIn);
-            this.$router.push('/login');
         }
     }
 }
@@ -127,7 +114,7 @@ export default {
 .container {
     align-items: stretch;
 }
-    .handbook-wrapper {
+    .endereco-wrapper {
         margin: 20px 150px 0px 150px;
         width: 100%;
         flex: 1;
