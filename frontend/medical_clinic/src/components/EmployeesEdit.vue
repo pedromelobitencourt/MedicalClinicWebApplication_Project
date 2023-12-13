@@ -142,7 +142,7 @@ export default {
         async fetchOptions() {
             try {
                 const response = await axios.get('http://localhost:8000/pacients/name');
-                console.log("AHHAH", response)
+                console.log("AHHAH", response.data)
                 this.options = response.data.response;
             }
             catch (error) {

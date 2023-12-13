@@ -845,5 +845,24 @@ if(env.PORT !== undefined) {
       console.log(error);
       res.status(500).json({ error });
     }
-  })
+  });
+
+  interface BloodType {
+    type: string;
+  }
+
+  app.get('/people/blood-types', async (req: Request, res: Response) => {
+    const bloodTypes: BloodType[] = [
+      { type: "A+" },
+      { type: "A-" },
+      { type: "B+" },
+      { type: "B-" },
+      { type: "AB+" },
+      { type: "AB-" },
+      { type: "O+" },
+      { type: "O-" }
+  ];
+  
+    res.status(201).send({ bloodTypes });
+  });
 }

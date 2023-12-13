@@ -72,8 +72,8 @@ export default {
         }
     },
     mounted() {
-        this.getPersonData(this.$route.params.id)
         this.fetchOptions();
+        this.getPersonData(this.$route.params.id)
     },
     methods: {
         async getPersonData(id) {
@@ -86,6 +86,16 @@ export default {
                     this.model.person.email = data.email;
                     this.model.person.telefone = data.telefone;
                     this.model.person.enderecoCep = data.enderecoCep;
+
+                    const index = this.options.findIndex(option => option.cep === data.enderecoCep);
+                    if (index !== -1) {
+                        // Definir selectedOption com base no índice encontrado
+                        this.selectedOption = this.options[index].cep;
+                        console.log("OPCAO", this.selectedOption)
+                    } else {
+                        // Lidar com o caso em que a opção não foi encontrada
+                        console.error('Opção não encontrada:', data.enderecoCep);
+                    }
                 });
         },
 
