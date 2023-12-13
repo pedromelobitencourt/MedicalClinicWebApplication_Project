@@ -178,9 +178,9 @@ async function getFuncionarioSenhaByEmail(email: string) {
     } 
 }
 
-async function deleteFuncionario(id: number): Promise<void> {
-    const sql = 'DELETE FROM Funcionario WHERE id = ?';
-    const values = [id];
+async function getFuncionarioIdByEmail(email: string) {
+    const sql = 'SELECT F.id FROM Funcionario F JOIN Pessoa P ON F.pessoaId = P.id WHERE P.email = ?';
+    const values = [email];
 
     let connection;
 
@@ -188,11 +188,16 @@ async function deleteFuncionario(id: number): Promise<void> {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        await query({ sql, values });
-    }
-    catch (error) {
+        const result: PasswordRetrievalResult[] = await query({ sql, values }) as PasswordRetrievalResult[];
+
+        if (result.length > 0) {
+            return result[0].senha;
+        } else {
+            return null; // E-mail não encontrado
+        }
+    } catch (error) {
         throw error;
-    }
+    } 
 }
 
 async function updateSalarioFuncionario(id: number, salario: number) {
@@ -255,4 +260,21 @@ async function updateSenhaFuncionario(id: number, senha: string) {
     }
 }
 
-export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario };
+async function deleteFuncionario(id: number): Promise<void> {
+    const sql = 'DELETE FROM Funcionario WHERE id = ?';
+    const values = [id];
+
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+export { insertNewFuncionario, getFuncionarioById, getAllFuncionarios, getAllFuncionariosWithName, getFuncionarioIdByName, getFuncionarioNameFromId, getFuncionarioSenhaByEmail, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, deleteFuncionario };
