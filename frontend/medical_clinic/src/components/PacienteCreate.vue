@@ -81,16 +81,27 @@ export default {
         }
     },
     mounted() {
+    },
+    created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
+
+        if(!this.isLoggedIn) {
+            this.$router.push('/login')
+        }
+
+        this.selectedOption = ''
         this.fetchOptions();
     },
     methods: {
-        savePaciente() {
+        async savePaciente() {
             var myThis = this;
 
             const pessoaId = this.options[this.$refs.selectedOption.selectedIndex - 1].id;
             this.model.paciente.pessoaId = pessoaId;
 
-            axios.post('http://localhost:8000/pacientes', this.model.paciente)
+            await axios.post('http://localhost:8000/pacientes', this.model.paciente)
                 .then(res => {
                     if (res.status === 201) {
                         const msg = "Paciente cadastrado com sucesso";

@@ -18,6 +18,8 @@ import PersonEdit from './components/PersonEdit.vue';
 import PacienteCreate from './components/PacienteCreate.vue';
 import Paciente from './components/Paciente.vue';
 import PacienteEdit from './components/PacienteEdit.vue';
+import DoctorsView from './components/DoctorsView.vue';
+import DoctorCreate from './components/DoctorCreate.vue';
 import AgendaList from './components/AgendaList.vue';
 import AgendaMedico from './components/AgendaMedico.vue';
 
@@ -47,5 +49,8 @@ export default new Router({
         { path: '/paciente/:id/edit', component: PacienteEdit },
         {path: '/agenda', component: AgendaList},
         {path: '/agenda/medico', component: AgendaMedico}
+        { path: '/paciente/:id/edit', component: PacienteEdit },
+        { path: '/doctors', component: DoctorsView },
+        { path: '/doctor/create', component: DoctorCreate }
     ] 
 })

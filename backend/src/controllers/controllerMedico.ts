@@ -24,6 +24,10 @@ type Medico = {
     funcionarioId: number
 };
 
+type MedicoName = {
+    name: string
+};
+
 async function insertNewMedico(medico: Medico): Promise<void> {
     const sql = 'INSERT INTO Medico (crm, especialidade, funcionarioId) VALUES (?, ?, ?)';
     const values = [medico.crm, medico.especialidade, medico.funcionarioId]; // Replace with your actual column names
@@ -65,7 +69,9 @@ async function getMedicoById(id: number): Promise<Medico> {
 }
 
 async function getAllMedicos() {
-    const sql = 'SELECT * FROM Medico';
+    const sql = `SELECT P.name AS nomeMedico, M.id, M.crm, M.especialidade
+    FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
+    JOIN Pessoa P ON P.id=F.pessoaId;`;
 
     let connection;
 
@@ -99,7 +105,47 @@ async function getMedicosByEspecialidade(especialidade: string) {
     } catch (error) {
         throw error;
     }
+};
+
+async function getMedicoNameById(id: number) {
+    const sql = `SELECT P.name AS nomeMedico
+                FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
+                JOIN Pessoa P ON P.id=F.pessoaId
+                WHERE M.id = ?;`
+    const values = [ id ];
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    }
+    catch (error) {
+        throw error;
+    }
 }
+
+async function getMedicoIdByFuncionarioId(id: number) {
+    const sql = `SELECT M.id AS idMedico
+                FROM Medico M JOIN Funcionario F ON M.funcionarioId = F.id
+                WHERE F.id = ?;`
+    const values = [ id ];
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        const response = await query({ sql, values });
+        return response;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 async function getMedicosNamesByEspecialidade(especialidade: string) {
     //const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
     const sql = 'select medico.id,medico.crm,medico.especialidade,medico.funcionarioID, pessoa.name from medico inner join funcionario on medico.funcionarioId = funcionario.id inner join pessoa on funcionario.pessoaID = pessoa.id WHERE especialidade = ?';
@@ -157,4 +203,4 @@ async function getMedicoIdByFuncionarioId(id: number) {
     }
 }
 
-export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, deleteMedico,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId }
+export { insertNewMedico, getMedicoById, getAllMedicos, getMedicosByEspecialidade, getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId, getMedicoNameById, getMedicoIdByFuncionarioId, deleteMedico }

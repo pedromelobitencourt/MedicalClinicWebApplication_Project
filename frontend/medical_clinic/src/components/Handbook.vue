@@ -59,7 +59,8 @@
 </template>
 
 <script>
-    import axios from 'axios';
+import axios from 'axios';
+
 
 export default {
     name: 'handbook',
@@ -97,7 +98,6 @@ export default {
         changePage(offset) {
             this.currentPage += offset;
             this.getHandbooks();
-            this.logout();
         },
         async deleteHandbook(id) {
             if(confirm('Você tem certeza que quer deletar tal registro?')){
@@ -117,7 +117,7 @@ export default {
             this.isLoggedIn = false;
             console.log(this.isLoggedIn);
             this.$router.push('/login');
-        }
+        },
     }
 }
 </script>

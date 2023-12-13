@@ -62,7 +62,7 @@
     import axios from 'axios';
 
 export default {
-    name: 'PeopleView',
+    name: 'PersonView',
     data() {
         return {
             people: [],
