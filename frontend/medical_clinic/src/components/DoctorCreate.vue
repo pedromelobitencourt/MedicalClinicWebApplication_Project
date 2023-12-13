@@ -53,7 +53,6 @@ export default {
     };
   },
   mounted() {
-      this.fetchOptions();
   },
   created() {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -63,6 +62,8 @@ export default {
     if(!this.isLoggedIn) {
         this.$router.push('/login')
     }
+
+    this.fetchOptions();
   },
   methods: {
     async saveEmployee() {
@@ -106,6 +107,7 @@ export default {
       try {
         const response = await axios.get('http://localhost:8000/doctor/create/employees');
         this.options = response.data.response;
+        console.log(this.options)
       } catch (error) {
         console.error('Médico creation: ', error);
       }

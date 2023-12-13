@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h4>
                     Médicos
-                    <router-link to="/doctors/create" class="btn btn-primary float-end">
+                    <router-link to="/doctor/create" class="btn btn-primary float-end">
                         Add Médico
                     </router-link>
                 </h4>

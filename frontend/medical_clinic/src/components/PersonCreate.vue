@@ -81,9 +81,10 @@ export default {
     if(!this.isLoggedIn) {
         this.$router.push('/login')
     }
+    this.selectedOption = ''
+    this.fetchOptions();
   },
   mounted() {
-    this.fetchOptions();
   },
   methods: {
     async savePerson() {
@@ -133,6 +134,7 @@ export default {
         const response = await axios.get('http://localhost:8000/ceps');
         this.options = response.data.response;
         console.log(this.options);
+        this.$refs.selectedOption.selectedIndex = 0;
       } catch (error) {
         console.error('cep creation: ', error);
       }
