@@ -3,11 +3,10 @@ import { promisify } from 'util';
 
 type Agenda = {
     id?: number,
-    date: Date,
+    data: Date,
     horario: string,
     name: string,
     email:string,
-    telefone:string,
     medicoID: number
 };
 
@@ -53,4 +52,25 @@ async function getAllAgenda(){
     }
 }
 
-export { getAllAgenda,getAgendaByMedicoId };
+async function insertNewAgenda(agenda: Agenda): Promise<void> {
+    const sql = 'INSERT INTO Agenda (data, horario, name,email,medicoID) VALUES (STR_TO_DATE(?, \'%Y-%m-%d %H:%i:%s\'), ?, ?,?,?)';
+
+    const values = [new Date(agenda.data).toISOString().slice(0, 19).replace('T', ' '), agenda.horario, agenda.name, agenda.email, agenda.medicoID];
+
+    console.log("valores que chegaram no controler da agenda",values);
+    let connection;
+
+    try {
+        connection = await getDB();
+        const query = promisify(connection.query).bind(connection);
+
+        await query({ sql, values });
+        console.log("Agenda inserida com sucesso!");
+    } 
+    catch (error) {
+        console.error("Erro ao executar a query:", error);
+        throw error;
+    }
+};
+
+export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda };

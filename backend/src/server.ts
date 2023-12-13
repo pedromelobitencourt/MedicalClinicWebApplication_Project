@@ -6,7 +6,7 @@ import { insertNewAddress } from './controllers/controllerBaseDeEnderecos';
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes } from './controllers/controllerPaciente';
-import {getAllAgenda,getAgendaByMedicoId} from './controllers/controllerAgenda';
+import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda} from './controllers/controllerAgenda';
 
 import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade } from './controllers/controllerMedico';
 import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario } from './controllers/controllerFuncionario';
@@ -17,9 +17,10 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 interface CustomError extends Error {
   code?: string; // ou o tipo apropriado da propriedade 'code'
 }
-
+process.env.TZ = 'UTC';
 const app = express();
 const env = process.env;
+Intl.DateTimeFormat().resolvedOptions().timeZone = 'UTC';
 
 if(env.PORT !== undefined) {
   const port: number = parseInt(env.PORT);
@@ -33,6 +34,7 @@ if(env.PORT !== undefined) {
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
+    console.log('Fuso horário do Node.js:', process.env.TZ);
   });
 
   app.post('/addressRegistration', async (req: Request, res: Response) => {
@@ -60,7 +62,7 @@ if(env.PORT !== undefined) {
     try {
       const especialidade = req.params.especialidade;
 
-      console.log('Valor da especialidade que chegou no server.ts:',  req.params.especialidade);
+      //console.log('Valor da especialidade que chegou no server.ts:',  req.params.//especialidade);
   
       const listaMedicos = await getMedicosNamesByEspecialidade(especialidade);
   
@@ -84,11 +86,11 @@ if(env.PORT !== undefined) {
     try {
       const medicoid = parseInt(req.params.medicoid);
 
-      console.log('valor do medicoId',  req.params.medicoid);
+      //console.log('valor do medicoId',  req.params.medicoid);
   
       const listaAgenda = await getAgendaByMedicoId(medicoid);
   
-      console.log('ListaAgenda',  listaAgenda);
+      //console.log('ListaAgenda',  listaAgenda);
 
       res.status(200).send(listaAgenda);
 
@@ -196,6 +198,29 @@ if(env.PORT !== undefined) {
         res.status(500).send((error as CustomError).code);
       } else {
         // Se 'code' não estiver presente, trate de outra forma
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
+  });
+  app.post('/agenda', async (req: Request, res: Response) => {
+    try {
+      const { data, horario,name, email,medicoID,telefone } = req.body;
+  
+      const agenda = { data, horario,name, email,medicoID,telefone };
+  
+      console.log("Agenda que chegou no post backend",agenda)
+
+      await insertNewAgenda(agenda);
+  
+      res.status(201).json({ message: 'Agenda cadastrada com sucesso' });
+      res.send();
+    } 
+    catch (error) {  
+      // Verifique se 'error' é do tipo CustomError
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+        
         res.status(500).json({ error: 'Erro desconhecido' });
       }
     }
