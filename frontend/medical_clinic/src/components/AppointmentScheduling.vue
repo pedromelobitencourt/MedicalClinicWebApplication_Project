@@ -183,8 +183,8 @@ export default {
         
       },
 
-      carregarMedicos(){
-        axios.get('http://localhost:8000/medicos').then(res =>{
+      async carregarMedicos(){
+        await axios.get('http://localhost:8000/medicos').then(res =>{
 
        
           
@@ -202,7 +202,7 @@ export default {
     });
 
       },
-      selecionarMedicos(event){
+      async selecionarMedicos(event){
          this.EspecialidadeSelecionada = event.target.value;
 
 
@@ -216,7 +216,7 @@ export default {
           
         
 
-        axios.get(`http://localhost:8000/medicos/name/${this.EspecialidadeSelecionada}`)
+        await axios.get(`http://localhost:8000/medicos/name/${this.EspecialidadeSelecionada}`)
         .then((response) => {
           
           this.medicos = response.data;
@@ -230,7 +230,7 @@ export default {
 
       }
       },
-      selecionarDataEHorario(event){
+      async selecionarDataEHorario(event){
         this.MedicoSelecionado = event.target.value;
         console.log("Id do medico selecionado:",this.MedicoSelecionado);
 
@@ -248,7 +248,7 @@ export default {
           
         
 
-        axios.get(`http://localhost:8000/agenda/${this.MedicoSelecionado}`)
+        await axios.get(`http://localhost:8000/agenda/${this.MedicoSelecionado}`)
         .then((response) => {
           
           this.Datas = response.data;

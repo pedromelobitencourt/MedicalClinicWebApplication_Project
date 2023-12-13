@@ -72,13 +72,13 @@ export default {
         this.getEnderecos();
     },
     methods: {
-        getEnderecos() {
+        async getEnderecos() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
             console.log(startIndex, endIndex);
             console.log("chegou axios");
-            axios.get('http://localhost:8000/address')
+            await axios.get('http://localhost:8000/address')
                 .then(res => {
                     console.log(res.data.response);
                     this.totalItems = res.data.response.length;
@@ -90,11 +90,11 @@ export default {
             this.currentPage += offset;
             this.getEnderecos();
         },
-        deleteEndereco(cep) {
+        async deleteEndereco(cep) {
             console.log("chegou axios delete");
             if(confirm('Você tem certeza que quer deletar tal registro?')){
                 console.log("chegou axios delete");
-                axios.delete(`http://localhost:8000/address/${cep}`)
+                await axios.delete(`http://localhost:8000/address/${cep}`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);

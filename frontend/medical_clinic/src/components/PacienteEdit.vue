@@ -75,8 +75,8 @@ export default {
         this.getPacienteData(this.$route.params.id);
     },
     methods: {
-        getPacienteData(id) {
-            axios.get(`http://localhost:8000/paciente/${id}/edit`)
+        async getPacienteData(id) {
+            await axios.get(`http://localhost:8000/paciente/${id}/edit`)
                 .then(res => {
                     const data = res.data.response;
                     console.log(data);
@@ -98,7 +98,7 @@ export default {
                         })
         },
 
-        editPaciente() {
+        async editPaciente() {
             var myThis = this;
 
             const bloodType = this.options[this.$refs.selectedOption.selectedIndex - 1].type;
@@ -107,7 +107,7 @@ export default {
 
             this.model.paciente.id = this.$route.params.id;
 
-            axios.put(`http://localhost:8000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
+            await axios.put(`http://localhost:8000/paciente/${this.model.paciente.id}/edit`, this.model.paciente)
                 .then(res => {
                     if (res.status === 201) {
                         const msg = "Paciente editado com sucesso";
