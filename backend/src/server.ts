@@ -6,10 +6,14 @@ import { insertNewAddress, getAllEnderecos, deleteEnderecoByCep, getAllCeps } fr
 import { getAllProntuarioRecords, insertNewProtuarioRecord, getDataFromId, getPacientNameFromId } from './controllers/controllerProntuario';
 import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, deleteProntuario } from './controllers/controllerProntuario';
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
-import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById} from './controllers/controllerAgenda';
 
-import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade,getMedicoIdByFuncionarioId, } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario,isDoctor } from './controllers/controllerFuncionario';
+import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames} from './controllers/controllerAgenda';
+
+
+
+import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId,getMedicoNameById } from './controllers/controllerMedico';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor,getFuncionarioIdByName,getAllFuncionariosNotMedicos} from './controllers/controllerFuncionario';
+
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -130,15 +134,15 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.get('/agenda/:medicoid', async (req: Request, res: Response) => {
+  app.get('/agendas/:medicoid', async (req: Request, res: Response) => {
     try {
       const medicoid = parseInt(req.params.medicoid);
 
-      //console.log('valor do medicoId',  req.params.medicoid);
+      console.log('valor do medicoId',  req.params.medicoid);
   
       const listaAgenda = await getAgendaByMedicoId(medicoid);
   
-      //console.log('ListaAgenda',  listaAgenda);
+      console.log('ListaAgenda',  listaAgenda);
 
       res.status(200).send(listaAgenda);
 
@@ -172,6 +176,7 @@ if(env.PORT !== undefined) {
   app.get('/medicos', async (req: Request, res: Response) => {
     try {
       const medicos = await getAllMedicos();
+      console.log(medicos);
       res.status(200).send(medicos);
     } catch (error) {
       // Verifique se 'error' é do tipo CustomError
@@ -560,7 +565,7 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.get('/employees/create', async (req: Request, res: Response) => {
+  app.get('/employeesCreate', async (req: Request, res: Response) => {
     try {
       const response = await getAllPessoasNotFuncionario();
 
@@ -821,7 +826,7 @@ if(env.PORT !== undefined) {
 
   app.put('/paciente/:id/edit', async (req: Request, res: Response) => {
     try {
-      const  { id }  = req.params;
+      const  { id } = req.params;
       const numberId = parseInt(id);
       const { peso, altura, tipoSanguineo } = req.body;
       await updatePaciente( peso, altura, tipoSanguineo, numberId);
@@ -832,16 +837,29 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
-  app.post('/employees/isDoctor', async (req: Request, res: Response) => {
+  app.get('/agendas', async (req: Request, res: Response) => {
+    try {
+      console.log("iniciou a req");
+      const response = await getAllAgendaMedNames();
+      res.status(201).json({ message: 'Agenda obtida com sucesso', response });
+      console.log("Agenda obtida com sucesso");
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  app.post('/employeesIsDoctor', async (req: Request, res: Response) => {
     try {
       const { id } = req.body;
-      console.log("body", req.body)
+      console.log("body: ", id)
       const numberId = parseInt(id);
       const isDoctorresponse = await isDoctor(numberId);
 
       if(isDoctorresponse) {
-        console.log("doctor response")
-        const doctorId = await getMedicoIdByFuncionarioId(numberId)
+        console.log("doctor response");
+        const doctorId = await getMedicoIdByFuncionarioId(numberId);
         res.status(201).send({ isDoctor: true, doctorId });
       }
       else {
@@ -852,6 +870,93 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
       console.log(error)
     }
-  })
+  });
 
+  app.get('/doctor/create/employees', async (req: Request, res: Response) => {
+    try {
+      console.log("antes")
+      const response = await getAllFuncionariosNotMedicos();
+      console.log("depos");
+      res.status(201).send({ message: 'Funcionários que não são médicos obtidos', response });
+    }
+    catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  interface BloodType {
+    type: string;
+  }
+
+  app.get('/people/blood-types', async (req: Request, res: Response) => {
+    const bloodTypes: BloodType[] = [
+      { type: "A+" },
+      { type: "A-" },
+      { type: "B+" },
+      { type: "B-" },
+      { type: "AB+" },
+      { type: "AB-" },
+      { type: "O+" },
+      { type: "O-" }
+  ];
+  
+    res.status(201).send({ bloodTypes });
+  });
+
+  app.post('/doctor/create', async (req: Request, res: Response) => {
+    const { name, crm, especialidade } = req.body;
+    console.log(name, crm, especialidade)
+
+    try {
+      const funcionarioId = await getFuncionarioIdByName(name);
+      if(funcionarioId) {
+        const numberFuncionarioId = funcionarioId.id;
+        await insertNewMedico({ crm, especialidade, funcionarioId: numberFuncionarioId })
+        console.log("id medico", numberFuncionarioId);
+        res.status(201).json({ message: `Médico inserido com sucesso` });
+      }
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  interface DoctorSpecialty {
+    specialty: string;
+  }
+  
+  const getDoctorSpecialties = (): DoctorSpecialty[] => {
+    const specialties: string[] = [
+      "Cardiologia",
+      "Dermatologia",
+      "Pediatria",
+      "Ortopedia",
+      "Ginecologia",
+      "Neurologia",
+      "Oftalmologia",
+      "Oncologia",
+      "Psiquiatria",
+      "Radiologia",
+      "Urologia",
+      "Endocrinologia",
+      "Otorrinolaringologia",
+      "Pneumologia",
+      "Cirurgia Geral",
+      "Clínica Médica",
+      "Gastroenterologia",
+      // Adicione mais especialidades conforme necessário
+    ];
+  
+    // Mapeia o array de especialidades para um novo array de objetos com a propriedade 'specialty'
+    const doctorSpecialties = specialties.map(specialty => ({ specialty }));
+    return doctorSpecialties;
+  };
+  
+  // Exemplo de uso na rota
+  app.get('/doctors/doctor-specialties', async (req: Request, res: Response) => {
+    const specialties = getDoctorSpecialties();
+    res.json({ response: specialties });
+  });
 }

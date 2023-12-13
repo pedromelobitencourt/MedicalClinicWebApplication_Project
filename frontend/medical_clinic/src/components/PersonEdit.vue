@@ -1,5 +1,19 @@
 <template>
     <div>
+
+        <div id="fade" class="hide" ref="fade">
+            <div id="message" class="hide" ref="message">
+                <div class="alert alert-light" role="alert">
+                    <h4>Mensagem:</h4>
+                    <p ref="message_p"></p>
+
+                    <button id="close-message" class="btn btn-secondary" ref="close_button" @click="closeMessage">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <form  @submit.prevent="editPerson" class="container">
             <div class="card">
                 <div class="card-header">
@@ -43,6 +57,7 @@
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
     name: 'PersonEdit',
@@ -72,8 +87,8 @@ export default {
         }
     },
     mounted() {
-        this.getPersonData(this.$route.params.id)
         this.fetchOptions();
+        this.getPersonData(this.$route.params.id)
     },
     methods: {
         async getPersonData(id) {
@@ -86,6 +101,16 @@ export default {
                     this.model.person.email = data.email;
                     this.model.person.telefone = data.telefone;
                     this.model.person.enderecoCep = data.enderecoCep;
+
+                    const index = this.options.findIndex(option => option.cep === data.enderecoCep);
+                    if (index !== -1) {
+                        // Definir selectedOption com base no índice encontrado
+                        this.selectedOption = this.options[index].cep;
+                        console.log("OPCAO", this.selectedOption)
+                    } else {
+                        // Lidar com o caso em que a opção não foi encontrada
+                        console.error('Opção não encontrada:', data.enderecoCep);
+                    }
                 });
         },
 
@@ -109,7 +134,9 @@ export default {
                         dataContrato: null,
                     }
 
-                    this.$router.go();
+
+                    this.registerMessage("Pessoa editada com sucesso");
+                    
                 })
                 .catch(function (error) {
                     if(error.response) {
@@ -140,6 +167,19 @@ export default {
             this.isLoggedIn = false;
             console.log(this.isLoggedIn);
             this.$router.push('/login');
+        },
+        toggleMessage(msg) {
+          this.$refs.message_p.innerText = msg;
+          this.$refs.fade.classList.toggle("hide");
+          this.$refs.message.classList.toggle("hide");
+      },
+    closeMessage() {
+            this.toggleMessage();
+            router.push('/people');
+        },
+    registerMessage(msg) {
+            this.toggleMessage(msg);
+            //this.resetFormValues();
         }
     }
 }

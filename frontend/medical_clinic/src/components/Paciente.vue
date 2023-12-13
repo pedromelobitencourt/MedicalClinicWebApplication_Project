@@ -74,11 +74,11 @@ export default {
         this.getPacientes();
     },
     methods: {
-        getPacientes() {
+        async getPacientes() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:8000/pacientes')
+            await axios.get('http://localhost:8000/pacientes')
                 .then(res => {
                     this.totalItems = res.data.length;
                     this.pacientes = res.data.slice(startIndex, endIndex);
@@ -88,10 +88,10 @@ export default {
             this.currentPage += offset;
             this.getPacientes();
         },
-        deletePaciente(id) {
+        async deletePaciente(id) {
 
             if(confirm('Você tem certeza que quer deletar tal registro?')){
-                axios.delete(`http://localhost:8000/pacientes/${id}`)
+                await axios.delete(`http://localhost:8000/pacientes/${id}`)
                     .then(res => {
                         const message = res.data.message;
                         alert(message);

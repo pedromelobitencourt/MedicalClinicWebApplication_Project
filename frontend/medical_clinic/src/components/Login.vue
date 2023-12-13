@@ -1,4 +1,18 @@
 <template>
+<div>
+    <div id="fade" class="hide" ref="fade">
+            <div id="message" class="hide" ref="message">
+                <div class="alert alert-light" role="alert">
+                    <h4>Mensagem:</h4>
+                    <p ref="message_p"></p>
+
+                    <button id="close-message" class="btn btn-secondary" ref="close_button" @click="closeMessage">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+
      <div class="auth-wrapper">
       <div class="auth-inner">
     <form @submit.prevent="handleSubmit">
@@ -19,10 +33,12 @@
     </form>
     </div>
     </div>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
     name: 'Login',
@@ -47,18 +63,35 @@ export default {
     },
     methods: {
       async handleSubmit() {
-        const response = await axios.post('http://localhost:8000/login', {
+        await axios.post('http://localhost:8000/login', {
           email: this.model.login.email,
           senha: this.model.login.senha
-        });
-
-        const login = response.data.response;
-        console.log(login);
-
-        localStorage.setItem('user', JSON.stringify(login));
+        }).then(res => {
+          const login = res.data.response;
+          console.log(login);
+          localStorage.setItem('user', JSON.stringify(login));
+          this.registerMessage('Logado com sucesso')
         window.location.reload();
         //this.$router.push('/');
-      }
+        }).catch(() => {
+          this.registerMessage("Email ou senha inválidos")
+        }) 
+
+
+      },
+      toggleMessage(msg) {
+          this.$refs.message_p.innerText = msg;
+          this.$refs.fade.classList.toggle("hide");
+          this.$refs.message.classList.toggle("hide");
+      },
+        closeMessage() {
+            this.toggleMessage();
+            router.push('/employees');
+        },
+        registerMessage(msg) {
+            this.toggleMessage(msg);
+            //this.resetFormValues();
+        }
     }
 }
 </script>

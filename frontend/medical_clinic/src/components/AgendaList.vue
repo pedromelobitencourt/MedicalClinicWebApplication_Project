@@ -1,42 +1,35 @@
 <template>
-    <div class="handbook-wrapper container">
+    <div class="agenda-wrapper container">
         <div class="card">
-            <div class="card-header">
+            <!-- <div class="card-header">
                 <h4>
-                    Pessoas Cadastradas
-                    <router-link to="/person/create" class="btn btn-primary float-end">
-                        Add Pessoa
+                    Paciente
+                    <router-link to="/paciente/create" class="btn btn-primary float-end">
+                        Add Paciente
                     </router-link>
                 </h4>
-            </div>
+            </div> -->
             <div class="card-body table-container">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th class="max-width">Nome</th>
+                            <th class="max-width">Data</th>
+                            <th class="max-width">Horário</th>
                             <th class="max-width">Email</th>
                             <th class="max-width">Telefone</th>
-                            <th class="max-width">CEP</th>
-                            <th class="min-width">Ação</th>
+                            <th class="min-width">Médico</th>
                         </tr>
                     </thead>
 
-                    <tbody v-if="people.length > 0">
-                        <tr v-for="(person, index) in people" :key="index">
-                            <td> {{person.id}} </td>
-                            <td class="max-width2"> {{person.name}} </td>
-                            <td class="max-width2"> {{person.email}} </td>
-                            <td class="max-width"> {{person.telefone}} </td>
-                            <td class="max-width"> {{person.enderecoCep}} </td>
-                            <td class="min-width">
-                                <router-link :to="{ path: '/person/'+person.id+'/edit' }" class="btn btn-success float-end">
-                                    Editar
-                                </router-link>
-                                <button type="button" @click="deletePerson(person.id)" class="btn btn-danger float-end">
-                                    Deletar
-                                </button>
-                            </td>
+                    <tbody v-if="agendas.length > 0">
+                        <tr v-for="(agenda, index) in agendas" :key="index">
+                            <td class="max-width"> {{agenda.name}} </td>
+                            <td class="max-width2"> {{dataFormatada(agenda.data)}} </td>
+                            <td class="max-width2"> {{horaFormatada(agenda.data)}} </td>
+                            <td class="max-width2"> {{agenda.email}} </td>
+                            <td class="max-width2"> {{agenda.telefone}} </td>
+                            <td class="max-width2"> {{agenda.medico}} </td>
                         </tr>
                     </tbody>
 
@@ -62,10 +55,10 @@
     import axios from 'axios';
 
 export default {
-    name: 'PersonView',
+    name: 'agenda',
     data() {
         return {
-            people: [],
+            agendas: [],
             currentPage: 1,
             itemsPerPage: 10,
             totalItems: 0,
@@ -77,54 +70,38 @@ export default {
         console.log("Ta logado", this.isLoggedIn);
 
         if(!this.isLoggedIn) {
-            this.$router.push('/login');
+            this.$router.push('/login')
         }
-    },
-    mounted() {
-        this.getPeople();
+
+        this.getAgenda();
     },
     methods: {
-        async getPeople() {
+        getAgenda() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get('http://localhost:8000/people')
+            axios.get('http://localhost:5000/agendas')
                 .then(res => {
-                    this.people = res.data.response
-                    this.totalItems = this.people.length;
-                    this.people = this.people.slice(startIndex, endIndex);
-                    console.log(res.data);
+                    this.totalItems = res.data.response.length;
+                    console.log(this.totalItems);
+                    this.agendas = res.data.response.slice(startIndex, endIndex);
+                    console.log(this.agendas);
                 })
-                .catch(error => {
-                    console.error("Error fetching employees", error);
-                });
-
-            
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getPeople();
+            this.getAgenda();
         },
-        async deletePerson(id) {
-            console.log("O ID", id)
-            if(confirm('Você tem certeza que quer deletar tal registro?')){
-                await axios.delete(`http://localhost:8000/person/${id}/delete`)
-                    .then(res => {
-                        const message = res.data.message;
-                        alert(message);
-                        this.$router.go();
-                    })
-                    .catch(error => {
-                        alert(error.message);
-                    });
-            }
+        dataFormatada(dataHora) {
+            const optionsData = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            const dataHoraTeste = new Date(dataHora);
+            return dataHoraTeste.toLocaleDateString(undefined, optionsData);
         },
-        logout() {
-            localStorage.removeItem('user');
-            this.isLoggedIn = false;
-            console.log(this.isLoggedIn);
-            this.$router.push('/login');
-        }
+        horaFormatada(dataHora) {
+            const optionsHora = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const dataHoraTeste = new Date(dataHora);
+            return dataHoraTeste.toLocaleTimeString(undefined, optionsHora);
+        },
     }
 }
 </script>
@@ -152,10 +129,10 @@ export default {
     }
 
     .max-width {
-        max-width: 60px;
+        max-width: 100px;
     }
     .max-width2 {
-        max-width: 250px;
+        max-width: 200px;
     }
 
     .pagination-container {
@@ -170,7 +147,7 @@ export default {
         margin-left: 15px;
     }
     .min-width {
-        min-width: 100px;
+        min-width: 150px;
     }
 
     th {
