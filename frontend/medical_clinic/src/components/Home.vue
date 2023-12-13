@@ -44,65 +44,6 @@ background: linear-gradient(180deg, #31AFB4 0%, rgba(49, 175, 180, 0.86) 18.75%,
 ">
 </div>
 
-<div class="Conteudo-Secundario">
-    <h3 style="text-align: center;margin-bottom: 24px;
-        margin-top: 10px;
-        font-size: 38px;
-        line-height: 48px;
-        color: rgb(20, 38, 64);
-        font-weight: 600;
-        -webkit-font-smoothing: antialiased;
-        font-family: 'Euclid Circular B', Arial, Helvetica, sans-serif;">Sobre nós</h3>
-        <p style="text-align: center;">
-            Na nossa clínica, acreditamos firmemente na entrega de serviços de saúde que refletem nossos valores fundamentais. Buscamos a excelência médica através da constante atualização e aplicação das melhores práticas. Nosso compromisso ético é a base de todas as nossas interações, respeitando sua dignidade, privacidade e direitos durante todo o processo de atendimento.
-
-Vemos além dos diagnósticos, cultivando um ambiente acolhedor e empático. Na nossa clínica, a sua saúde e bem-estar são nossa prioridade máxima. Confie em nós para uma abordagem holística, onde seu cuidado vai além das expectativas. Estamos aqui para ser seu parceiro na busca por uma vida saudável.
-        </p>
-    <div class="ListCard-Principios">
-        
-        <div class="Card-Principios">
-            
-                <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 60px;display: inline-block;">
-                <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
-            </svg>
-        
-        <h3 class="TextoPrincipio2">Ética Profissional</h3>
-        <p class="TextoPrincipio1">
-            A ética é um valor fundamental que guia todas as interações na clínica médica. Ela assegura a integridade, confidencialidade e respeito pelos direitos e dignidade dos pacientes, profissionais e demais envolvidos.
-        </p>
-        </div>
-
-        <div class="Card-Principios">
-            
-            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 60px;display: inline-block;">
-            <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
-        </svg>
-    
-    <h3 style="margin-top: 10px;">Excelência no Atendimento</h3>
-    <p style="margin-top: 10px;word-wrap: break-word;">
-        Buscar a excelência no atendimento significa oferecer cuidados de saúde de alta qualidade. Isso envolve a atualização constante dos profissionais, a aplicação das melhores práticas médicas e o foco na satisfação e bem-estar do paciente.
-    </p>
-    </div>
-    
-    <div class="Card-Principios">
-            
-            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 60px;display: inline-block;">
-            <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
-        </svg>
-    
-    <h3 style="margin-top: 10px;">Acolhimento e Empatia</h3>
-    <p style="margin-top: 10px;word-wrap: break-word;">
-        A clínica médica deve ser um espaço acolhedor, onde pacientes se sintam compreendidos e apoiados. A empatia é crucial, pois permite aos profissionais entenderem as necessidades emocionais dos pacientes, contribuindo para um ambiente de cura integral.
-    </p>
-    </div>
-
-</div>
-
-</div>
-<hr style="width: 1440.042px;
-height: 1px;background: #000;">
-
-
 <div class="Conteudo-Especialidades">
     <h3 style="text-align: center;margin-bottom: 24px;
         margin-top: 10px;
@@ -111,49 +52,92 @@ height: 1px;background: #000;">
         color: rgb(20, 38, 64);
         font-weight: 600;
         -webkit-font-smoothing: antialiased;
-        font-family: 'Euclid Circular B', Arial, Helvetica, sans-serif;">Especialidades disponíveis</h3>
+        font-family: 'Euclid Circular B', Arial, Helvetica, sans-serif;"> Sobre Nós</h3>
 <div class="Lista-Especiadades">
 
-<div class="Especialidades">
-    <svg xmlns="http://www.w3.org/2000/svg" width="223" height="220" viewBox="0 0 223 220" fill="none">
-  <ellipse cx="111.5" cy="110" rx="111.5" ry="110" fill="url(#paint0_radial_22_32)"/>
-  <defs>
-    <radialGradient id="paint0_radial_22_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(111.5 110) rotate(90) scale(110 111.5)">
-      <stop stop-color="#FFFCFC"/>
-      <stop offset="1" stop-color="#FFFCFC" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-</svg>
+<div class="CardF">
+    <img src="../assets/MedicoAtendendo.jpg" class="cardI" alt="">
+    <div class="cardT">
+        
+        <p class="cardTexto"> Na nossa clínica, oferecemos uma variedade de especialidades médicas para atender às suas necessidades de saúde. Com uma equipe de profissionais altamente qualificados e experientes, estamos comprometidos em proporcionar consultas médicas online personalizadas, garantindo que você receba o cuidado adequado para o seu bem-estar.</p>
+
+    </div>
 </div>
 
-<div class="Especialidades">
-    <svg xmlns="http://www.w3.org/2000/svg" width="223" height="220" viewBox="0 0 223 220" fill="none">
-  <ellipse cx="111.5" cy="110" rx="111.5" ry="110" fill="url(#paint0_radial_22_32)"/>
-  <defs>
-    <radialGradient id="paint0_radial_22_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(111.5 110) rotate(90) scale(110 111.5)">
-      <stop stop-color="#FFFCFC"/>
-      <stop offset="1" stop-color="#FFFCFC" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-</svg>
+<div class="CardF">
+    <img src="../assets/MedicoAtendendo2.jpg" class="cardI" alt="">
+    <div class="cardT">
+        
+        <p class="cardTexto">O agendamento de consultas é descomplicado e rápido. Basta acessar nossa página de agendamento, escolher o especialista desejado e selecionar o horário mais conveniente para você. Nossos médicos estão prontos para fornecer orientações, diagnósticos e tratamentos eficazes, tudo por meio de videoconferências seguras e confidenciais.</p>
+
+    </div>
 </div>
 
-<div class="Especialidades">
-    <svg xmlns="http://www.w3.org/2000/svg" width="223" height="220" viewBox="0 0 223 220" fill="none">
-  <ellipse cx="111.5" cy="110" rx="111.5" ry="110" fill="url(#paint0_radial_22_32)"/>
-  <defs>
-    <radialGradient id="paint0_radial_22_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(111.5 110) rotate(90) scale(110 111.5)">
-      <stop stop-color="#FFFCFC"/>
-      <stop offset="1" stop-color="#FFFCFC" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-</svg>
+<div class="CardF">
+    <img src="../assets/MedicoAtendendo3.jpg" class="cardI" alt="">
+    <div class="cardT">
+        
+        <p class="cardTexto"> A sua saúde está sempre em primeiro lugar. Conte conosco para uma experiência médica moderna, eficiente e centrada no paciente. Estamos aqui para tornar o acesso à saúde mais fácil e mais próximo de você.
+
+</p>
+
+    </div>
 </div>
+
 
 
 </div>
 
 </div>
+<hr style="width: 1440.042px;
+height: 1px;background: #000;">
+<div class="Conteudo-Secundario">
+    <h3 style="text-align: center;margin-bottom: 24px;
+        margin-top: 10px;
+        font-size: 38px;
+        line-height: 48px;
+        color: rgb(20, 38, 64);
+        font-weight: 600;
+        -webkit-font-smoothing: antialiased;
+        font-family: 'Euclid Circular B', Arial, Helvetica, sans-serif;">Nossa missão e valores</h3>
+        <p style="text-align: center;font-size: 21px;text-align: justify;margin: 10px;">   &nbsp; Nossa missão na Mais Saúde é proporcionar acesso facilitado e eficiente a cuidados de saúde de alta qualidade. Comprometemo-nos a utilizar a tecnologia para conectar pacientes a profissionais de saúde qualificados, oferecendo consultas médicas online personalizadas e seguras. Buscamos promover uma abordagem centrada no paciente, priorizando a comodidade sem comprometer a excelência no atendimento. Nosso objetivo é ser uma ponte confiável entre os indivíduos e a atenção médica, contribuindo para uma comunidade mais saudável e bem-informada.</p>
+    <div class="ListCard-Principios">
+        
+        <div class="Card-Principios">
+            
+                <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 0px;display: inline-block;">
+                <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
+            </svg>
+            <h3 style="margin-top: 10px;">Foco no Paciente</h3>
+    <p style="margin-top: 10px;word-wrap: break-word;text-align: justify;">&nbsp;Colocamos o paciente no centro de tudo o que fazemos, adaptando nossos serviços para atender às necessidades individuais, proporcionando uma experiência de cuidado personalizada que promova o bem-estar.
+</p>
+        </div>
+
+        <div class="Card-Principios">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 0px;display: inline-block;">
+            <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
+        </svg>
+    
+    <h3 style="margin-top: 10px;">Empatia e Respeito</h3>
+    <p style="margin-top: 10px;word-wrap: break-word;text-align: justify;">&nbsp;Valorizamos a importância de compreender as necessidades individuais de cada paciente, promovendo um ambiente de cuidado baseado na empatia e no respeito mútuo, onde todos se sintam ouvidos e compreendidos.</p>
+    </div>
+    
+    <div class="Card-Principios">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" width="66" height="59" viewBox="0 0 66 59" fill="none" style="width: 66px;height: 59px;flex-shrink: 0;margin-left: 0px;display: inline-block;">
+            <path d="M66 29.5C66 45.7924 51.2254 59 33 59C14.7746 59 0 45.7924 0 29.5C0 13.2076 14.7746 0 33 0C51.2254 0 66 13.2076 66 29.5ZM4.64283 29.5C4.64283 43.5002 17.3388 54.8496 33 54.8496C48.6612 54.8496 61.3572 43.5002 61.3572 29.5C61.3572 15.4998 48.6612 4.15041 33 4.15041C17.3388 4.15041 4.64283 15.4998 4.64283 29.5Z" fill="#076064"/>
+        </svg>
+    
+    <h3 style="margin-top: 10px;">Inovação em Saúde Digital</h3>
+    <p style="margin-top: 10px;word-wrap: break-word;text-align: justify;">&nbsp;Abraçamos a inovação tecnológica para otimizar o acesso à saúde, utilizando soluções digitais de vanguarda para proporcionar consultas médicas online eficientes, seguras e convenientes.</p>
+    </div>
+
+</div>
+
+</div>
+
+
 
 
 
@@ -170,12 +154,60 @@ height: 1px;background: #000;">
 
 <style scoped>
  @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
+ @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
 
 .Conteudo-Especialidades{
     margin-bottom: 40px;
 }
+.cardTitulo{text-transform: uppercase;
+font-size: 50px;
+font-weight: 500;
+}
+.cardSubTitulo{
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 300;
+}
+.cardTexto{font-size: 18px;
 
+margin: 40px 0;
+font-weight: 300;
+}
+.cardT{ 
+    
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%; position: absolute;
+    background: #1f3d4738;
+    backdrop-filter: blur(5px);
+    border-radius: 15px;
+    color: white;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 1.5s;
+}
+.CardF{
+width: 420px;
+height: 500px;
+border-radius: 20px;
+overflow: hidden;
+border: 4px solid #02a0a0;
+position: relative;
+}
+.CardF:hover .cardT{
+
+    left: 0;
+}
+.cardI{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
  .Especialidades{
     width: 200px;
 height: 250px;
@@ -188,6 +220,7 @@ background: #A2EEF1;
 
 .Lista-Especiadades{
     display: flex;
+    justify-content: space-between;
 }
 .ListCard-Principios{
     justify-content: space-between;
@@ -225,21 +258,25 @@ background-position: center center;
     width: 25%;
   float: left; 
   box-sizing: border-box;
+  
 }
 .TextoBranco{
-    color: #FFF;
-    
+color: #ffffff ;
 font-family: Inter;
 font-size: 30px;
 font-style: bold;
 font-weight: 600;
 line-height: normal;
+margin-top: 40px;
+
+
 }
 .Lista-CardDoutores{
     margin-top: 20px;
     margin-right: 20px;
     float: right; 
     box-sizing: border-box;
+    
 
 }
 .CardDoutores{

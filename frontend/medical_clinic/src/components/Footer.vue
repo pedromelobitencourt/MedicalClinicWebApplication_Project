@@ -41,7 +41,7 @@ export default {
 <style scoped>
 .footer-container{
     width: 100%;
-height: 150px;
+height: 160px;
 flex-shrink: 0;
 background: #31AFB4;
 position: relative;
