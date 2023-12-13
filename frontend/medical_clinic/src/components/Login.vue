@@ -63,14 +63,14 @@ export default {
     },
     methods: {
       async handleSubmit() {
-        const response = await axios.post('http://localhost:8000/login', {
+        await axios.post('http://localhost:8000/login', {
           email: this.model.login.email,
           senha: this.model.login.senha
         }).then(res => {
-          const login = response.data.response;
+          const login = res.data.response;
+          console.log(login);
           localStorage.setItem('user', JSON.stringify(login));
           this.registerMessage('Logado com sucesso')
-          console.log(login);
         }).catch(error => {
           this.registerMessage("Email ou senha inválidos")
         }) 
