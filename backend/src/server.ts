@@ -8,8 +8,8 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
 import {getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames} from './controllers/controllerAgenda';
 
-import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
+import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId } from './controllers/controllerMedico';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, isDoctor } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -130,15 +130,15 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.get('/agenda/:medicoid', async (req: Request, res: Response) => {
+  app.get('/agendas/:medicoid', async (req: Request, res: Response) => {
     try {
       const medicoid = parseInt(req.params.medicoid);
 
-      //console.log('valor do medicoId',  req.params.medicoid);
+      console.log('valor do medicoId',  req.params.medicoid);
   
       const listaAgenda = await getAgendaByMedicoId(medicoid);
   
-      //console.log('ListaAgenda',  listaAgenda);
+      console.log('ListaAgenda',  listaAgenda);
 
       res.status(200).send(listaAgenda);
 
@@ -560,7 +560,7 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.get('/employees/create', async (req: Request, res: Response) => {
+  app.get('/employeesCreate', async (req: Request, res: Response) => {
     try {
       const response = await getAllPessoasNotFuncionario();
 
@@ -843,6 +843,28 @@ if(env.PORT !== undefined) {
     catch (error) {
       console.log(error);
       res.status(500).json({ error });
+    }
+  });
+
+  app.post('/employeesIsDoctor', async (req: Request, res: Response) => {
+    try {
+      const { id } = req.body;
+      console.log("body: ", id)
+      const numberId = parseInt(id);
+      const isDoctorresponse = await isDoctor(numberId);
+
+      if(isDoctorresponse) {
+        console.log("doctor response");
+        const doctorId = await getMedicoIdByFuncionarioId(numberId);
+        res.status(201).send({ isDoctor: true, doctorId });
+      }
+      else {
+        res.status(201).send({ isDoctor: false });
+      }
+    }
+    catch (error) {
+      res.status(500).json({ error });
+      console.log(error)
     }
   });
 

@@ -18,7 +18,6 @@
                             <th class="max-width">Horário</th>
                             <th class="max-width">Email</th>
                             <th class="max-width">Telefone</th>
-                            <th class="min-width">Médico</th>
                         </tr>
                     </thead>
 
@@ -29,7 +28,6 @@
                             <td class="max-width2"> {{horaFormatada(agenda.data)}} </td>
                             <td class="max-width2"> {{agenda.email}} </td>
                             <td class="max-width2"> {{agenda.telefone}} </td>
-                            <td class="max-width2"> {{agenda.medico}} </td>
                         </tr>
                     </tbody>
 
@@ -52,7 +50,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios, { formToJSON } from 'axios';
 
 export default {
     name: 'agenda',
@@ -64,26 +62,55 @@ export default {
             totalItems: 0,
         }
     },
-    mounted() {
+    created() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
+        console.log(user);
+        const medicoId = 0;
 
-        this.getAgenda();
+        if(!this.isLoggedIn) {
+            this.$router.push('/login')
+        } else {
+            axios.post('http://localhost:5000/employeesIsDoctor', user)
+                .then(res => {
+                    console.log("Resposta do servidor", res.data);
+                    console.log(res.data);
+                    if(res.data.isDoctor) {
+                        const id = res.data.doctorId[0];
+                        this.medicoId = id;
+                        console.log(this.medicoId);
+                        this.getAgendaMedico(this.medicoId);
+                    }else {
+                        this.$router.push('/login')
+                    }
+                        
+            });
+        }
+      
     },
+    // mounted() {
+
+        
+    // },
     methods: {
-        getAgenda() {
+        getAgendaMedico(medicoId) {
+            const { idMedico } = medicoId;
+            console.log(idMedico);
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:5000/agendas')
+            axios.get(`http://localhost:5000/agendas/${idMedico}`, idMedico)
                 .then(res => {
-                    this.totalItems = res.data.response.length;
+                    this.totalItems = res.data.length;
                     console.log(this.totalItems);
-                    this.agendas = res.data.response.slice(startIndex, endIndex);
+                    this.agendas = res.data.slice(startIndex, endIndex);
                     console.log(this.agendas);
                 })
         },
         changePage(offset) {
             this.currentPage += offset;
-            this.getAgenda();
+            this.getAgendaMedico(this.medicoId.id);
         },
         dataFormatada(dataHora) {
             const optionsData = { year: 'numeric', month: '2-digit', day: '2-digit' };

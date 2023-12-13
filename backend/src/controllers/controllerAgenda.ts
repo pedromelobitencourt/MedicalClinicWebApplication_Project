@@ -11,7 +11,7 @@ type Agenda = {
 };
 
 async function getAgendaByMedicoId(id: number){
-    const sql = 'select * from agenda where medicoId = ?';
+    const sql = 'select * from Agenda where medicoId = ?';
     const values = [id];
 
     let connection;
@@ -115,5 +115,6 @@ async function getAllAgendaMedNames(){
         throw error;
     }
 }
+
 
 export { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById, getAllAgendaMedNames };
