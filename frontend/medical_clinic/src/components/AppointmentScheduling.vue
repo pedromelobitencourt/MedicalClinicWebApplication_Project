@@ -4,7 +4,7 @@
         <h3>Agendamento de consulta</h3>
         <form @submit.prevent="efetuarAgendamento" >
           <div class="form-especialidade">
-            <label for="MedicoSelecionado">Selecione a especialidade:</label>
+            <label for="EspecialidadeSelecionada">Selecione a especialidade:</label>
             <select class="form-select" aria-label=""  v-model="EspecialidadeSelecionada"
             @change="selecionarMedicos($event)">
                   <option selected value="" >Selecione a especialidade Desejada</option>
@@ -31,7 +31,7 @@
 
             <label for="dataConsulta">Data da consulta:</label>
             
-            <b-form-datepicker v-model="dataC" :date-disabled-fn="dateDisabled" locale="pt-br" name="dataConsulta" id="dataConsulta" :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }" date-format="d/m/Y" @input="atualizarHorariosDisponiveis"
+            <b-form-datepicker v-model="dataC" :date-disabled-fn="dateDisabled" locale="pt-br" name="dataConsulta" id="dataConsulta" :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }" date-format="d/m/Y" @input="atualizarHorariosDisponiveis" :disabled="!this.MedicoSelecionado"
             >
             
             </b-form-datepicker>
@@ -42,9 +42,10 @@
           <div class="form-horarioEscolhido"  style="margin-top: 20px;">
 
             <label for="horaConsulta">Horario da consulta:</label>
-            <select class="form-select" v-model="HorarioSelecionado">
+            <select class="form-select" v-model="HorarioSelecionado" 
+            :disabled="!this.MedicoSelecionado||!this.dataC">
               <option selected value="" >Selecione o horario desejado</option>
-              <option v-for="hora in ListaPadrao"   :key="hora" :value="hora">
+              <option v-for="hora in HorariosDisponiveis"   :key="hora" :value="hora">
                     {{ hora}}hrs</option>
             </select>
 
@@ -80,6 +81,15 @@
         </template>
       </b-modal>
 
+      <b-modal v-model="showWarningModal" title="Aviso">
+    <p>Por favor, preencha todos os campos antes de agendar.</p>
+    <template #modal-footer="{ ok }">
+      <b-button @click="ok">OK</b-button>
+    </template>
+  </b-modal>
+
+
+
       </div>
     </div>
 
@@ -87,6 +97,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 
 export default {
@@ -109,6 +120,7 @@ export default {
         NomeP:'',
         EmailP:'',
         showSuccessPopup: false,
+        showWarningModal: false
       }
     },
     mounted() {
@@ -120,41 +132,49 @@ export default {
       dateDisabled(ymd) {
 
 
-      // const hoje = new Date();
-      // const [ano, mes, dia] = ymd.split('-').map(Number);
-      // const dataSelecionada = new Date(ano, mes - 1, dia);
-
-      // // Desabilita datas anteriores à data atual
-      // return dataSelecionada < hoje;
+      
         // console.log("datepicker",this.DatasEHorariosOcupados);
         
-        
+        let DiaCheio =  false;
+
         for (const chave in this.DatasEHorariosOcupados) {
           const lista = this.DatasEHorariosOcupados[chave];
-
-          // console.log(`Chave: ${chave}`);
           
+          //console.log("DateDisabled, chave e lista:",chave,lista );
+          // console.log(`Chave: ${chave}`);
+          let tamanhoMax = 0;
           for (const valor of lista) {
-            let tamanhoMax = 0;
-            // console.log(`  Valor: ${valor}`);
-            tamanhoMax =+ tamanhoMax+1;
-            // console.log("tamnhoMax",tamanhoMax)
             
+            // console.log(`  Valor: ${valor}`);
+            tamanhoMax = tamanhoMax+1;
+            // console.log("tamnhoMax",tamanhoMax)
+            //console.log("tamanhoMax da dupla acima",tamanhoMax);
             if(tamanhoMax>=10){
             //   const [ano, mes, dia] = chave.split('-').map(Number);
 
 
             // const dataObj = new Date(ano, mes - 1, dia);
             
-            return chave===ymd;
+           DiaCheio = chave===ymd;
 
             }
+
+
           }}
           
           
           
 
-        
+        const hoje = new Date().setHours(0,0,0,0);//formato aparece estranho no console
+        //console.log("data atual: ",hoje );
+      const [ano, mes, dia] = ymd.split('-').map(Number);
+      const dataSelecionada = new Date(ano, mes - 1, dia);
+      //console.log("data selecionada: ",dataSelecionada );
+      //console.log("resultado logico: ",dataSelecionada < hoje );
+
+
+      // Desabilita datas anteriores à data atual
+      return (dataSelecionada < hoje)||(DiaCheio);
 
         
         // const weekday = date.getDay()
@@ -173,7 +193,7 @@ export default {
         this.especialidades = Array.from(especialidadesSet);
 
          
-
+          console.log("carregarMedicos, Lista de especialidades:",this.especialidades);
 
 
 
@@ -200,6 +220,7 @@ export default {
         .then((response) => {
           
           this.medicos = response.data;
+          console.log("Selecionar medicos, lista de medicos selecionados",this.medicos);
         })
         .catch((error) => {
           console.error('Erro na requisição ao backend (controllerMedicos):', error);
@@ -231,13 +252,13 @@ export default {
         .then((response) => {
           
           this.Datas = response.data;
-          console.log("Datas da agenda:",this.Datas);
+         // console.log("Datas da agenda:dia e horario",this.Datas);
        
           this.DatasEHorariosOcupados = {};
         
           for (const obj of this.Datas) {
           const chave =  obj.data.split("T")[0].slice(0,10);
-          console.log("Chave selecionada:",chave);
+          //console.log("Chave selecionada:",chave);
 
           this.DatasEHorariosOcupados[chave] = [];
 
@@ -246,8 +267,9 @@ export default {
           
 
             if(chave===obj2.data.split("T")[0].slice(0,10)){
-              console.log("Hora Selecionada:",obj2.data.split("T")[1]
-              .slice(0,2));
+              
+              //console.log("Hora Selecionada:",obj2.data.split("T")[1]
+              //.slice(0,2));
 
               this.DatasEHorariosOcupados[chave].push(obj2.data.split("T")[1]
               .slice(0,2));
@@ -255,7 +277,10 @@ export default {
             }
             
           }
+
+         
         }
+        console.log("Dicionario DatasEHorariosOcupados:",this.DatasEHorariosOcupados);
         })
         .catch((error) => {
           console.error('Erro na requisição ao backend (controllerAgenda):', error);
@@ -267,32 +292,47 @@ export default {
 
       },
       atualizarHorariosDisponiveis(){
-        console.log("Data escolhida:", this.dataC);
+        console.log("DataC, data escolhida:", this.dataC);
+
+        this.HorariosDisponiveis = this.ListaPadrao;
+
         for (const chave in this.DatasEHorariosOcupados) {
           const lista = this.DatasEHorariosOcupados[chave];
-          // console.log(`Chave: ${chave}`);
+           //console.log("comparacao",chave === this.dataC);
 
           if(chave === this.dataC){
-            for (const valor of lista) {
+           
 
-              console.log(this.ListaPadrao, lista);
+              console.log("lista escolhida, lista padrao:",lista,this.ListaPadrao);
 
-              this.ListaPadrao = this.ListaPadrao.filter(itemB => !lista.includes(itemB));
+              this.HorariosDisponiveis = this.ListaPadrao.filter(itemB => !lista.includes(itemB));
             
-              console.log("Horarios disponiveis:", this.HorariosDisponiveis);
-          }
+              console.log("HorariosDisponiveis,Horarios disponiveis:", this.HorariosDisponiveis);
+          
           }
 
          
           }},
            async efetuarAgendamento(){
+            if (!this.dataC || !this.HorarioSelecionado || !this.NomeP || !this.EmailP || !this.MedicoSelecionado || !this.TelefoneP) {
+              
+              console.error("Por favor, preencha todos os campos antes de agendar.");
+              this.showWarningModal = true;
+              
+              return;
+            }
             try {
               const dataCompletaString = this.dataC + " " + this.HorarioSelecionado + ":00:00";
-              const dataCompleta = new Date(dataCompletaString);
+              //const dataCompleta = new Date(dataCompletaString);
+              const dataCompleta = moment.utc(dataCompletaString);
+
               const dataFormatada = dataCompleta.toISOString();
+
               const novaData =  new Date(dataFormatada);
 
               console.log(novaData,this.NomeP,this.EmailP,this.TelefoneP,parseInt(this.MedicoSelecionado))
+
+
                     const response = await axios.post('http://localhost:8000/agenda', {
                       
                       data: novaData,
