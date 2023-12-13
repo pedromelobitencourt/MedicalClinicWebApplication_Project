@@ -97,6 +97,7 @@ export default {
         changePage(offset) {
             this.currentPage += offset;
             this.getHandbooks();
+            this.logout();
         },
         async deleteHandbook(id) {
             if(confirm('Você tem certeza que quer deletar tal registro?')){

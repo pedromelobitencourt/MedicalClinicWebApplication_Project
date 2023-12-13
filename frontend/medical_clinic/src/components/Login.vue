@@ -36,6 +36,15 @@ export default {
           }
       }
     },
+    created() {
+      const user = JSON.parse(localStorage.getItem('user'));
+        this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
+        console.log("Ta logado", this.isLoggedIn);
+
+        if(this.isLoggedIn) {
+            this.$router.push('/handbook')
+        }
+    },
     methods: {
       async handleSubmit() {
         const response = await axios.post('http://localhost:8000/login', {
