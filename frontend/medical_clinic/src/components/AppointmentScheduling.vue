@@ -216,7 +216,7 @@ export default {
           
         
 
-        await axios.get(`http://localhost:8000/medicos/name/${this.EspecialidadeSelecionada}`)
+        await axios.get(`http://localhost:8000/medicosname/${this.EspecialidadeSelecionada}`)
         .then((response) => {
           
           this.medicos = response.data;

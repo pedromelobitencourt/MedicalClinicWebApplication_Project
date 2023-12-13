@@ -130,7 +130,7 @@ async function getMedicoNameById(id: number) {
 
 async function getMedicosNamesByEspecialidade(especialidade: string) {
     //const sql = 'SELECT * FROM Medico WHERE especialidade = ?';
-    const sql = 'select medico.id,medico.crm,medico.especialidade,medico.funcionarioID, pessoa.name from medico inner join funcionario on medico.funcionarioId = funcionario.id inner join pessoa on funcionario.pessoaID = pessoa.id WHERE especialidade = ?';
+    const sql = 'select Medico.id, Medico.crm, Medico.especialidade, Medico.funcionarioID, Pessoa.name from Medico inner join Funcionario on Medico.funcionarioId = Funcionario.id inner join Pessoa on Funcionario.pessoaID = Pessoa.id WHERE especialidade = ?';
     const values = [especialidade];
 
     let connection;
@@ -138,8 +138,10 @@ async function getMedicosNamesByEspecialidade(especialidade: string) {
     try {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
+        console.log("oioioioiioshouyo9099999")
 
         const response = await query({ sql, values });
+
 
         console.log("Lista retornada com sucesso");
         console.log(response);

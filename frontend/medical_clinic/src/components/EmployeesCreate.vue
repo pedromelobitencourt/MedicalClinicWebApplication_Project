@@ -115,7 +115,9 @@ export default {
                         senha: '',
                         dataContrato: '',
                         name: null
-                    }
+                    };
+
+                    this.registerMessage('Funcionário registrado com sucesso')
                 })
                 .catch(function (error) {
                     if(error.response) {

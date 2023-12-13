@@ -62,7 +62,7 @@ export default {
             totalItems: 0,
         }
     },
-    created() {
+    async created() {
         const user = JSON.parse(localStorage.getItem('user'));
         this.isLoggedIn = !!user; // Define isLoggedIn como true se o usuário estiver logado
         console.log("Ta logado", this.isLoggedIn);
@@ -72,7 +72,7 @@ export default {
         if(!this.isLoggedIn) {
             this.$router.push('/login')
         } else {
-            axios.post('http://localhost:5000/employeesIsDoctor', user)
+            await axios.post('http://localhost:8000/employeesIsDoctor', user)
                 .then(res => {
                     console.log("Resposta do servidor", res.data);
                     console.log(res.data);
@@ -94,13 +94,13 @@ export default {
         
     // },
     methods: {
-        getAgendaMedico(medicoId) {
+        async getAgendaMedico(medicoId) {
             const { idMedico } = medicoId;
             console.log(idMedico);
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get(`http://localhost:5000/agendas/${idMedico}`, idMedico)
+            await axios.get(`http://localhost:8000/agendas/${idMedico}`, idMedico)
                 .then(res => {
                     this.totalItems = res.data.length;
                     console.log(this.totalItems);

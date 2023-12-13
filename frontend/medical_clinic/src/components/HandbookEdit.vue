@@ -124,10 +124,11 @@ export default {
                         atestados: '',
                         name: null,
                     }
-
-                    this.$router.go();
+                    
+                    this.registerMessage('Prontuário atualizado com sucesso')
                 })
                 .catch(function (error) {
+                    console.log("oihiughsiugaikhiuhas")
                     if(error.response) {
                         if(error.response.status === 422) {
                             myThis.errorList = error.response.data.errors;
@@ -161,6 +162,7 @@ export default {
           this.$refs.message_p.innerText = msg;
           this.$refs.fade.classList.toggle("hide");
           this.$refs.message.classList.toggle("hide");
+          console.log("register message")
       },
         closeMessage() {
             this.toggleMessage();

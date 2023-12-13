@@ -22,12 +22,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="">Funcionário</label>
-                        <select required v-model="selectedOption" ref="selectedOption" class="block mt-1 w-100" disabled>
-                            <option value="" selected>-- Escolha uma opção --</option>
-                            <option v-for="employee in options" :key="employee.id" :value="employee.id">
-                                {{ employee.name }}
-                            </option>
-                        </select>
+                        <input type="text" v-model="model.employee.name" name="" id="" class="form-control" disabled>
                     </div>
                     <div class="mb-3">
                         <label for="">Salario</label>
@@ -107,23 +102,13 @@ export default {
                     this.model.employee.salario = data.salario.toFixed(2);
                     this.model.employee.senha = data.senha;
 
-                    const index = this.options.findIndex(option => option.name === data.name);
-                    if (index !== -1) {
-                        // Definir selectedOption com base no índice encontrado
-                        this.selectedOption = this.options[index].id;
-                    } else {
-                        // Lidar com o caso em que a opção não foi encontrada
-                        console.error('Opção não encontrada:', data.nome);
-                    }
-
+                    console.log("dataaa", data)
                 })
         },
 
         async editEmployee() {
             var myThis = this;
 
-            const name = this.options[this.$refs.selectedOption.selectedIndex - 1].name;
-            this.model.employee.name = name;
             this.model.employee.id = this.$route.params.id;
 
             await axios.put(`http://localhost:8000/employees/${this.model.employee.id}/edit`, this.model.employee)
@@ -174,6 +159,7 @@ export default {
           this.$refs.message_p.innerText = msg;
           this.$refs.fade.classList.toggle("hide");
           this.$refs.message.classList.toggle("hide");
+          console.log("message");
       },
         closeMessage() {
             this.toggleMessage();

@@ -110,7 +110,7 @@ if(env.PORT !== undefined) {
       }
     }
   });
-  app.get('/medicos/name/:especialidade', async (req: Request, res: Response) => {
+  app.get('/medicosname/:especialidade', async (req: Request, res: Response) => {
     try {
       const especialidade = req.params.especialidade;
 
@@ -527,7 +527,9 @@ if(env.PORT !== undefined) {
         ([updateIdPaciente(id, pacientId.id), updateAnamnese(id, anamnese), updateMedicamentos(id, medicamentos),
           updateAtestados(id, atestados)]);
         
-        return { updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse }
+          console.log("==========================================================================================")
+
+          res.status(201).json({ updateIdResponse, updateAnamneseResponse, updateMedicamentosResponse, updateAtestadosResponse })
       }
       else throw new Error("update handbook error")
     }
@@ -599,6 +601,18 @@ if(env.PORT !== undefined) {
     }
   });
 
+  app.get('/employees/create', async (req: Request, res: Response) => {
+    try {
+      const response = await getAllPessoasNotFuncionario();
+
+      res.status(201).json({ response });
+      res.send();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
   app.post('/employees', async (req: Request, res: Response) => {
     try {
       const { dataContrato, salario, name, senha } = req.body;
@@ -656,7 +670,7 @@ if(env.PORT !== undefined) {
       await Promise.all
       ( [updateSalarioFuncionario(id, salario), updateDataContratoFuncionario(id, dataContrato), updateSenhaFuncionario(id, senha) ]);
       
-      return { updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse, updateSenhaFuncionarioResponse }
+      res.status(201).json({ updateSalarioFuncionarioResponse, updateDataContratoFuncionarioResponse, updateSenhaFuncionarioResponse });
     }
     catch (error) {
       console.log(error);

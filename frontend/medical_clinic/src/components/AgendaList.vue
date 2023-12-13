@@ -76,11 +76,11 @@ export default {
         this.getAgenda();
     },
     methods: {
-        getAgenda() {
+        async getAgenda() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            axios.get('http://localhost:5000/agendas')
+            await axios.get('http://localhost:8000/agendas')
                 .then(res => {
                     this.totalItems = res.data.response.length;
                     console.log(this.totalItems);

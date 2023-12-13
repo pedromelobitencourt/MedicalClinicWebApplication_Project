@@ -43,7 +43,6 @@ export default new Router({
         { path: '/people', component: PersonView },
         { path: '/person/create', component: PersonCreate },
         { path: '/person/:id/edit', component: PersonEdit },
-        { path: '/scheduling', component: AppointmentScheduling },
         { path: '/paciente/create', component: PacienteCreate },
         { path: '/paciente', component: Paciente },
         { path: '/paciente/:id/edit', component: PacienteEdit },
