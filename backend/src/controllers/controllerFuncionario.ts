@@ -13,6 +13,7 @@ type Funcionario = {
 type FuncionarioId = {
     id: number
 }
+
 type FuncionarioName = {
     name: string
 }
@@ -188,10 +189,10 @@ async function getFuncionarioIdByEmail(email: string) {
         connection = await getDB();
         const query = promisify(connection.query).bind(connection);
 
-        const result: PasswordRetrievalResult[] = await query({ sql, values }) as PasswordRetrievalResult[];
+        const result: FuncionarioId[] = await query({ sql, values }) as FuncionarioId[];
 
         if (result.length > 0) {
-            return result[0].senha;
+            return result[0].id;
         } else {
             return null; // E-mail não encontrado
         }

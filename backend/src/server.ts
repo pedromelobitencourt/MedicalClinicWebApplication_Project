@@ -628,7 +628,8 @@ if(env.PORT !== undefined) {
 
     try {
       await validateLogin(email, senha);
-      const id = getFuncionarioIdByEmail(email);
+      const id = await getFuncionarioIdByEmail(email);
+      console.log("id funcionario", id);
       res.status(201).json({ message: `Login realizado com sucesso`, response: { email, senha, id } });
     }
     catch(error) {
