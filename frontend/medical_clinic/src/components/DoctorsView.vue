@@ -14,7 +14,6 @@
                             <th class="max-width">Nome</th>
                             <th class="max-width">CRM</th>
                             <th class="max-width">Especialidade</th>
-                            <th class="min-width">Ação</th>
                         </tr>
                     </thead>
 
@@ -24,12 +23,6 @@
                             <td class="max-width2"> {{doctor.nomeMedico}} </td>
                             <td class="max-width"> {{doctor.crm}} </td>
                             <td class="max-width2"> {{doctor.especialidade}} </td>
-
-                                <td v-if="currentDoctorId === doctor.id" class="min-width">
-                                    <router-link :to="{ path: '/doctor/'+doctor.id+'/view' }" class="btn btn-success float-end">
-                                        Visualizar
-                                    </router-link>
-                                </td>
                         </tr>
                     </tbody>
 
@@ -76,8 +69,6 @@ export default {
             this.$router.push('/login')
         }
 
-        this.isADoctor = await this.isDoctor(user.id);
-        console.log("doctor", this.isADoctor)
         this.getDoctors();
     },
     methods: {
@@ -90,7 +81,6 @@ export default {
                     const data = res.data;
                     this.totalItems = data.length;
                     this.doctors = data.slice(startIndex, endIndex);
-                    console.log(data);
                 })
                 .catch(error => {
                     console.error("Error fetching employees", error);
@@ -106,20 +96,6 @@ export default {
             console.log(this.isLoggedIn);
             this.$router.push('/login');
         },
-        async isDoctor(id) {
-            console.log("id", id);
-            await axios.post('http://localhost:8000/employees/isDoctor', JSON.parse(localStorage.getItem('user')))
-                .then(res => {
-                    const data = res.data;
-                    console.log("isdoctor", data)
-                    this.isADoctor = data;
-
-                    if(this.isADoctor) {
-                        this.currentDoctorId = data.doctorId[0].idMedico;
-                        console.log("eeh medico", this.currentDoctorId)
-                    }
-                })
-        }
     }
 }
 </script>

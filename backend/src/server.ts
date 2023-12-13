@@ -8,8 +8,8 @@ import { updateIdPaciente, updateAnamnese, updateAtestados, updateMedicamentos, 
 import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes , deletePaciente, getPacienteById, updatePaciente } from './controllers/controllerPaciente';
 import { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById } from './controllers/controllerAgenda';
 
-import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoIdByFuncionarioId, getMedicoNameById } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, isDoctor, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
+import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoNameById } from './controllers/controllerMedico';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -833,27 +833,4 @@ if(env.PORT !== undefined) {
       res.status(500).json({ error });
     }
   });
-
-  app.post('/employees/isDoctor', async (req: Request, res: Response) => {
-    try {
-      const { id } = req.body;
-      console.log("body", req.body)
-      const numberId = parseInt(id);
-      const isDoctorresponse = await isDoctor(numberId);
-
-      if(isDoctorresponse) {
-        console.log("doctor response")
-        const doctorId = await getMedicoIdByFuncionarioId(numberId)
-        res.status(201).send({ isDoctor: true, doctorId });
-      }
-      else {
-        res.status(201).send({ isDoctor: false });
-      }
-    }
-    catch (error) {
-      res.status(500).json({ error });
-      console.log(error)
-    }
-  })
-
 }
