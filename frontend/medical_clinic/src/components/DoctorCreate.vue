@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="saveEmployee" class="container">
+  <form @submit.prevent="saveDoctor" class="container">
     <div class="card">
       <div class="card-header">
         <h4>Adicionar Médico</h4>
@@ -7,10 +7,10 @@
       <div class="card-body">
         <div class="mb-3">
           <label for="selectedOption">Funcionário</label>
-          <select required v-model="selectedOption" id="selectedOption" ref="selectedOption" class="block mt-1 w-100">
+          <select required v-model="selectedOption1" id="selectedOption1" ref="selectedOption1" class="block mt-1 w-100">
             <option value="" selected>-- Escolha uma opção --</option>
             <option value="" selected>-- Se não houver opção, não há funcionários cadastrados que não são médicos --</option>
-            <option v-for="person in options" :key="person.name" :value="person.name">
+            <option v-for="person in options1" :key="person.name" :value="person.name">
               {{ person.name }}
             </option>
           </select>
@@ -21,7 +21,13 @@
         </div>
         <div class="mb-3">
           <label for="senha">Especialidade</label>
-          <input type="password" v-model="model.doctor.especialidade" id="especialidade" class="form-control" required>
+          <select required v-model="selectedOption2" id="selectedOption2" ref="selectedOption2" class="block mt-1 w-100">
+            <option value="" selected>-- Escolha uma opção --</option>
+            <option v-for="specialty in options2" :key="specialty.specialty" :value="specialty.specialty">
+              {{ specialty.specialty }}
+            </option>
+          </select>
+
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-primary w-100">Salvar</button>
@@ -47,8 +53,10 @@ export default {
           funcionarioId: '',
         },
       },
-      selectedOption: null,
-      options: [],
+      selectedOption1: null,
+      selectedOption2: null,
+      options1: [],
+      options2: [],
       locale: 'pt-BR',
     };
   },
@@ -63,16 +71,21 @@ export default {
         this.$router.push('/login')
     }
 
-    this.selectedOption = ''
+    this.selectedOption1 = ''
+    this.selectedOption2 = ''
     this.fetchOptions();
   },
   methods: {
-    async saveEmployee() {
+    async saveDoctor() {
       try {
         var myThis = this;
 
-        const name = this.options[this.$refs.selectedOption.selectedIndex - 2].name;
+        const name = this.options1[this.$refs.selectedOption1.selectedIndex - 2].name;
+        const especialidade = this.options2[this.$refs.selectedOption2.selectedIndex - 1].specialty;
+
         this.model.doctor.name = name;
+        this.model.doctor.especialidade = especialidade;
+
         console.log('Employee saved:', this.model.doctor);
 
         await axios.post('http://localhost:8000/doctor/create', this.model.doctor)
@@ -106,9 +119,12 @@ export default {
     },
     async fetchOptions() {
       try {
-        const response = await axios.get('http://localhost:8000/doctor/create/employees');
-        this.options = response.data.response;
-        console.log(this.options)
+        const response1 = await axios.get('http://localhost:8000/doctor/create/employees');
+        const response2 = await axios.get('http://localhost:8000/doctors/doctor-specialties');
+        this.options1 = response1.data.response;
+        this.options2 = response2.data.response;
+        console.log(this.options1)
+        console.log(this.options2)
       } catch (error) {
         console.error('Médico creation: ', error);
       }

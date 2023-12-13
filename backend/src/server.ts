@@ -9,7 +9,7 @@ import { getAllPacientNames, getIdFromName, insertNewPaciente, getAllPacientes ,
 import { getAllAgenda,getAgendaByMedicoId,insertNewAgenda,deleteAgendaById } from './controllers/controllerAgenda';
 
 import { getAllMedicos, insertNewMedico, deleteMedico,getMedicosByEspecialidade,getMedicosNamesByEspecialidade, getMedicoNameById } from './controllers/controllerMedico';
-import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getAllFuncionariosNotMedicos, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario } from './controllers/controllerFuncionario';
+import { getAllFuncionarios, insertNewFuncionario, deleteFuncionario, getFuncionarioById, getAllFuncionariosWithName, getAllFuncionariosNotMedicos, getFuncionarioNameFromId, getFuncionarioIdByEmail, updateSalarioFuncionario, updateDataContratoFuncionario, updateSenhaFuncionario, getFuncionarioIdByName } from './controllers/controllerFuncionario';
 import { getAllPessoas, getAllPessoasNotFuncionario, getPessoaIdByName, insertNewPessoa, deletePessoa, getPessoaById, updatePessoaNome, updatePessoaEmail, updatePessoaTelefone, updatePessoaCep } from './controllers/controllerPessoa';
 import { validateLogin } from './controllers/controllerLogin';
 
@@ -864,5 +864,61 @@ if(env.PORT !== undefined) {
   ];
   
     res.status(201).send({ bloodTypes });
+  });
+
+  app.post('/doctor/create', async (req: Request, res: Response) => {
+    const { name, crm, especialidade } = req.body;
+    console.log(name, crm, especialidade)
+
+    try {
+      const funcionarioId = await getFuncionarioIdByName(name);
+      if(funcionarioId) {
+        const numberFuncionarioId = funcionarioId.id;
+        await insertNewMedico({ crm, especialidade, funcionarioId: numberFuncionarioId })
+        console.log("id medico", numberFuncionarioId);
+        res.status(201).json({ message: `Médico inserido com sucesso` });
+      }
+    }
+    catch(error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+
+  interface DoctorSpecialty {
+    specialty: string;
+  }
+  
+  const getDoctorSpecialties = (): DoctorSpecialty[] => {
+    const specialties: string[] = [
+      "Cardiologia",
+      "Dermatologia",
+      "Pediatria",
+      "Ortopedia",
+      "Ginecologia",
+      "Neurologia",
+      "Oftalmologia",
+      "Oncologia",
+      "Psiquiatria",
+      "Radiologia",
+      "Urologia",
+      "Endocrinologia",
+      "Otorrinolaringologia",
+      "Pneumologia",
+      "Cirurgia Geral",
+      "Clínica Médica",
+      "Gastroenterologia",
+      // Adicione mais especialidades conforme necessário
+    ];
+  
+    // Mapeia o array de especialidades para um novo array de objetos com a propriedade 'specialty'
+    const doctorSpecialties = specialties.map(specialty => ({ specialty }));
+    return doctorSpecialties;
+  };
+  
+  // Exemplo de uso na rota
+  app.get('/doctors/doctor-specialties', async (req: Request, res: Response) => {
+    const specialties = getDoctorSpecialties();
+    res.json({ response: specialties });
   });
 }
