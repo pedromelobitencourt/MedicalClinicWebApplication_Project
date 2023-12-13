@@ -1,12 +1,16 @@
 <template>
+  
+
   <div id="app">
     <Nav />
 
    
         <router-view />
      
-      <!-- <Footer /> -->
+    <Footer /> 
 </div>
+
+
 </template>
 
 <script>

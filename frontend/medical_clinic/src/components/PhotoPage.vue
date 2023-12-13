@@ -1,8 +1,8 @@
 <template>
-    <v-app>
+   <div>
         <PhotoCarousel />   
         <PhotoGallery />
-    </v-app>
+      </div>
 </template>
 
 <script>
