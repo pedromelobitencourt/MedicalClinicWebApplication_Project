@@ -298,6 +298,7 @@ export default {
     atualizarHorariosDisponiveis() {
       console.log("DataC, data escolhida:", this.dataC);
 
+      this.HorariosDisponiveis = this.ListaPadrao;
 
       for (const chave in this.DatasEHorariosOcupados) {
         const lista = this.DatasEHorariosOcupados[chave];

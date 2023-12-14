@@ -100,7 +100,7 @@ export default {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
 
-            await axios.get(`http://localhost:8000/agendas/${idMedico}`, idMedico)
+            await axios.get(`http://localhost:8000/agenda/${idMedico}`, idMedico)
                 .then(res => {
                     this.totalItems = res.data.length;
                     console.log(this.totalItems);

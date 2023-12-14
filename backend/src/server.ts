@@ -134,7 +134,7 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.get('/agendas/:medicoid', async (req: Request, res: Response) => {
+  app.get('/agenda/:medicoid', async (req: Request, res: Response) => {
     try {
       const medicoid = parseInt(req.params.medicoid);
 
