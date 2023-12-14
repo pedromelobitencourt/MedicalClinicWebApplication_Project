@@ -33,7 +33,7 @@
 
                     <tbody v-else>
                         <tr>
-                            <td colspan="4">Loading...</td>
+                            <td colspan="4">Não há consultas marcadas</td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,7 +72,7 @@ export default {
         if(!this.isLoggedIn) {
             this.$router.push('/login')
         } else {
-            await axios.post('http://localhost:8000/employeesIsDoctor', user)
+            await axios.post('http://localhost:8000/employees/isDoctor', user)
                 .then(res => {
                     console.log("Resposta do servidor", res.data);
                     console.log(res.data);

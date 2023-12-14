@@ -865,7 +865,7 @@ if(env.PORT !== undefined) {
     }
   });
 
-  app.post('/employeesIsDoctor', async (req: Request, res: Response) => {
+  app.post('/employees/isDoctor', async (req: Request, res: Response) => {
     try {
       const { id } = req.body;
       console.log("body: ", id)
@@ -973,5 +973,29 @@ if(env.PORT !== undefined) {
   app.get('/doctors/doctor-specialties', async (req: Request, res: Response) => {
     const specialties = getDoctorSpecialties();
     res.json({ response: specialties });
+  });
+
+  app.get('/agenda/:medicoid', async (req: Request, res: Response) => {
+    try {
+      const medicoid = parseInt(req.params.medicoid);
+
+      //console.log('valor do medicoId',  req.params.medicoid);
+
+      const listaAgenda = await getAgendaByMedicoId(medicoid);
+
+      //console.log('ListaAgenda',  listaAgenda);
+
+      res.status(200).send(listaAgenda);
+
+    } 
+    catch (error) { 
+
+      if ((error as CustomError).code) {
+        res.status(500).send((error as CustomError).code);
+      } else {
+
+        res.status(500).json({ error: 'Erro desconhecido' });
+      }
+    }
   });
 }

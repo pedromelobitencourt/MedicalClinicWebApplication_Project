@@ -14,19 +14,19 @@
               <router-link to="/paciente" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Pacientes</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/employees" class="nav-link" style="font-size: 20px;;padding-bottom: 50px;margin-right: 20px; ">Listar Funcionario</router-link>
+              <router-link to="/people" class="nav-link" style="font-size: 20px;;padding-bottom: 50px;margin-right: 20px; ">Pessoa</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/paciente" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar pacientes</router-link>
+              <router-link to="/doctors" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Médicos</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/address" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar endereços</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar todos agendamentos</router-link>
+              <router-link to="/agenda" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 20px; ">Listar todos agendamentos</router-link>
             </li>
             <li class="nav-item">
-              <router-link v-if="isADoctor" to="" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agendamentos</router-link>
+              <router-link v-if="isADoctor" to="/agenda/medico" class="nav-link" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px; ">Listar meus agendamentos</router-link>
             </li>
            
             <li class="nav-item" @click="logout" style="font-size: 20px;padding-bottom: 50px;margin-right: 40px;color: #31AFB4; margin-left: -20px; cursor: pointer;">
